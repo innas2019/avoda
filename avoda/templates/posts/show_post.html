@@ -1,0 +1,15 @@
+      {% extends 'base.html' %}
+      {% block content %}
+      <h1>{{ title }}</h1>
+     
+      <div class="container">
+          {% for fld in list %}
+            {% if fld.find("_")!= 0 and fld.find("get")!=0 and fld.find("id")!=0: %}
+            <div class="row">
+                  <div class="col-md-2">   {{fld}}:     </div>
+                  <div class="col-md-7">  {{post.get_atr_by_name(fld)}}    </div>
+            </div>
+            {% endif %}  
+          {% endfor %}
+      </div>
+      {% endblock %}

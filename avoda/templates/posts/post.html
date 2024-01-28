@@ -1,0 +1,89 @@
+      {% extends 'base.html' %}
+      {% block content %}
+      <h1>{{ title }}</h1>
+     
+      <div class="container">
+      <form action = "http://localhost:5000/create" method = "post">
+      <div class="row">
+                  <div class="col-md-4">Имя </div>  <div class="col-md-4"><input type = "text" name = "name" /> </div> </div>
+      <div class="row">
+                  <div class="col-md-4">Телефон </div>   <div class="col-md-4"><input type = "text" name = "phone" /> </div> </div>
+      <div class="row"> 
+            <div class="col-md-3">
+              <label for="note" class="form-label">Объявление</label>
+              <textarea class="form-control" name="text", id="note" rows="3"></textarea>
+            </div>      
+      </div>
+      <div class="row">
+            <div class="col-md-3">    
+                  <div class="text-bg-primary p-3">Регион:</div>
+                  <select name="place" class="form-select" aria-label="Город:">
+                        <option selected>-</option>
+                        {% for town in towns %}
+                        <option value={{town}}>{{town}}</option>
+                        {% endfor %}
+                  </select>        
+            </div> 
+      </div>     
+      <div class="row"><div class="col-md-2">Языки:</div></div> 
+      {% for l in languages %}  
+            <div class="row"> 
+                  <div class="col-md-1">   
+                     <div class="form-check" >
+                        <input class="form-check-input" type="checkbox" value="{{l}}" name={{"len_"+l}} id={{"len_"+l}}>
+                        <label class="form-check-label" for={{"len_"+l}}> {{l}} </label>                        
+                     </div>
+                  </div>   
+                  <div class="col-md-1">  
+                       <select name={{"len_level"+l}} class="form-select" aria-label="">
+                              <option selected>-</option>
+                              {% for level in levels %}
+                              <option value={{level}}>{{level}}</option>
+                              {% endfor %}
+                        </select>   
+                  </div>
+            </div> 
+      {% endfor %}    
+      
+      <div class="row">  
+            <div class="col-md-2"> 
+              <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sex" id="s1">
+                  <label class="form-check-label" for="s1"> мужчина </label>
+               </div>
+               <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sex" id="s2" >
+                  <label class="form-check-label" for="s2"> женщина </label>
+                </div>
+            </div>
+      </div>
+      <div class="row">    
+            <div class="col-md-6"> 
+                  Работы:
+                  {% for oc in occupations %}  
+                 
+                    <div class="form-check ">
+                        <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}} id={{"oc_"+oc}}>
+                        <label class="form-check-label" for={{"oc_"+oc}}> {{oc}} </label>
+                    </div>
+             
+                  {% endfor %}
+            </div>   
+            <div class="col-md-2"> 
+                Занятость
+                  {% for ok in o_kind %} 
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="ok" id={{ok}}>
+                      <label class="form-check-label" for={{ok}}> {{ok}} </label>
+                   </div>
+                   {% endfor %} 
+                </div>        
+      </div>       
+      <div class="row">
+            <div class="col-md-3"><input type = "button" class="btn btn-primary mt-3 mb-2" value = "отмена" onclick="window.location.href='/list';"/> </div> 
+
+            <div class="col-md-3"><input type = "submit" class="btn btn-primary mt-3 mb-2" value = "Ok" /> </div>
+       </div>
+      </form>
+   </div>
+      {% endblock %}

@@ -1,0 +1,18 @@
+      {% extends 'base.html' %}
+      {% block content %}
+      <h1>{{ title }}</h1>
+     
+      <div class="container">
+      <form action = "http://localhost:5000/login" method = "post">
+       
+      <div class="row">   <div class="col-md-4">
+         Пользователь:   </div> </div> 
+      <div class="row">
+            <div class="col-md-4">Имя </div>  <div class="col-md-4"><input type = "text" name = "name" /> </div> </div>
+      <div class="row">
+            <div class="col-md-4">Примечание </div>   <div class="col-md-4"><input type = "text" name = "comment" /> </div> </div>
+      <div class="row">
+            <div class="col-md-4"><input type = "submit" class="btn btn-primary mt-3 mb-2" value = "send" /> </div> </div>
+      </form>
+   </div>
+      {% endblock %}
