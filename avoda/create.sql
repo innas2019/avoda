@@ -21,6 +21,6 @@ CREATE TABLE post (
     occupations TEXT (100),
     o_kind      TEXT (100),
     sex         INTEGER,
-    created     TIMESTAMP  NOT NULL,
-    updated     TIMESTAMP  NOT NULL
+    created     DATETIME  NOT NULL,
+    updated     DATETIME  NOT NULL
 );
