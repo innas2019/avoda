@@ -16,4 +16,4 @@ def create_app():
     app.register_blueprint(posts.bp)
     app.register_blueprint(auth.bp)
     return app
-    
+#сообщения и валидация ввода    

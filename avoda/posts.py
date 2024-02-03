@@ -17,41 +17,55 @@ class Post:
        self.text=_text
        self.len={}
        self.occupations=[]
-       self.o_kind=["полная"]
+       self.o_kind=[]
        self.sex=""
        self.id=0
-
-       self.created=datetime.datetime.now()
-       self.updated = datetime.datetime.now()
-
-   
+       self.created=datetime.date.today()
+       self.updated = datetime.date.today()
+ 
    def get_len(self):
       conv = str(self.len).replace("{"," ").replace("}"," ")
       return conv.replace("'"," ") 
    
    def get_atr_by_name(self, source):
         dataSource = getattr(self,source)
-        return dataSource  
+        return dataSource
 
-def create_post(form):
-   global i
-   n_post=Post(form["name"],form["place"],form["phone"],form["text"])
-    #для языков из списка
-   for f in form.keys():
+   def get_from_form(self,map):
+     for f in map.keys():
+      #для языков из списка
       if (str(f).find("len")!=-1 and str(f).find("level")==-1) :
-         s="len_level"+str(form[f])
-         value=str(form[s])
-         n_post.len.update({form[f]:value})
+         s="len_level"+str(map[f])
+         value=str(map[s])
+         self.len.update({map[f]:value})
+      elif str(f).find("oc")!=-1:
+         print(map[f],"occupations")
+         self.occupations.append(map[f])
+      elif str(f).find("ok")!=-1:
+         self.o_kind.append(map[f])   
+      elif str(f).find("sex")!=-1:
+        self.sex=map[f]
+
+def create_post(n_post):
    db = get_db()
    try:
-      db.execute("INSERT INTO post (name, place, phone, text) VALUES (?,?,?,?)",
-                    (n_post["name"],n_post["place"],n_post["phone"],n_post["text"]),
+      db.execute("INSERT INTO post (created, updated, name, place, phone, text, len, occupations, o_kind, sex) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                    (n_post.created, n_post.updated,n_post.name,n_post.place,n_post.phone,n_post.text,str(n_post.len),str(n_post.occupations),str(n_post.o_kind),n_post.sex),
                 )
       db.commit()
    except db.Error as e:
+    print(e)
+    flash(e)
     return e
+   flash(n_post.name+" created")
+   print(n_post.name+" created")
    return "ok"
             
+def validation(post):
+   if post.place=="":
+      return False
+   return True
+
 
 def filters(flt) :
    global posts
@@ -89,6 +103,9 @@ def list():
          np=Post(p["name"],p["place"],p["phone"],p["text"])
          np.id=p["id"]
          np.len=p["len"]
+         np.occupations=p["occupations"]
+         np.o_kind=p["o_kind"]
+         np.sex=p["sex"]
          posts.append(np)
 
    except db.Error as e:
@@ -105,22 +122,29 @@ def filter():
 
 @bp.route('/create',methods = ['POST', 'GET'])
 def create():
-   
    if request.method == 'POST':
-      create_post(request.form)
-      return redirect(url_for('post.list'))
-            
+      form=request.form
+      n_post=Post(form["name"],form["place"],form["phone"],form["text"])
+      n_post.get_from_form(form)
+      if validation(n_post):
+          if n_post.id==0:
+           create_post(n_post)
+           flash("Запись добавлена!")
+          return redirect(url_for('posts.list'))
+      else: 
+       return render_template('posts/post.html',towns=towns, post=n_post,
+       languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels )    
    else:
-      
-      return render_template('posts/post.html',towns=towns, 
+      p=Post('','','','')
+      return render_template('posts/post.html',towns=towns, post=p,
       languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels )
 
 @bp.route('/post/<int:id>',methods=['GET'])
 def post(id):
    for p in posts:
       if id==p.id:
-          return render_template('posts/show_post.html',post=p,list=dir(p), title="Объявление от "+p.name)
-
+          #return render_template('posts/show_post.html',post=p,list=dir(p), title="Объявление от "+p.name)
+          return render_template('posts/post.html' ,post=p) 
 @bp.route('/search')
 def search():
    return render_template('posts/search.html')

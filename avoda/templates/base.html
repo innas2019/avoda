@@ -9,15 +9,12 @@
         <img src= {{ url_for('static', filename='man2.png') }} width="40" height="40"  >    
         <a href="{{ url_for('posts.list') }}">Главная</a>
         <a href="{{ url_for('auth.login') }}">Регистрация</a>
-     
-        {{user}}
-    </nav>
-  
+          {{user}}
+    </nav> 
 {% endblock %}
 
 {% block content %}
     <div class="container">
-       
-        {% block app_content %}{% endblock %}
-    </div>
+         {% block app_content %}{% endblock %}
+    </div> 
 {% endblock %}
