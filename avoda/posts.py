@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 
 from avoda.db import get_db
@@ -54,9 +54,9 @@ def create_post(n_post):
                 )
       db.commit()
    except db.Error as e:
-    print(e)
-    flash(e)
-    return e
+      print(e)
+      flash(e)
+      return e
    flash(n_post.name+" created")
    print(n_post.name+" created")
    return "ok"
@@ -90,9 +90,19 @@ def filters(flt) :
          f_posts.append(p)
    return f_posts
 
-@bp.route('/')
-@bp.route('/list', methods = ['POST', 'GET'])
 
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+
+@bp.route('/list', methods = ['POST', 'GET'])
 def list():
    # список заявок
    db = get_db()
@@ -128,8 +138,11 @@ def create():
       n_post.get_from_form(form)
       if validation(n_post):
           if n_post.id==0:
-           create_post(n_post)
-           flash("Запись добавлена!")
+            if create_post(n_post):
+              flash("Запись добавлена!")
+            else:
+              return render_template('posts/post.html',towns=towns, post=n_post,
+       languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels ) 
           return redirect(url_for('posts.list'))
       else: 
        return render_template('posts/post.html',towns=towns, post=n_post,
