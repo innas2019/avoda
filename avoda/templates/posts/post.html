@@ -1,6 +1,10 @@
       {% extends 'base.html' %}
       {% block content %}
-      <h1>{{ title }}</h1>
+      <h3> Объявление от {{ post.name }}</h3>
+     message
+      {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
       <div class="container">
       <form action = "http://localhost:5000/create" method = "post">
       <div class="row">

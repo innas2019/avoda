@@ -11,9 +11,8 @@ def create_app():
         DATABASE='avoda.db'
     )
     bootstrap = Bootstrap(app)
-   
-    db.init_app(app)
-    app.register_blueprint(posts.bp)
+    #db.init_app(app)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(posts.bp)
     return app
-#сообщения и валидация ввода    
+
