@@ -2,27 +2,33 @@
 
 {% block title %}
    {{ title }} 
-{% endblock %}
+ {% endblock %}
 
 {% block navbar %}
     <nav class="navbar navbar-default">
         <img src= {{ url_for('static', filename='man2.png') }} width="40" height="40"  >    
-        <a href="{{ url_for('posts.list') }}">Главная </a>
-    {% if g.user %}
-             пользователь: {{ g.user['name'] }}
+        {% if g.user %}
+             <a href="{{ url_for('posts.list') }}">Главная </a>         
+              {{ g.user['name'] }}
              <a href="{{ url_for('auth.logout') }}"> Выйти</a>
             {% else %}
              <a href="{{ url_for('auth.register') }}">Регистрация</a>
              <a href="{{ url_for('auth.login') }}">Вход</a>
             {% endif %}
-    
     </nav> 
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+    {% endwith %}
 {% endblock %}
 
 {% block content %}
-    
-<div class="container">
-   
+    <div class="container">
          {% block app_content %}{% endblock %}
     </div> 
 {% endblock %}

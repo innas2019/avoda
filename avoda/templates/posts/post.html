@@ -51,11 +51,19 @@
       <div class="row">  
             <div class="col-md-2"> 
               <div class="form-check">
-                  <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина">
+                  {%if post.sex=="мужчина" %}
+                  <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина" checked>
+                  {% else %}
+                  <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина" >
+                  {% endif %}
                   <label class="form-check-label" for="s1"> мужчина </label>
                </div>
                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина" >
+                  {%if post.sex=="женщина" %}
+                  <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина" checked>
+                  {% else %}
+                  <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина" >>
+                  {% endif %}
                   <label class="form-check-label" for="s2"> женщина </label>
                 </div>
             </div>

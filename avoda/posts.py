@@ -154,10 +154,16 @@ def create():
 
 @bp.route('/post/<int:id>',methods=['GET'])
 def post(id):
-   for p in posts:
-      if id==p.id:
-          #return render_template('posts/show_post.html',post=p,list=dir(p), title="Объявление от "+p.name)
-          return render_template('posts/post.html' ,post=p) 
+   if session["roles"].count("create_post")>0:
+      for p in posts:
+         if id==p.id:
+           return render_template('posts/post.html' ,post=p) 
+   else:
+      for p in posts:
+         if id==p.id:
+           return render_template('posts/show_post.html',post=p,list=dir(p), title="Объявление от "+p.name)
+       
+
 @bp.route('/search')
 def search():
    return render_template('posts/search.html')

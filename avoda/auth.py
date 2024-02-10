@@ -5,6 +5,16 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 from avoda.db import get_db
 import datetime
+
+def get_roles(user_id):
+  #"select u.name, u.password, u.isactive, r.name as role from user as u left join role as r, user_role on user_role.user_id=u.id and user_role.role_id=r.id
+  query= "select name from role, user_role where user_role.user_id=? and user_role.role_id=role.id"       
+  roles=get_db().execute(query, (user_id,) ).fetchall()
+  session['roles']=[]
+  for r in roles:
+      session['roles'].append(r["name"])
+  print(session['roles'])   
+
 bp = Blueprint("auth", __name__)
 
 @bp.before_app_request
@@ -70,13 +80,16 @@ def login():
 
         if error is None:
             session.clear()
+            get_roles(user['id'])
             session['user_id'] = user['id']
             session['name']= username
             return redirect(url_for('posts.list'))
-     
+            
         flash(error)
+        return render_template('auth/login.html', title="Вход") 
+        
     else:
-     return render_template('auth/login.html', title="Регистрация")    
+     return render_template('auth/login.html', title="Вход")    
 
 @bp.route('/logout')
 def logout():
