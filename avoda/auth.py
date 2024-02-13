@@ -27,6 +27,8 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
+        get_roles(g.user['id'])
+        
 
 @bp.route('/')
 def title():
@@ -84,7 +86,7 @@ def login():
             session['user_id'] = user['id']
             session['name']= username
             return redirect(url_for('posts.list'))
-            
+
         flash(error)
         return render_template('auth/login.html', title="Вход") 
         

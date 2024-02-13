@@ -1,9 +1,11 @@
+from warnings import catch_warnings
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 
 from avoda.db import get_db
 import datetime
+import json
 
 bp = Blueprint('posts', __name__)
 
@@ -39,7 +41,6 @@ class Post:
          value=str(map[s])
          self.len.update({map[f]:value})
       elif str(f).find("oc")!=-1:
-         print(map[f],"occupations")
          self.occupations.append(map[f])
       elif str(f).find("ok")!=-1:
          self.o_kind.append(map[f])   
@@ -50,17 +51,34 @@ def create_post(n_post):
    db = get_db()
    try:
       db.execute("INSERT INTO post (created, updated, name, place, phone, text, len, occupations, o_kind, sex) VALUES (?,?,?,?,?,?,?,?,?,?)",
-                    (n_post.created, n_post.updated,n_post.name,n_post.place,n_post.phone,n_post.text,str(n_post.len),str(n_post.occupations),str(n_post.o_kind),n_post.sex),
+                    (n_post.created, n_post.updated,n_post.name,n_post.place,n_post.phone,n_post.text,json.dumps(n_post.len),str(n_post.occupations),str(n_post.o_kind),n_post.sex),
                 )
       db.commit()
    except db.Error as e:
-      print(e)
       flash(e)
       return e
-   flash(n_post.name+" created")
-   print(n_post.name+" created")
+   flash(n_post.name+" добавлено")
    return "ok"
             
+def update_post(n_post):
+   db = get_db()
+   len=""
+   try:
+      len=json.dumps(n_post.len)
+   except json.Error as e:
+      print (e)
+
+   try:
+      db.execute("update post set updated=?, name=?, place=?, phone=?, text=?, len=?, occupations=?, o_kind=?, sex=? where id=?",
+                    (n_post.updated,n_post.name,n_post.place,n_post.phone,n_post.text,len,str(n_post.occupations),str(n_post.o_kind),n_post.sex,n_post.id),
+                )
+      db.commit()
+   except db.Error as e:
+      flash(e)
+      return e
+   flash(n_post.name+" изменено")
+   return "ok"
+
 def validation(post):
    if post.place=="":
       return False
@@ -112,7 +130,8 @@ def list():
       for p in ps:
          np=Post(p["name"],p["place"],p["phone"],p["text"])
          np.id=p["id"]
-         np.len=p["len"]
+         print(p["len"])
+         np.len=json.loads(p["len"])
          np.occupations=p["occupations"]
          np.o_kind=p["o_kind"]
          np.sex=p["sex"]
@@ -137,32 +156,41 @@ def create():
       n_post=Post(form["name"],form["place"],form["phone"],form["text"])
       n_post.get_from_form(form)
       if validation(n_post):
-          if n_post.id==0:
-            if create_post(n_post):
+         if create_post(n_post):
               flash("Запись добавлена!")
-            else:
-              return render_template('posts/post.html',towns=towns, post=n_post,
-       languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels ) 
-          return redirect(url_for('posts.list'))
-      else: 
-       return render_template('posts/post.html',towns=towns, post=n_post,
+              return redirect(url_for('posts.list'))
+        
+      return render_template('posts/post.html',towns=towns, post=n_post,
        languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels )    
    else:
       p=Post('','','','')
       return render_template('posts/post.html',towns=towns, post=p,
       languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels )
 
-@bp.route('/post/<int:id>',methods=['GET'])
+@bp.route('/post/<int:id>',methods=['GET','POST'])
 def post(id):
-   if session["roles"].count("create_post")>0:
-      for p in posts:
-         if id==p.id:
-           return render_template('posts/post.html' ,post=p) 
-   else:
-      for p in posts:
-         if id==p.id:
-           return render_template('posts/show_post.html',post=p,list=dir(p), title="Объявление от "+p.name)
-       
+   if request.method == 'POST':
+      form=request.form
+      n_post=Post(form["name"],form["place"],form["phone"],form["text"])
+      n_post.id=id
+      n_post.get_from_form(form)
+      if validation(n_post):            
+         if update_post(n_post):
+            return redirect(url_for('posts.list'))
+         
+      return render_template('posts/post.html',towns=towns, post=n_post,
+       languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels )   
+   else:   
+      if session["roles"].count("create_post")>0:
+         for p in posts:
+            if id==p.id:
+               return render_template('posts/post.html',towns=towns, post=p,
+         languages=leng,occupations=o_list, o_kind=o_kind,levels=len_levels ) 
+      else:
+         for p in posts:
+            if id==p.id:
+               return render_template('posts/show_post.html',post=p,list=dir(p), title="Объявление от "+p.name)
+         
 
 @bp.route('/search')
 def search():
