@@ -1,3 +1,4 @@
+from flask_paginate import Pagination, get_page_parameter
 from warnings import catch_warnings
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, session
@@ -24,15 +25,15 @@ class Post:
        self.id=0
        self.created=datetime.date.today()
        self.updated = datetime.date.today()
- 
+   # функция возвращает список языков для показа во вью
    def get_len(self):
       conv = str(self.len).replace("{"," ").replace("}"," ")
       return conv.replace("'"," ") 
-   
+   # функция возвращает значение атрибута по его имени
    def get_atr_by_name(self, source):
         dataSource = getattr(self,source)
         return dataSource
-
+   # функция заполняет поля объекта из формы
    def get_from_form(self,map):
      for f in map.keys():
       #для языков из списка
@@ -46,6 +47,14 @@ class Post:
          self.o_kind.append(map[f])   
       elif str(f).find("sex")!=-1:
         self.sex=map[f]
+   # функция добавляет все поля объекта из SQL
+   def get_from_db(self,p):
+         self.id=p["id"]
+         self.len=json.loads(p["len"])
+         self.occupations=p["occupations"]
+         self.o_kind=p["o_kind"]
+         self.sex=p["sex"]  
+         self.updated=p["updated"]    
 
 def create_post(n_post):
    db = get_db()
@@ -84,30 +93,31 @@ def validation(post):
       return False
    return True
 
-
+#формирует условия для запроса к базе. если хоть  одно условие задано то в начале стоит and
 def filters(flt) :
-   global posts
-   f_posts=[]
-   for p in posts:
-      isTrue=True
-      #для языков из списка
-      for f in flt.keys():
-         if str(f).find("len")!=-1:
-            if p.len.get(flt[f])==None:
-               isTrue=False
-     
-         elif str(f).find("oc")!=-1:
-            if p.occupations.count(flt[f])==0:
-               isTrue=False 
-         #для городов  
-         else:
-            if flt.get(f)!="-" and p.get_atr_by_name(f)!=flt.get(f):
-               isTrue=False
-            
-      if isTrue:
-         f_posts.append(p)
-   return f_posts
-
+   conditions=""
+   len=""
+   oc=""
+   for f in flt.keys():
+      if str(f).find("len_")!=-1:
+            if len=="": 
+               len="len like "
+            len_key= str(f).split("_")
+            len=len+"'%"+len_key[1]+"%'"
+            conditions=conditions+" and "+len
+      if str(f).find("oc")!=-1:
+            if oc=="": 
+               oc="occupations like "
+            oc=oc+"'%"+flt[f]+"%'"
+            conditions=conditions+" and "+oc
+      if str(f)=="place" and flt[f]!="-" :
+         place="place ="+"'"+flt[f]+"'"
+         conditions=conditions+" and "+place
+      if str(f).find("sex")!=-1:
+            sex="sex= '"+flt[f]+"'" 
+            conditions=conditions+" and "+sex  
+   
+   return conditions  
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -123,28 +133,32 @@ def load_logged_in_user():
 @bp.route('/list', methods = ['POST', 'GET'])
 def list():
    # список заявок
+   title="Все публикации"
+   conditions="where julianday() - julianday(updated)<"+count_days
+   # в случае если задан фильтр для заявок то метод POST
+   if request.method == 'POST':
+      conditions=conditions+filters(request.form)
+      print(conditions)
+      title="Выбранные публикации"
    db = get_db()
    try:
-      posts.clear()
-      ps=db.execute("select * from post").fetchall()
-      for p in ps:
+    posts.clear()
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    limit=10
+    offset = page*limit - limit
+    res= db.execute("select count(id) as c from post "+conditions).fetchone()
+    total=res["c"]
+    ps=db.execute("select * from post "+conditions+" limit ? offset ?", (limit, offset)).fetchall()
+    
+    for p in ps:
          np=Post(p["name"],p["place"],p["phone"],p["text"])
-         np.id=p["id"]
-         print(p["len"])
-         np.len=json.loads(p["len"])
-         np.occupations=p["occupations"]
-         np.o_kind=p["o_kind"]
-         np.sex=p["sex"]
+         np.get_from_db(p)
          posts.append(np)
-
+    pagination = Pagination(page=page, page_per=limit, total=total)  
+    return render_template('posts/list.html', pagination=pagination, title=title,posts=posts,user=user)    
    except db.Error as e:
-      return e  
-   if request.method == 'POST':
-      f=filters(request.form)
-      return render_template('posts/list.html',title="Выбранные публикации",posts=f,user=user)
-   else:  
-      return render_template('posts/list.html',title="Все публикации",posts=posts,user=user)
-   
+      return e
+      
 @bp.route('/filter')
 def filter():
    return render_template('posts/filters.html',towns=towns, languages=leng,occupations=o_list, o_kind=o_kind )
@@ -202,3 +216,4 @@ leng = ["en","he", "ru"]
 towns=["Бат-Ям","Хайфа","Холон","Эйлат"]
 o_list=["охрана", "уборка","стройка","завод"]
 o_kind=["полная", "частичная" ]
+count_days="15"

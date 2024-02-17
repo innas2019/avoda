@@ -1,33 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3>{{title}}</h3>
+
 <input type = "button" class="btn btn-primary mt-3 mb-2" value = "фильтр" onclick="window.location.href='/filter';"/> </div> </div>
 <input type = "button" class="btn btn-primary mt-3 mb-2" value = "поиск" onclick="window.location.href='/search';"/> </div> </div>
 <input type = "button" class="btn btn-primary mt-3 mb-2" value = "все" onclick="window.location.href='/list';"/> </div> </div>
 {% if session['roles'].count("create_post")>0 %}
 <input type = "button" class="btn btn-primary mt-3 mb-2" value = "новое" onclick="window.location.href='/create';"/> </div> </div>
 {% endif %}
+<h3>{{title}}</h3> {{ pagination.info }}
+{{ pagination.links }}
 <table id="data" class="table table-hover border-top border-bottom border-light">
   <thead>
     <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-      <th class="col-1 text-center">Имя</th>
-      <th class="col-1 text-center">Контакт</th>
-      <th class="col-1 text-center">Город</th>
-      <th class="col-7"></th>
+      <th class="col-1"></th>
+      <th class="col-1">№</th>
+      <th class="col-1">Имя</th>
+      <th class="col-1">Контакт</th>
+      <th class="col-1">Город</th>
+      <th class="col-4">Языки</th>
+      <th class="col-7">Описание</th>
     </tr>
   </thead>
   <tbody>
   {% for post in posts %}
   <tr class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light"></td>
-     <td class="col-1"><input type = "button" class="btn btn-info" value = "i" onclick="window.location.href='/post/{{post.id }}';"/> </div> </div> 
-     <td class="col-1 text-center"> {{ post["name"] }}</td>
-    <td class="col-1 text-center"> {{ post["phone"] }}</td>
-    <td class="col-1 text-center"> {{ post["place"] }}</td>
-    <td class="col-7 ">{{ post.get_len()}}</td>
-    <td class="col-7 ">{{ post["text"] }}</td>
+    <td class="col-1"><input type = "button" class="btn btn-info" value = "i" onclick="window.location.href='/post/{{post.id }}';"/> </div> </div> 
+    <td>{{ loop.index + pagination.skip }}</td>
+    <td class="col-1"> {{ post["name"] }}</td>
+    <td class="col-1"> {{ post["phone"] }}</td>
+    <td class="col-1"> {{ post["place"] }}</td>
+    <td class="col-4">{{ post.get_len()}}</td>
+    <td class="col-7">{{ post["text"] }}</td>
 
    </tr>
   {% endfor %}
 </tbody>
 </table>
+{{ pagination.links }}
+
 {% endblock %}
