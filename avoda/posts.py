@@ -1,17 +1,26 @@
 from flask_paginate import Pagination, get_page_parameter
-from warnings import catch_warnings
-from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, session
-)
 
+from flask import (
+    Blueprint, flash, g, redirect, render_template, request, url_for, session,current_app
+)
 from avoda.db import get_db
+from avoda import managing as m
+from avoda import auth as a
 import datetime
 import json
+
 
 bp = Blueprint('posts', __name__)
 
 posts=[]
 user=''
+count_days="30"
+len_levels = []
+leng = ["en","he", "ru"]
+towns=[]
+o_list=[]
+o_kind=["полная", "частичная" ]
+
 class Post:
    def __init__(self,_name,_place,_phone,_text):
        self.name=_name
@@ -98,6 +107,8 @@ def filters(flt) :
    conditions=""
    len=""
    oc=""
+   global count_days
+   count_days=flt["count_days"]
    for f in flt.keys():
       if str(f).find("len_")!=-1:
             if len=="": 
@@ -116,32 +127,36 @@ def filters(flt) :
       if str(f).find("sex")!=-1:
             sex="sex= '"+flt[f]+"'" 
             conditions=conditions+" and "+sex  
-   
+      if str(f)=="permanent":
+         a.update_settings(session['filter'])
+
    return conditions  
 
 @bp.before_app_request
 def load_logged_in_user():
-    user_id = session.get('user_id')
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+    global len_levels
+    global towns
+    global o_list
+    
+    #заполняем справочники
+    len_levels = m.get_ref("levels")
+    towns=m.get_ref("places")
+    o_list=m.get_ref("occupations")
 
 @bp.route('/list', methods = ['POST', 'GET'])
 def list():
    # список заявок
    title="Все публикации"
-   conditions="where julianday() - julianday(updated)<"+count_days
+   if session.get("filter")!="":
+      title="Выбранные публикации"
    # в случае если задан фильтр для заявок то метод POST
    if request.method == 'POST':
-      conditions=conditions+filters(request.form)
-      print(conditions)
-      title="Выбранные публикации"
+      session['filter'] = filters(request.form)
+      #session['days']=count_days
+      
    db = get_db()
    try:
+    conditions="where julianday() - julianday(updated)<"+count_days+session.get("filter")
     posts.clear()
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit=10
@@ -159,9 +174,14 @@ def list():
    except db.Error as e:
       return e
       
-@bp.route('/filter')
-def filter():
-   return render_template('posts/filters.html',towns=towns, languages=leng,occupations=o_list, o_kind=o_kind )
+@bp.route('/filter/<string:p>')
+#all/set
+def filter(p):
+   if p=="set":
+      return render_template('posts/filters.html',towns=towns, languages=leng,occupations=o_list, o_kind=o_kind )
+   else:
+      session["filter"]=""
+      return redirect(url_for('posts.list')) 
 
 @bp.route('/create',methods = ['POST', 'GET'])
 def create():
@@ -210,10 +230,3 @@ def post(id):
 def search():
    return render_template('posts/search.html')
    
- 
-len_levels = ["начинающий","средний", "хороший", "родной"]
-leng = ["en","he", "ru"]
-towns=["Бат-Ям","Хайфа","Холон","Эйлат"]
-o_list=["охрана", "уборка","стройка","завод"]
-o_kind=["полная", "частичная" ]
-count_days="15"

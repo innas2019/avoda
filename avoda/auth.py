@@ -15,6 +15,17 @@ def get_roles(user_id):
       session['roles'].append(r["name"])
   print(session['roles'])   
 
+def update_settings(s):
+  db = get_db()
+  try:
+    db.execute("update user set settings=? where id=?",
+                    (s,session.get('user_id'))
+                )
+    db.commit()
+  except db.Error as e:
+    flash(e)
+
+
 bp = Blueprint("auth", __name__)
 
 @bp.before_app_request
@@ -85,6 +96,10 @@ def login():
             get_roles(user['id'])
             session['user_id'] = user['id']
             session['name']= username
+            if user['settings']==None:
+                session['filter']=''
+            else:
+                session['filter']=user['settings']
             return redirect(url_for('posts.list'))
 
         flash(error)

@@ -5,15 +5,15 @@
  {% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-default">
+    <nav class="navbar bg-secondary">
         <img src= {{ url_for('static', filename='man2.png') }} width="40" height="40"  >    
         {% if g.user %}
-             <a href="{{ url_for('posts.list') }}">Главная </a>         
+             <a class="nav-link" href="{{ url_for('posts.list') }}">Главная </a>         
               {{ g.user['name'] }}
-             <a href="{{ url_for('auth.logout') }}"> Выйти</a>
+             <a class="nav-link" href="{{ url_for('auth.logout') }}"> Выйти</a>
             {% else %}
-             <a href="{{ url_for('auth.register') }}">Регистрация</a>
-             <a href="{{ url_for('auth.login') }}">Вход</a>
+             <a class="nav-link" href="{{ url_for('auth.register') }}">Регистрация</a>
+             <a class="nav-link" href="{{ url_for('auth.login') }}">Вход</a>
             {% endif %}
     </nav> 
     {% with messages = get_flashed_messages() %}

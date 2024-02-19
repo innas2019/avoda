@@ -6,7 +6,8 @@ CREATE TABLE user (
     name     TEXT (30) UNIQUE
                        NOT NULL,
     password TEXT (40) NOT NULL,
-    isactive INTEGER
+    isactive INTEGER,
+    settings TEXT (50) 
 );
 CREATE TABLE post (
     id          INTEGER    PRIMARY KEY
@@ -37,6 +38,13 @@ CREATE TABLE IF NOT EXISTS user_role (
     user_id INTEGER REFERENCES user (id) ON DELETE NO ACTION ON UPDATE NO ACTION, 
     role_id INTEGER REFERENCES role (id) ON DELETE NO ACTION ON UPDATE NO ACTION);
 
+CREATE TABLE IF NOT EXISTS refs (
+    id    INTEGER   PRIMARY KEY
+                    NOT NULL
+                    UNIQUE,
+    name  TEXT (20) NOT NULL,
+    value           NOT NULL
+);
 
 
 COMMIT TRANSACTION;
