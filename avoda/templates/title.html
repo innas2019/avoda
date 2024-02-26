@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
-      {% block content %}
-      <h1>{{ title }}</h1>
-      <img src= {{ url_for('static', filename='wolf.png') }} width="300" height="300"  >   
-      
-      {% endblock %}
+{% block content %}
+   <div class="row" style="margin: 5px">
+      <div class="col-sm-12">  
+         <img src= {{ url_for('static', filename='title.png') }}  >   
+       </div>
+   </div>    
+
+{% endblock %}

@@ -4,7 +4,7 @@ from flask import (
 from avoda.db import get_db
 
 
-#читаем все спавочники и добавляем в app
+#читаем все справочники и добавляем в app
 #app.config.from_mapping(
 def get_ref(name):
  res=[]

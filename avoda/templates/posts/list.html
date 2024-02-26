@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "фильтр" onclick="window.location.href='/filter/set';"/> </div> </div>
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "поиск" onclick="window.location.href='/search';"/> </div> </div>
+<div style="margin: 10px">
+<input type = "button" class="btn btn-primary mt-3 mb-2" value = "фильтр" onclick="window.location.href='/filter/set';"/>  
+<input type = "button" class="btn btn-primary mt-3 mb-2" value = "поиск" onclick="window.location.href='/search';"/> 
 {% if session['filter']!="" %}
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "все" onclick="window.location.href='/filter/all';"/> </div> </div>
+<input type = "button" class="btn btn-primary mt-3 mb-2" value = "все" onclick="window.location.href='/filter/all';"/> 
 {% endif %}
 {% if session['roles'].count("create_post")>0 %}
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "+" onclick="window.location.href='/create';"/> </div> </div>
+<input type = "button" class="btn btn-primary mt-3 mb-2" value = "+" onclick="window.location.href='/create';"/>
 {% endif %}
 <h3>{{title}}</h3> {{ pagination.info }}
 {{ pagination.links }}
@@ -26,7 +26,7 @@
   <tbody>
   {% for post in posts %}
   <tr class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light"></td>
-    <td class="col-1"><input type = "button" class="btn btn-info" value = "i" onclick="window.location.href='/post/{{post.id }}';"/> </div> </div> 
+    <td class="col-1"><input type = "button" class="btn btn-link" value = "i" onclick="window.location.href='/post/{{post.id }}';"/> </div> </div> 
     <td>{{ loop.index + pagination.skip }}</td>
     <td class="col-1"> {{ post["name"] }}</td>
     <td class="col-1"> {{ post["phone"] }}</td>
@@ -39,5 +39,5 @@
 </tbody>
 </table>
 {{ pagination.links }}
-
+</div>
 {% endblock %}

@@ -5,17 +5,19 @@
  {% endblock %}
 
 {% block navbar %}
-    <nav class="navbar bg-secondary">
-        <img src= {{ url_for('static', filename='man2.png') }} width="40" height="40"  >    
-        {% if g.user %}
-             <a class="nav-link" href="{{ url_for('posts.list') }}">Главная </a>         
-              {{ g.user['name'] }}
-             <a class="nav-link" href="{{ url_for('auth.logout') }}"> Выйти</a>
-            {% else %}
-             <a class="nav-link" href="{{ url_for('auth.register') }}">Регистрация</a>
-             <a class="nav-link" href="{{ url_for('auth.login') }}">Вход</a>
-            {% endif %}
-    </nav> 
+  <nav class="navbar " >
+    <a class="navbar-text" href="{{ url_for('auth.title') }}">
+      'פּרוֹיֶקט 'עבודה-Проект Авода</a>
+     
+      {% if g.user %}
+            <a class="navbar-text " href="{{ url_for('posts.list') }}">Объявления </a>  
+            <a class="navbar-text" href="{{ url_for('auth.logout') }}"> Выйти</a> 
+             <span   class="navbar-text"> {{ g.user['name'] }} </span> 
+      {% else %}
+            <a class="navbar-text" href="{{ url_for('auth.register') }}">Регистрация</a>
+            <a class="navbar-text" href="{{ url_for('auth.login') }}">Вход</a>
+      {% endif %}
+  </nav> 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
       <ul class=flashes>
@@ -26,9 +28,11 @@
     {% endif %}
     {% endwith %}
 {% endblock %}
-
 {% block content %}
     <div class="container">
          {% block app_content %}{% endblock %}
     </div> 
+<div class="container ">
+      <p>ver 0.8 Hatul madan studio </p>
+</div>
 {% endblock %}

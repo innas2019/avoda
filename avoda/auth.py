@@ -19,7 +19,7 @@ def update_settings(s):
   db = get_db()
   try:
     db.execute("update user set settings=? where id=?",
-                    (s,session.get('user_id'))
+                    (s,session.get('user_id                '))
                 )
     db.commit()
   except db.Error as e:
@@ -42,8 +42,9 @@ def load_logged_in_user():
         
 
 @bp.route('/')
+@bp.route('/title')
 def title():
-   return render_template('title.html',title="добро пожаловать")   
+   return render_template('title.html',title= "'פּרוֹיֶקט 'עבודה ")  
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():

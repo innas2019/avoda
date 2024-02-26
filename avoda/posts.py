@@ -133,7 +133,7 @@ def filters(flt) :
    return conditions  
 
 @bp.before_app_request
-def load_logged_in_user():
+def load_ref():
     global len_levels
     global towns
     global o_list
