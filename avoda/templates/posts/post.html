@@ -3,25 +3,25 @@
    {% for message in get_flashed_messages() %}
       <div class="flash">{{ message }}</div>
    {% endfor %}
-   <div class="grid" style="margin: 20px">
+   <div class="grid" >
       {% if post.id==0 %}
        <form action = "http://localhost:5000/create" method = "post">
       {% else %}  
        <form action = "http://localhost:5000/post/{{post.id }}" method = "post">
       {% endif%}   
+       <div class="row">
+                  <div class="col-md-4">Имя </div>  <div class="col-md-4"><input type = "text" class="form-control" name = "name" required value={{post.name}} > </div> </div>
       <div class="row">
-                  <div class="col-md-4">Имя </div>  <div class="col-md-4"><input type = "text" name = "name" required value={{post.name}} > </div> </div>
-      <div class="row">
-                  <div class="col-md-4">Телефон </div>   <div class="col-md-4"><input type = "text" name = "phone" required value={{post.phone}}  > </div> </div>
+                  <div class="col-md-4">Телефон </div>   <div class="col-md-4"><input type = "text" class="form-control" name = "phone" required value={{post.phone}}  > </div> </div>
       <div class="row"> 
-            <div class="col-md-6">
+            <div class="col-md-8">
               <label for="note" class="form-label">Объявление</label>
               <textarea class="form-control" name="text", id="note" rows="3"  required>{{post.text}}</textarea>
             </div>      
       </div>
       <div class="row">
             <div class="col-md-6">    
-             Регион:
+                  <span class="form-text">  Регион: </span>
                   <select name="place" class="form-select" aria-label="Город:">
                         <option selected>{{post.place}}</option>
                         {% for town in towns %}
@@ -30,10 +30,10 @@
                   </select>        
             </div> 
       </div>     
-      <div class="col-md-3">Языки:
+      <div class="col-md-3 ">   <span class="form-text">  Языки: </span>
       {% for l in languages %}  
             <div class="row"> 
-                  <div class="col-md-1">   
+                  <div class="col-md-2">   
                      <div class="form-check" >
                         {% if post.len.get(l)!=None %}
                         <input class="form-check-input" type="checkbox" value="{{l}}" name={{"len_"+l}} id={{"len_"+l}}  checked>
@@ -43,7 +43,7 @@
                         <label class="form-check-label" for={{"len_"+l}}> {{l}} </label>                        
                      </div>
                   </div>   
-                  <div class="col-md-1">  
+                  <div class="col-md-2">  
                        <select name={{"len_level"+l}} class="form-select" aria-label="">
                               {% if post.len.get(l)!=None %}
                              <option selected>{{post.len.get(l)}}</option>
@@ -80,7 +80,7 @@
       </div>
       <div class="row">  
             <div class="col-md-3"> 
-                  Работы:
+                  <span class="form-text">  Работы: </span>
                   {% for oc in occupations %}  
                  
                     <div class="form-check ">

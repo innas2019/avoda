@@ -19,4 +19,4 @@ bp = Blueprint("mng", __name__)
         
 @bp.route('/admin')
 def admin():
-   return "здесь будет управление справочниками и настройками"
+   return render_template("try.html")

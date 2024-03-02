@@ -9,7 +9,9 @@ def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE='avoda.db'
+        DATABASE='avoda.db',
+         BOOTSTRAP_SERVE_LOCAL = True,
+    BOOTSTRAP_BOOTSWATCH_THEME = 'Cosmo'
     )
     bootstrap = Bootstrap(app)
     db.init_app(app)
