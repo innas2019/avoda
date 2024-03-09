@@ -1,5 +1,5 @@
 BEGIN TRANSACTION;
-CREATE TABLE user (
+CREATE TABLE IF NOT EXISTS user (
     id       INTEGER   PRIMARY KEY
                        UNIQUE
                        NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE user (
     isactive INTEGER,
     settings TEXT (50) 
 );
-CREATE TABLE post (
+CREATE TABLE IF NOT EXISTS post (
     id          INTEGER    PRIMARY KEY
                            NOT NULL
                            UNIQUE,
