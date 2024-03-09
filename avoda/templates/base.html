@@ -15,8 +15,9 @@
         {% endblock %}
     </head>
     <body>
+        <div class="container-md" >
         <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4"  >
-            <div class="container-md" >
+           
             <a class="navbar-brand" href="{{ url_for('auth.title') }}">
               'פּרוֹיֶקט 'עבודה-Проект Авода</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,15 +39,19 @@
             </ui>
            
         </div>   
-        </div>
-        </nav> 
+       
+        </nav>  </div>
         {% from 'bootstrap4/utils.html' import render_messages %}
         {{ render_messages() }}
         <div class="container-md" >
-        
-            {% block content %}{% endblock %}
-        <p class="text-secondary fs-6">ver 0.8</p>        
-        </div>   
+                    {% block content %}{% endblock %}
+               </div> 
+        <footer class="container-md text-left">
+            {% block footer %}
+                <small> ver 0.8 Hatul madan
+                </small>
+            {% endblock %}
+        </footer>  
         {% block scripts %}
             <!-- Optional JavaScript -->
             {{ bootstrap.load_js() }}
