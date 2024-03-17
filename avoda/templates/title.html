@@ -1,9 +1,85 @@
-{% extends 'base.html' %}
-{% block content %}
-   <div class="row" >
-      <div class="col-sm-12">  
-         <img src= {{ url_for('static', filename='title.png') }}  >   
-       </div>
-   </div>    
+<!doctype html>
+<html lang="en">
 
-{% endblock %}
+<head>
+   {% block head %}
+   <!-- Required meta tags -->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <link rel="icon" href="{{ url_for('static', filename='hatul.png') }}">
+   {% block styles %}
+   <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
+   {% endblock %}
+   <title>עבודה</title>
+   {% endblock %}
+</head>
+
+<body>
+   <div id="component" class="container">
+      <div class="bg-white justify-content-center align-items-center">
+         <!-- logo+login -->
+         <div class="col-xxl-12 row d-flex">
+            <div class="col-6 row justify-content-end">
+               <div class="px-1 py-1 bg-white col-5 row">
+                  <img src={{ url_for('static', filename='LogoStartScreen_448X128.png' ) }}>
+               </div>
+               <div class="bg-white col-12 justify-content-center align-items-center d-flex">
+                  <p class="text-end text-dark fs-3 fw-semibold font-family-Inter col-12 m-0 px-3 py-2">
+                     Поиск сотрудников по объявлениям
+                  </p>
+               </div>
+            </div>
+            <div class="col-6 row justify-content-left">
+               <div class="px-1 py-1 bg-secondary-subtle col-12 row ">
+                  <div class="py-1 col-10 justify-content-center align-items-center">
+                     <p class="text-dark fs-5 fw-semibold font-family-Inter col-12 m-0 px-3 py-2">
+                        Вход для работодателей
+                     </p>
+                  </div>
+                  <form action="{{ url_for('auth.login')}}" style="margin: 10px" method="post">
+
+                     <div class="row">
+                        
+                        <div class="col-4"><input type="text" name="name" required> </div>
+                     </div>
+                     <div class="row">
+                      
+                        <div class="col-4"><input type="password" name="password" required> </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-4"><p>Забыли пароль?</p> <a class="link-underline-primary fs-6 fw-normal font-family-Inter" href=""> Восстановить </a>
+                        </div>
+                     </div>   
+                     <div class="row">
+                        <div class="col-4"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Войти">
+                        </div>
+                        <div class="col-4"><input type="button" class="btn btn-secondary-subtle mt-3 mb-2 rounded-2"
+                              value="Регистрация"> </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="col-12 row d-flex">
+                  <p class="text-end text-dark fs-6 fw-normal font-family-Inter col-12 m-0 px-3 py-2">
+                  ver 1.0 Hatul Madan
+                  </p>
+                  <p class="text-end text-primary fs-6 fw-normal font-family-Inter text-decoration-underline col-12 m-0 px-3 py-2">
+                  Связаться с нами
+                  </p>
+              </div>
+            </div>
+         </div>
+      </div>
+      <!-- banner -->
+      <div class="col-xxl-12 row d-flex">
+         <img src={{ url_for('static', filename='Banner2X.png' ) }}>
+      </div>
+
+   </div>
+   </div>
+   {% block scripts %}
+   <!-- Optional JavaScript 
+   {{ bootstrap.load_js() }}-->
+   {% endblock %}
+</body>
+
+</html>

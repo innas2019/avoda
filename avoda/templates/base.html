@@ -1,62 +1,81 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        {% block head %}
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="icon" href="{{ url_for('static', filename='hatul.png') }}">
-        {% block styles %}
-            <!-- Bootstrap CSS -->
-            {{ bootstrap.load_css() }}
-        {% endblock %}
 
-        <title>'פּרוֹיֶקט 'עבודה</title>
-        {% endblock %}
-    </head>
-    <body>
-        <div class="container-md" >
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4"  >
-           
+<head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{ url_for('static', filename='hatul.png') }}">
+    {% block styles %}
+    <!-- Bootstrap CSS 
+            {{ bootstrap.load_css() }}-->
+
+    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
+    {% endblock %}
+    <title>עבודה</title>
+    {% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4">
+
             <a class="navbar-brand" href="{{ url_for('auth.title') }}">
-              'פּרוֹיֶקט 'עבודה-Проект Авода</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                'פּרוֹיֶקט 'עבודה-Проект Авода</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarCollapse">
-              <ui class="navbar-nav me-auto mb-2 mb-md-0">
-              {% if g.user %}
-                    <li class="nav-item "><a class="nav-link active" href="{{ url_for('posts.list') }}">Объявления </a> </li>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ui class="navbar-nav me-auto mb-2 mb-md-0">
+                    {% if g.user %}
+                    <li class="nav-item "><a class="nav-link active" href="{{ url_for('posts.list') }}">Объявления </a>
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a> </li>
-                        <span class="navbar-text"> User name:  {{ g.user['name'] }}  </span>    
-              {% else %}
-              <li class="nav-item">      
-              <a class="nav-link active" href="{{ url_for('auth.register') }}">Регистрация</a>  </li>
-              <li class="nav-item">  
-              <a class="nav-link active" href="{{ url_for('auth.login') }}">Вход</a> </li>
-              {% endif %}
-            </ui>
-           
-        </div>   
-       
-        </nav>  </div>
-        {% from 'bootstrap4/utils.html' import render_messages %}
-        {{ render_messages() }}
-        <div class="container-md" >
-                    {% block content %}{% endblock %}
-               </div> 
-        <footer class="container-md text-left">
-            {% block footer %}
-                <small> ver 0.8 Hatul madan
-                </small>
-            {% endblock %}
-        </footer>  
-        {% block scripts %}
-            <!-- Optional JavaScript -->
-            {{ bootstrap.load_js() }}
-        {% endblock %}
-    </body>
-</html>
+                        <a class="nav-link active" href="/refs/0">Управление</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a>
+                    </li>
+                    <span class="navbar-text"> User name: {{ g.user['name'] }} </span>
+                    {% else %}
+                   
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('auth.login') }}">Вход</a>
+                    </li>
+                    {% endif %}
+                </ui>
 
-  
+            </div>
+
+        </nav>
+    </div>
+    {% from 'bootstrap4/utils.html' import render_messages %}
+    {{ render_messages() }}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <footer class="container">
+        {% block footer %}
+        <div class="bg-primary col-xxl-12 d-flex">
+            <div class="px-1 py-1  justify-content-center align-items-center ">
+                <p class="text-white fs-6 fw-normal font-family-Inter m-0 px-3 py-2">
+                    ver 1.0 Hatul Madan
+                </p>
+              <p class="text-end text-white fs-6 fw-normal font-family-Inter text-decoration-underline m-0 px-3 py-2">
+                    Связаться с нами
+                </p>
+            </div>
+
+        </div>
+
+        {% endblock %}
+    </footer>
+    {% block scripts %}
+    <!-- Optional JavaScript -->
+    {{ bootstrap.load_js() }}
+    {% endblock %}
+</body>
+
+</html>

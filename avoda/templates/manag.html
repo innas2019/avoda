@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Справочники</h3>
+<div class="row">
+  <div class="col">
+    <table id="data" class="table table-hover border-top border-bottom border-light">
+      <thead>
+        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
+          <th class="col-1">Род занятий</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in o_list %}
+        <tr
+          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+          <th>
+            <a class="link-underline-primary" href="/refs/{{ o["id"] }}">
+              {{ o["id"] }}</td>
+            </a>
+          </th>
+
+          <td class="col-3"> {{ o["value"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <table id="data" class="table table-hover border-top border-bottom border-light">
+      <thead>
+        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
+          <th class="col-1">Города</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in towns %}
+        <tr
+          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+          <th>
+            <a class="link-underline-primary" href="/refs/{{ o["id"] }}">
+              {{ o["id"] }}</td>
+            </a>
+          </th>
+
+          <td class="col-3"> {{ o["value"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <table id="data" class="table table-hover border-top border-bottom border-light">
+      <thead>
+        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
+          <th class="col-1">Язык уровни</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in len %}
+        <tr
+          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+          <th>
+            <a class="link-underline-primary" href="/refs/{{ o["id"] }}">
+              {{ o["id"] }}</td>
+            </a>
+          </th>
+
+          <td class="col-3"> {{ o["value"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <form action="" method="post">
+
+    <div class="row">
+      <div class="col-4"><input type="number" name="id" value={{r.id}}> </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <select name="name" class="form-select" aria-label="Справочник:">
+          <option selected>{{r.name}}</option>
+          <option value=places>places</option>
+          <option value=occupations>occupations</option>
+          <option value=levels>levels</option>
+          
+    </select>      
+    </div>
+    <div class="row">
+      <div class="col-4"><input type="text" name="value"  value={{r.value}} required> </div>
+    </div>
+    <div class="row">
+      <div class="col-2"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить"> </div>
+      <div class="col-2"><input type="button" class="btn mt-3 mb-2 rounded-2" value="Отменить" onclick="window.location.href='/refs/0';"> </div>
+    </div>
+</div>
+{% endblock %}

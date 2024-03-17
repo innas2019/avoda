@@ -1,15 +1,37 @@
-      {% extends 'base.html' %}
-      {% block content %}
-      <h1>{{ title }}</h1>
-     
-      <div class="container">
-          {% for fld in list %}
-            {% if fld.find("_")!= 0 and fld.find("get")!=0 and fld.find("id")!=0: %}
-            <div class="row">
-                  <div class="col-md-2">   {{fld}}:     </div>
-                  <div class="col-md-7">  {{post.get_atr_by_name(fld)}}    </div>
-            </div>
-            {% endif %}  
-          {% endfor %}
-      </div>
-      {% endblock %}
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-flex">
+   <div class="row">
+      <a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="/list"> Вернуться к списку </a>
+   </div>
+   <div class="row">
+      <p class="text-secondary-subtle fs-6 fw-normal font-family-Inter">
+         Опубликовано {{days}} дней назад {{post["updated"]}}</p>
+   </div>
+   <div class="row">
+      <p class="text-dark fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</p>
+   </div>
+   <div class="row">{{ post["phone"] }}</div>
+   <div class="row">{{ post["o_kind"] }} {{ post["place"] }}</div>
+   <div class="row">{{ post["occupation"] }}</div>
+   <span> Языки</span>
+   <div >{{ post.get_len()}}</div>
+   <span> Объявление</span>
+   <div>{{ post["text"] }}</div>
+   <div ><input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="" /> </div>
+   <div class="row"> {{current}}й из {{last}}</div>
+   <div>
+      {% if prev!=0 %}
+      <input type="button" class="btn btn-primary rounded-2" value="Предыдущая анкета"
+         onclick="window.location.href='/show/{{prev}}';" />
+      {% endif %}
+      {% if next!=0 %}
+      <input type="button" class="btn btn-primary rounded-2" value="Следующая анкета"
+         onclick="window.location.href='/show/{{next}}';" />
+      {% endif %}
+      {% if session['roles'].count("create_post")>0 %}
+      <a class="link-underline-primary" href="/post/{{post.id }}"> редактировать </a>
+      {% endif %}
+   </div>
+</div>
+{% endblock %}

@@ -27,7 +27,7 @@
   {% for post in posts %}
   <tr class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
    <th>
-      <a class="link-underline-primary" href="/post/{{post.id }}">
+      <a class="link-underline-primary" href="/show/{{post.id }}">
       {{ loop.index + pagination.skip }}
     </a></th>
        <td class="col-1"> {{ post["name"] }}</td>
