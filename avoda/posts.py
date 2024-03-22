@@ -22,7 +22,7 @@ bp = Blueprint("posts", __name__)
 
 posts = []
 user = ""
-count_days = "30"
+count_days = "60"
 len_levels = []
 leng = ["en", "he", "ru"]
 towns = []

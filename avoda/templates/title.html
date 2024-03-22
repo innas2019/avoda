@@ -15,67 +15,77 @@
 </head>
 
 <body>
-   <div id="component" class="container">
-      <div class="bg-white justify-content-center align-items-center">
-         <!-- logo+login -->
-         <div class="col-xxl-12 row d-flex">
-            <div class="col-6 row justify-content-end">
-               <div class="px-1 py-1 bg-white col-5 row">
-                  <img src={{ url_for('static', filename='LogoStartScreen_448X128.png' ) }}>
+   <!-- bg-white justify-content-center align-items-center" -->
+   <div id="component" class="container-md">
+      <!-- logo+login -->
+      <div class="row mt-5 justify-content-center">
+         <!-- logo+text -->
+         <div class="col-4 mt-5 px-3 justify-content-end">
+            <div class="row justify-content-end">
+               <div class="col-7 justify-content-end d-flex">
+                  <img src={{ url_for('static', filename='LogoStartScreen_224X62.png' ) }}>
+
                </div>
-               <div class="bg-white col-12 justify-content-center align-items-center d-flex">
-                  <p class="text-end text-dark fs-3 fw-semibold font-family-Inter col-12 m-0 px-3 py-2">
+               <div class="col-7">
+                  <p class="text-end text-dark fs-4 fw-semibold font-family-Inter m-0 px-3 py-2">
                      Поиск сотрудников по объявлениям
                   </p>
                </div>
             </div>
-            <div class="col-6 row justify-content-left">
-               <div class="px-1 py-1 bg-secondary-subtle col-12 row ">
-                  <div class="py-1 col-10 justify-content-center align-items-center">
-                     <p class="text-dark fs-5 fw-semibold font-family-Inter col-12 m-0 px-3 py-2">
-                        Вход для работодателей
-                     </p>
-                  </div>
-                  <form action="{{ url_for('auth.login')}}" style="margin: 10px" method="post">
+         </div>
+      <!-- login -->
+         <div class="col-3 justify-content-start mt-3 px-3">
+            <div class="row justify-content-center px-6 py-1 bg-secondary-subtle">
+               <div class="col py-3 justify-content-center align-items-center">
+                  <p class="text-dark fs-5 fw-semibold font-family-Inter px-3 py-2">
+                     Вход для работодателей
+                  </p>
+               </div>
+               <div class="col px-3 py-2 justify-content-center align-items-center">
+                  <form action="{{ url_for('auth.login')}}" method="post">
 
-                     <div class="row">
-                        
-                        <div class="col-4"><input type="text" name="name" required> </div>
+                     <div class="row ">
+
+                        <div class="col justify-content-center"><input type="text" name="name" required> </div>
                      </div>
                      <div class="row">
-                      
-                        <div class="col-4"><input type="password" name="password" required> </div>
+
+                        <div class="col justify-content-center"><input type="password" name="password" required> </div>
                      </div>
                      <div class="row">
-                        <div class="col-4"><p>Забыли пароль?</p> <a class="link-underline-primary fs-6 fw-normal font-family-Inter" href=""> Восстановить </a>
+                        <div class="col">
+                           Забыли пароль?<a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="">
+                              Восстановить </a>
                         </div>
-                     </div>   
+                     </div>
                      <div class="row">
-                        <div class="col-4"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Войти">
+                        <div class="col-4"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                              value="Войти">
                         </div>
                         <div class="col-4"><input type="button" class="btn btn-secondary-subtle mt-3 mb-2 rounded-2"
                               value="Регистрация"> </div>
                      </div>
                   </form>
                </div>
-               <div class="col-12 row d-flex">
-                  <p class="text-end text-dark fs-6 fw-normal font-family-Inter col-12 m-0 px-3 py-2">
+            </div>
+            <div class="col-12 row d-flex">
+               <p class="text-end text-dark fs-6 fw-normal font-family-Inter col-12 m-0 px-3 py-2">
                   ver 1.0 Hatul Madan
-                  </p>
-                  <p class="text-end text-primary fs-6 fw-normal font-family-Inter text-decoration-underline col-12 m-0 px-3 py-2">
+               </p>
+               <p
+                  class="text-end text-primary fs-6 fw-normal font-family-Inter text-decoration-underline col-12 m-0 px-3 py-2">
                   Связаться с нами
-                  </p>
-              </div>
+               </p>
             </div>
          </div>
       </div>
       <!-- banner -->
-      <div class="col-xxl-12 row d-flex">
+      <div class="row mt-5">
          <img src={{ url_for('static', filename='Banner2X.png' ) }}>
       </div>
 
    </div>
-   </div>
+
    {% block scripts %}
    <!-- Optional JavaScript 
    {{ bootstrap.load_js() }}-->
