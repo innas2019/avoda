@@ -1,45 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="px-6">
+  <div class="row">
+    <div class="col">
+      <span class="text fs-5 fw-semibold">{{title}}</span>
+    </div>
+    <div class="col"> 
+    {{ pagination.info }}
+    </div>
+  </div>
+  <input type="button" class="btn btn-light btn-sm" value="фильтр" onclick="window.location.href='/filter/set';" />
+  <input type="button" class="btn btn-light btn-sm" value="поиск" onclick="window.location.href='/search';" />
+  {% if session['filter']!="" %}
+  <input type="button" class="btn btn-light btn-sm" value="все" onclick="window.location.href='/filter/all';" />
+  {% endif %}
+  {% if session['roles'].count("create_post")>0 %}
+  <input type="button" class="btn btn-light btn-sm" value="+" onclick="window.location.href='/create';" />
+  {% endif %}
 
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "фильтр" onclick="window.location.href='/filter/set';"/>  
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "поиск" onclick="window.location.href='/search';"/> 
-{% if session['filter']!="" %}
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "все" onclick="window.location.href='/filter/all';"/> 
-{% endif %}
-{% if session['roles'].count("create_post")>0 %}
-<input type = "button" class="btn btn-primary mt-3 mb-2" value = "+" onclick="window.location.href='/create';"/>
-{% endif %}
-<h3>{{title}}</h3> {{ pagination.info }}
-{{ pagination.links }}
-<table id="data" class="table table-hover border-top border-bottom border-light">
-  <thead>
-    <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-    
-      <th class="col-1">№</th>
-      <th class="col-1">Имя</th>
-      <th class="col-1">Контакт</th>
-      <th class="col-1">Город</th>
-      <th class="col-4">Языки</th>
-      <th class="col-7">Описание</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for post in posts %}
-  <tr class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-   <th>
-      <a class="link-underline-primary" href="/show/{{post.id }}">
-      {{ loop.index + pagination.skip }}
-    </a></th>
-       <td class="col-1"> {{ post["name"] }}</td>
-    <td class="col-1"> {{ post["phone"] }}</td>
-    <td class="col-1"> {{ post["place"] }}</td>
-    <td class="col-4">{{ post.get_len()}}</td>
-    <td class="col-7">{{ post["text"] }}</td>
+  {{ pagination.links }}
+  <table id="data" class="table table-hover border-top border-bottom border-light">
+    <thead>
+      <tr class="d-none d-lg-table-row table-secondary border-start border-end border-light text-center">
+        <th class="col-1">№</th>
+        <th class="col-1">Имя</th>
+        <th class="col-1">Контакт</th>
+        <th class="col-1">Город</th>
+        <th class="col-7">Описание</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+      <tr
+        class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+        <th>
+          <a class="link-underline-primary" href="/show/{{loop.index}}">
+            {{loop.index + pagination.skip}}
+          </a>
+        </th>
+        <td class="col-1"> {{ post["name"] }}</td>
+        <td class="col-1"> {{ post["phone"] }}</td>
+        <td class="col-1"> {{ post["place"] }}</td>
 
-   </tr>
-  {% endfor %}
-</tbody>
-</table>
-{{ pagination.links }}
+        <td class="col-7">{{ post["text"] }}</td>
 
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

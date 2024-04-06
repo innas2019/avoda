@@ -17,8 +17,10 @@
 <body>
    <!-- bg-white justify-content-center align-items-center" -->
    <div id="component" class="container-md">
+    {% from 'bootstrap5/utils.html' import render_messages %}
+    {{ render_messages() }}
       <!-- logo+login -->
-      <div class="row mt-5 justify-content-center">
+      <div class="row mt-5 justify-content-center" style ="height: 450px;">
          <!-- logo+text -->
          <div class="col-4 mt-5 px-3 justify-content-end">
             <div class="row justify-content-end">
@@ -46,36 +48,34 @@
 
                      <div class="row ">
 
-                        <div class="col justify-content-center"><input type="text" name="name" required> </div>
+                        <div class="col justify-content-center"><input type="text" class="form-control" placeholder="логин" name="name" required> </div>
                      </div>
                      <div class="row">
 
-                        <div class="col justify-content-center"><input type="password" name="password" required> </div>
+                        <div class="col justify-content-center"><input type="password" class="form-control" name="password" placeholder="пароль"  required> </div>
                      </div>
                      <div class="row">
                         <div class="col">
                            Забыли пароль?<a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="">
                               Восстановить </a>
-                        </div>
+                        </div>       
                      </div>
                      <div class="row">
                         <div class="col-4"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
                               value="Войти">
                         </div>
-                        <div class="col-4"><input type="button" class="btn btn-secondary-subtle mt-3 mb-2 rounded-2"
-                              value="Регистрация"> </div>
+                        <div class="col-4"><input type="button" class="btn btn-secondary-subtle mt-3 mb-2 rounded-2 text-primary"
+                              value="Регистрация" onclick="window.location.href='/register';"> </div>
                      </div>
                   </form>
                </div>
             </div>
             <div class="col-12 row d-flex">
-               <p class="text-end text-dark fs-6 fw-normal font-family-Inter col-12 m-0 px-3 py-2">
-                  ver 1.0 Hatul Madan
-               </p>
-               <p
-                  class="text-end text-primary fs-6 fw-normal font-family-Inter text-decoration-underline col-12 m-0 px-3 py-2">
+               <span class="text-end text-dark  font-family-Inter" style="font-size: 0.75rem;">
+                  ver 1.0 Hatul Madan </span>
+                  <span   class="text-end text-primary font-family-Inter text-decoration-underline" style="font-size: 0.75rem;">
                   Связаться с нами
-               </p>
+               </span>
             </div>
          </div>
       </div>

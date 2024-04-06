@@ -1,122 +1,147 @@
 {% extends 'base.html' %}
 {% block content %}
-   {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
-   {% endfor %}
-   <div class="grid" >
+{% for message in get_flashed_messages() %}
+<div class="flash">{{ message }}</div>
+{% endfor %}
+<div class="px-6">
       {% if post.id==0 %}
-       <form action = "{{ url_for('posts.create') }}" method = "post">
-      {% else %}  
-       <form action = "/post/{{post.id }}" method = "post">
-      {% endif%}   
-       <div class="row">
-                  <div class="col-md-4">Имя </div>  <div class="col-md-4"><input type = "text" class="form-control" name = "name" required value={{post.name}} > </div> </div>
-      <div class="row">
-                  <div class="col-md-4">Телефон </div>   <div class="col-md-4"><input type = "text" class="form-control" name = "phone" required value={{post.phone}}  > </div> </div>
-      <div class="row"> 
-            <div class="col-md-8">
-              <label for="note" class="form-label">Объявление</label>
-              <textarea class="form-control" name="text", id="note" rows="3"  required>{{post.text}}</textarea>
-            </div>      
-      </div>
-      <div class="row">
-            <div class="col-md-6">    
-                  <span class="form-text">  Регион: </span>
-                  <select name="place" class="form-select" aria-label="Город:">
-                        <option selected>{{post.place}}</option>
-                        {% for town in towns %}
-                        <option value={{town}}>{{town}}</option>
-                        {% endfor %}
-                  </select>        
-            </div> 
-      </div>     
-      <div class="col-md-3 ">   <span class="form-text">  Языки: </span>
-      {% for l in languages %}  
-            <div class="row"> 
-                  <div class="col-md-2">   
-                     <div class="form-check" >
-                        {% if post.len.get(l)!=None %}
-                        <input class="form-check-input" type="checkbox" value="{{l}}" name={{"len_"+l}} id={{"len_"+l}}  checked>
-                        {% else %}
-                        <input class="form-check-input" type="checkbox" value="{{l}}" name={{"len_"+l}} id={{"len_"+l}}>
-                         {% endif %}
-                        <label class="form-check-label" for={{"len_"+l}}> {{l}} </label>                        
-                     </div>
-                  </div>   
-                  <div class="col-md-2">  
-                       <select name={{"len_level"+l}} class="form-select" aria-label="">
-                              {% if post.len.get(l)!=None %}
-                             <option selected>{{post.len.get(l)}}</option>
-                             {% else %}
-                             <option selected>-</option>
-                             {% endif %}
-                              {% for level in levels %}
-                              <option value={{level}}>{{level}}</option>
-                              {% endfor %}
-                        </select>   
+      <form action="{{ url_for('posts.create') }}" method="post">
+            {% else %}
+            <form action="/post/{{post.id }}" method="post">
+                  {% endif%}
+                  <div class="row">
+                        <div class="col-md-2">
+                              <p class="form-text">Имя </p>
+                        </div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="name" required
+                                    value={{post.name}}> </div>
                   </div>
-            </div> 
-      {% endfor %}    
-      </div>
-      <div class="row">  
-            <div class="col-md-2"> 
-              <div class="form-check">
-                  {%if post.sex=="мужчина" %}
-                  <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина" checked>
-                  {% else %}
-                  <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина" >
-                  {% endif %}
-                  <label class="form-check-label" for="s1"> мужчина </label>
-               </div>
-               <div class="form-check">
-                  {%if post.sex=="женщина" %}
-                  <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина" checked>
-                  {% else %}
-                  <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина">
-                  {% endif %}
-                  <label class="form-check-label" for="s2"> женщина </label>
-                </div>
-            </div>
-      </div>
-      <div class="row">  
-            <div class="col-md-3"> 
-                  <span class="form-text">  Работы: </span>
-                  {% for oc in occupations %}  
-                 
-                    <div class="form-check ">
-                        {% if post.occupations!=None and post.occupations.count(oc)>0 %}
-                        <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}} id={{"oc_"+oc}} checked>
-                        
-                        {% else %}
-                        <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}} id={{"oc_"+oc}}>
-                        {% endif %}
-                        <label class="form-check-label" for={{"oc_"+oc}}> {{oc}} </label>
-                    </div>
-             
-                  {% endfor %}
-            </div>  
-            <div class="col-md-3"> 
-                Занятость
-                  {% for ok in o_kind %} 
-                  <div class="form-check">
-                      {% if post.o_kind.count(ok)>0 %}
-                        <input class="form-check-input" type="radio" name="ok" id={{ok}} value={{ok}} checked>
-                      {% else %}
-                      <input class="form-check-input" type="radio" name="ok" id={{ok}} value={{ok}} >
-                      {% endif %}  
-                      <label class="form-check-label" for={{ok}}> {{ok}} </label>
-                   </div>
-                   {% endfor %} 
-           </div>        
-      </div>      
-      <div class="row"> 
-            <div class="col-md-6"> дата объявления {{post.updated}}   </div>
-      </div>
-      <div class="row">
-            <div class="col-md-3"><input type = "button" class="btn btn-primary mt-3 mb-2" value = "Выйти" onclick="window.location.href='/list';"/> </div> 
+                  <div class="row">
+                        <div class="col-md-2">
+                              <p class="form-text">Телефон </p>
+                        </div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="phone" required
+                                    value={{post.phone}}> </div>
+                  </div>
 
-            <div class="col-md-3"><input type = "submit" class="btn btn-primary mt-3 mb-2" value = "Сохранить" /> </div>
-      </div>
-      </form>
+                  <div class="row">
+                        <div class="col-md-1">
+                              <span class="form-text"> Регион: </span>
+                        </div>
+                        <div class="col-md-2">
+                              <select name="place" class="form-select" aria-label="Город:">
+                                    <option selected>{{post.place}}</option>
+                                    {% for town in towns %}
+                                    <option value={{town}}>{{town}}</option>
+                                    {% endfor %}
+                              </select>
+                        </div>
+                        <div class="col-md-6">
+                              <span class="form-text">Занятость: </span>
+                              {% for ok in o_kind %}
+                              <div class="form-check form-check-inline">
+                                    {% if post.o_kind.count(ok)>0 %}
+                                    <input class="form-check-input" type="radio" name="ok" id={{ok}} value={{ok}}
+                                          checked>
+                                    {% else %}
+                                    <input class="form-check-input" type="radio" name="ok" id={{ok}} value={{ok}}>
+                                    {% endif %}
+                                    <label class="form-check-label" for={{ok}}> {{ok}} </label>
+                              </div>
+                              {% endfor %}
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col">
+                              <span class="form-text"> Работы: </span>
+                              {% for oc in occupations %}
+                              <div class="form-check form-check-inline">
+                                    {% if post.occupations!=None and post.occupations.count(oc)>0 %}
+                                    <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}}
+                                          id={{"oc_"+oc}} checked>
+
+                                    {% else %}
+                                    <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}}
+                                          id={{"oc_"+oc}}>
+                                    {% endif %}
+                                    <label class="form-check-label" for={{"oc_"+oc}}> {{oc}} </label>
+                              </div>
+                              {% endfor %}
+                        </div>
+                  </div>
+                  <div class="col-md-8"> <span class="form-text"> Языки: </span>
+                        {% for l in languages %}
+                        <div class="row">
+                              <div class="col-md-2">
+                                    <div class="form-check">
+                                          {% if post.len.get(l)!=None %}
+                                          <input class="form-check-input" type="checkbox" value="{{l}}"
+                                                name={{"len_"+l}} id={{"len_"+l}} checked>
+                                          {% else %}
+                                          <input class="form-check-input" type="checkbox" value="{{l}}"
+                                                name={{"len_"+l}} id={{"len_"+l}}>
+                                          {% endif %}
+                                          <label class="form-check-label" for={{"len_"+l}}> {{l}} </label>
+                                          
+                                    </div>
+                              </div>
+                              <div class="col-md-4">
+                                    <select name={{"len_level"+l}} class="form-select" aria-label="уровень языка">
+                                       {% if post.len.get(l)!=None %}
+                                          <option selected>{{post.len.get(l)}}</option>
+                                       {% else %}
+                                          <option selected>-</option>
+                                       {% endif %}
+                                       {% for level in levels %}
+                                          <option value={{level}}>{{level}}</option>
+                                        {% endfor %}
+                                    </select>
+                              </div>
+                        </div>
+                        {% endfor %}
+                  </div>
+                  <div class="row">
+                        <div class="col-md-8">
+                              <label for="note" class="form-text">Текст объявления</label>
+                              <textarea class="form-control" name="text" , id="note" rows="3"
+                                    required>{{post.text}}</textarea>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-2">
+                              <div class="form-check">
+                                    {%if post.sex=="мужчина" %}
+                                    <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина"
+                                          checked>
+                                    {% else %}
+                                    <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина">
+                                    {% endif %}
+                                    <label class="form-check-label" for="s1"> мужчина </label>
+                              </div>
+                              <div class="form-check">
+                                    {%if post.sex=="женщина" %}
+                                    <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина"
+                                          checked>
+                                    {% else %}
+                                    <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина">
+                                    {% endif %}
+                                    <label class="form-check-label" for="s2"> женщина </label>
+                              </div>
+                        </div>
+                  </div>
+
+                  <div class="row">
+                        <div class="col-md-6">
+                              <p class="form-text"> дата объявления {{post.updated}} </p>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-3"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Выйти"
+                                    onclick="window.location.href='/list';" /> </div>
+
+                        <div class="col-md-3"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                                    value="Сохранить" /> </div>
+                  </div>
+            </form>
 </div>
 {% endblock %}

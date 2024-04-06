@@ -1,19 +1,32 @@
-      {% extends 'base.html' %}
-      {% block content %}
-      <h3>{{ title }}</h3>
-      <form action = "{{ url_for('auth.register') }}" method = "post" style="margin: 10px">
-      <div class="row">
-            <div class="col-md-4">Имя </div>  
-           <div class="col-md-4"><input type = "text" name = "name" required> </div> 
+{% extends 'base.html' %}
+{% block content %}
+<div class="row px-6 mt-6 mb-6">
+      <div class="col-3 justify-content-center px-6">
+            <a class="link-underline-primary" href="{{ url_for('auth.title') }}">
+                  Вернуться на главную</a>
+            <div class="row justify-content-center px-2 py-2 bg-secondary-subtle ">
+                  <div class="mt-4">
+                        <h4>{{ title }}</h4>
+                        <form action="{{ url_for('auth.register') }}" method="post">
+                              <div class="row">
+                                    <div class="col"><input type="text" class="form-control" name="name"
+                                                placeholder="логин" required> </div>
+                              </div>
+                              <div class="row">
+                                    <div class="col"><input type="password" placeholder="пароль" class="form-control"
+                                                name="password" required> </div>
+                              </div>
+                              <div class="row">
+                                    <div class="col"><input type="password" class="form-control" name="password2"
+                                                placeholder="подтверждение пароля" required> </div>
+                              </div>
+                              <div class="row mb-5">
+                                    <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                                                value="Зарегистрироваться"> </div>
+                              </div>
+                        </form>
+                  </div>
+            </div>
       </div>
-      <div class="row">
-            <div class="col-md-4">Пароль </div>   <div class="col-md-4"><input type = "password" name = "password" required> </div> </div>
-      <div class="row">
-            <div class="col-md-4">Подтверждение пароля </div> 
-            <div class="col-md-4"><input type = "password" name = "password2" required> </div> 
-      </div>
-      <div class="row">
-            <div class="col-md-4"><input type = "submit" class="btn btn-primary mt-3 mb-2" value = "send" > </div>
-      </div>
-      </form>
-  {% endblock %}
+</div>
+{% endblock %}

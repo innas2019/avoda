@@ -6,7 +6,7 @@
     <table id="data" class="table table-hover border-top border-bottom border-light">
       <thead>
         <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-          <th class="col-1">Род занятий</th>
+          <th class="col-3">Род занятий</th>
         </tr>
       </thead>
       <tbody>
@@ -18,7 +18,6 @@
               {{ o["id"] }}</td>
             </a>
           </th>
-
           <td class="col-3"> {{ o["value"] }}</td>
         </tr>
         {% endfor %}
@@ -29,20 +28,19 @@
     <table id="data" class="table table-hover border-top border-bottom border-light">
       <thead>
         <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-          <th class="col-1">Города</th>
+          <th class="col-2">Города</th>
         </tr>
       </thead>
       <tbody>
-        {% for o in towns %}
+        {% for o1 in towns %}
         <tr
           class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
           <th>
-            <a class="link-underline-primary" href="/refs/{{ o["id"] }}">
-              {{ o["id"] }}</td>
+            <a class="link-underline-primary" href="/refs/{{ o1["id"] }}">
+              {{ o1["id"] }}</td>
             </a>
           </th>
-
-          <td class="col-3"> {{ o["value"] }}</td>
+          <td class="col-3"> {{ o1["value"] }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -52,7 +50,7 @@
     <table id="data" class="table table-hover border-top border-bottom border-light">
       <thead>
         <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-          <th class="col-1">Язык уровни</th>
+          <th class="col-3">Язык уровни</th>
         </tr>
       </thead>
       <tbody>
@@ -74,26 +72,32 @@
 </div>
 <div class="row">
   <form action="" method="post">
-
     <div class="row">
-      <div class="col-4"><input type="number" name="id" value={{r.id}}> </div>
-    </div>
-    <div class="row">
-      <div class="col-4">
-        <select name="name" class="form-select" aria-label="Справочник:">
+      <div class="col-1">
+        <label for="n" class="form-text">Справочник:</label>
+      </div>
+      <div class="col-2">
+        <select name="name" id="n" class="form-select" aria-label="Справочник:" required>
           <option selected>{{r.name}}</option>
           <option value=places>places</option>
           <option value=occupations>occupations</option>
           <option value=levels>levels</option>
-          
-    </select>      
+        </select>
+      </div>
+      <div class="col-1">
+        <label for="v" class="form-text">значение:</label>
+      </div>
+      <div class="col-2"><input type="text" class="form-control" name="value" id="v" required value={{r.value}}>
+      </div>
+
+      <div class="col-2">
+        <input type="submit" class="btn btn-primary rounded-2" value="Сохранить">
+      </div>
+      <div class="row">
+        <div class="col-2">
+          <input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Выйти"
+            onclick="window.location.href='/refs/0';">
+        </div>
+      </div>
     </div>
-    <div class="row">
-      <div class="col-4"><input type="text" name="value"  value={{r.value}} required> </div>
-    </div>
-    <div class="row">
-      <div class="col-2"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить"> </div>
-      <div class="col-2"><input type="button" class="btn mt-3 mb-2 rounded-2" value="Отменить" onclick="window.location.href='/refs/0';"> </div>
-    </div>
-</div>
-{% endblock %}
+    {% endblock %}

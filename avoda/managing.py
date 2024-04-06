@@ -8,24 +8,16 @@ from flask import (
     url_for,
     session,
 )
-from avoda.db import get_db
-
-
-class Ref:
-    def __init__(self, _id, _name, _value):
-        self.name = _name
-        self.id = _id
-        self.value = _value
+from avoda import db
+from avoda.models import Refs
 
 
 # читаем все справочники
 def get_ref(name):
     res = []
-    db = get_db()
-    q = "select value from refs where name='" + name + "'"
-    ps = db.execute(q).fetchall()
+    ps = db.session.execute(db.select(Refs).where(Refs.name == name)).scalars()
     for p in ps:
-        res.append(p["value"])
+        res.append(p.value)
     return res
 
 
@@ -38,41 +30,40 @@ o_list = []
 # функция для показа всех записей справочника
 @bp.route("/refs/<int:id>", methods=["POST", "GET"])
 def refs(id):
+    ref = None
     if request.method == "GET":
-        len = []
-        towns = []
-        o_list = []
-        db = get_db()
-        q = "select * from refs"
-        ps = db.execute(q).fetchall()
-        new_ref = Ref(0, "", "")
-        for p in ps:
-            if p["name"] == "levels":
-                len.append(Ref(p["id"], p["name"], p["value"]))
-            elif p["name"] == "places":
-                towns.append(Ref(p["id"], p["name"], p["value"]))
-            elif p["name"] == "occupations":
-                o_list.append(Ref(p["id"], p["name"], p["value"]))
-            if id != 0:
-                new_ref = Ref(p["id"], p["name"], p["value"])
-
-        return render_template(
-            "manag.html", len=len, towns=towns, o_list=o_list, r=new_ref
-        )
-    else:
-        # new_id = request.form["id"]
-        name = request.form["name"]
-        value = request.form["value"]
-        db = get_db()
+        res = db.session.execute(db.select(Refs)).scalars()
+        all=res.all()
+        o_list = [r for r in all if r.name == "occupations"]
+        len = [r for r in all if r.name == "levels"]
+        towns = [r for r in all if r.name == "places"]
+        
+        """ len = db.session.execute(db.select(Refs).where(Refs.name == "levels")).scalars()
+        towns = db.session.execute(
+            db.select(Refs).where(Refs.name == "places")
+        ).scalars()
+        o_list = db.session.execute(
+            db.select(Refs).where(Refs.name == "occupations")
+        ).scalars() """
         if id == 0:
-            db.execute(
-                "INSERT INTO refs (name, value) VALUES (?, ?)",
-                (name, value),
-            )
+            ref = Refs(name="", value="")
         else:
-            db.execute(
-                "update refs set name = ?, value = ? where id=?",
-                (name, value, id),
-            )
-        db.commit()
+            res = [r for r in all if r.id == id] 
+            ref=res[0]        
+            print(res,ref.id)   
+
+        return render_template("manag.html", len=len, towns=towns, o_list=o_list, r=ref)
+        #return render_template("manag.html", all=all, r=ref)
+    else:
+        if id != 0:
+            ref = db.one_or_404(db.select(Refs).where(Refs.id == id))
+            ref.name = request.form["name"]
+            ref.value = request.form["value"]
+            flash(ref.value + " добавлено")
+        else:
+            ref = Refs(name=request.form["name"], value=request.form["value"])
+            db.session.add(ref)
+            flash(ref.value + " изменено")
+        db.session.commit()
+        
         return redirect("/refs/0")

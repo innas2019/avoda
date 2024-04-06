@@ -11,7 +11,8 @@ from flask import (
     session,
     current_app,
 )
-from avoda.db import get_db
+from avoda import db
+from avoda.models import Posts
 from avoda import managing as m
 from avoda import auth as a
 import datetime
@@ -19,8 +20,7 @@ import json
 
 
 bp = Blueprint("posts", __name__)
-
-posts = []
+s_posts = []
 user = ""
 count_days = "60"
 len_levels = []
@@ -28,6 +28,7 @@ leng = ["en", "he", "ru"]
 towns = []
 o_list = []
 o_kind = ["полная", "частичная"]
+current_post = None  # frontend ob
 
 
 class Post:
@@ -71,68 +72,49 @@ class Post:
 
     # функция добавляет все поля объекта из SQL
     def get_from_db(self, p):
-        self.id = p["id"]
-        self.len = json.loads(p["len"])
-        self.occupations = p["occupations"]
-        self.o_kind = p["o_kind"]
-        self.sex = p["sex"]
-        self.updated = p["updated"]
+        self.id = p.id
+        if p.len!=None:
+           self.len = json.loads(p.len)
+        if p.occupations!=None:
+           self.occupations = json.loads(p.occupations)
+        if p.o_kind!=None:
+            self.o_kind = json.loads(p.o_kind)
+        self.sex = p.sex
+        self.updated = p.updated
 
 
 def create_post(n_post):
-    db = get_db()
-    try:
-        db.execute(
-            "INSERT INTO post (created, updated, name, place, phone, text, len, occupations, o_kind, sex) VALUES (?,?,?,?,?,?,?,?,?,?)",
-            (
-                n_post.created,
-                n_post.updated,
-                n_post.name,
-                n_post.place,
-                n_post.phone,
-                n_post.text,
-                json.dumps(n_post.len),
-                str(n_post.occupations),
-                str(n_post.o_kind),
-                n_post.sex,
-            ),
-        )
-        db.commit()
-    except db.Error as e:
-        flash(e)
-        return e
+    new_post = Posts(
+        created=n_post.created,
+        updated=n_post.updated,
+        name=n_post.name,
+        place=n_post.place,
+        phone=n_post.phone,
+        text=n_post.text,
+        len=json.dumps(n_post.len),
+        occupations=json.dumps(n_post.occupations),
+        o_kind=json.dumps(n_post.o_kind),
+        sex=n_post.sex,
+    )
+    db.session.add(new_post)
+    db.session.commit()
     flash(n_post.name + " добавлено")
     return "ok"
 
 
 def update_post(n_post):
-    db = get_db()
-    len = ""
-    try:
-        len = json.dumps(n_post.len)
-    except json.Error as e:
-        print(e)
-
-    try:
-        db.execute(
-            "update post set updated=?, name=?, place=?, phone=?, text=?, len=?, occupations=?, o_kind=?, sex=? where id=?",
-            (
-                n_post.updated,
-                n_post.name,
-                n_post.place,
-                n_post.phone,
-                n_post.text,
-                len,
-                str(n_post.occupations),
-                str(n_post.o_kind),
-                n_post.sex,
-                n_post.id,
-            ),
-        )
-        db.commit()
-    except db.Error as e:
-        flash(e)
-        return e
+    db_post = db.one_or_404(db.select(Posts).where(Posts.id == n_post.id))
+    #db_post = db.session.execute(db.select(Posts).where(Posts.id == n_post.id)).scalar()
+    db_post.updated = n_post.updated
+    db_post.name = n_post.name
+    db_post.place = n_post.place
+    db_post.phone = n_post.phone
+    db_post.text = n_post.text
+    db_post.len = json.dumps(n_post.len)
+    db_post.occupations = json.dumps(n_post.occupations)
+    db_post.o_kind = json.dumps(n_post.o_kind)
+    db_post.sex = n_post.sex
+    db.session.commit()
     flash(n_post.name + " изменено")
     return "ok"
 
@@ -190,44 +172,23 @@ def load_ref():
 def list():
     # список заявок
     title = "Все публикации"
-    if session.get("filter") != "":
-        title = "Выбранные публикации"
-    # в случае если задан фильтр для заявок то метод POST
-    if request.method == "POST":
-        session["filter"] = filters(request.form)
-        # session['days']=count_days
-
-    db = get_db()
-    try:
-        conditions = (
-            "where julianday() - julianday(updated)<"
-            + count_days
-            + session.get("filter")
-        )
-        posts.clear()
-        page = request.args.get(get_page_parameter(), type=int, default=1)
-        limit = 10
-        offset = page * limit - limit
-        res = db.execute("select count(id) as c from post " + conditions).fetchone()
-        total = res["c"]
-        ps = db.execute(
-            "select * from post " + conditions + " limit ? offset ?", (limit, offset)
-        ).fetchall()
-
-        for p in ps:
-            np = Post(p["name"], p["place"], p["phone"], p["text"])
-            np.get_from_db(p)
-            posts.append(np)
-        pagination = Pagination(page=page, page_per=limit, total=total)
-        return render_template(
-            "posts/list.html",
-            pagination=pagination,
-            title=title,
-            posts=posts,
-            user=user,
-        )
-    except db.Error as e:
-        return e
+    global s_posts
+    global current_post
+    current_post = None
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    limit = 10
+    query = db.select(Posts).order_by(Posts.updated.desc())
+    # читаем по страницам
+    ps = db.paginate(query, page=page, per_page=limit, error_out=True)
+    s_posts = ps.items
+    pagination = Pagination(page=page, page_per=limit, total=ps.total)
+    return render_template(
+        "posts/list.html",
+        pagination=pagination,
+        title=title,
+        posts=s_posts,
+        user=user,
+    )
 
 
 @bp.route("/filter/<string:p>")
@@ -281,6 +242,7 @@ def create():
 
 @bp.route("/post/<int:id>", methods=["GET", "POST"])
 def post(id):
+    global current_post
     if request.method == "POST":
         form = request.form
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
@@ -301,43 +263,42 @@ def post(id):
         )
     else:
 
-        for p in posts:
-            if id == p.id:
-                return render_template(
-                    "posts/post.html",
-                    towns=towns,
-                    post=p,
-                    languages=leng,
-                    occupations=o_list,
-                    o_kind=o_kind,
-                    levels=len_levels,
-                )
+        return render_template(
+            "posts/post.html",
+            towns=towns,
+            post=current_post,
+            languages=leng,
+            occupations=o_list,
+            o_kind=o_kind,
+            levels=len_levels,
+        )
 
 
 @bp.route("/show/<int:id>")
 def show_post(id):
-    for p in posts:
-        if id == p.id:
-            # преобразование даты в datetime
-            d = datetime.datetime.strptime(p.updated, "%Y-%m-%d")
-            # объект содержит разницу между датами
-            delta = datetime.datetime.today() - d
-            pos = posts.index(p)
-            prev = 0
-            if pos > 0:
-                prev = posts[pos - 1].id
-            next = 0
-            if pos < len(posts) - 1:
-                next = posts[pos + 1].id
-            return render_template(
-                "posts/show_post.html",
-                post=p,
-                days=delta.days,
-                prev=prev,
-                next=next,
-                current=pos + 1,
-                last=len(posts),
-            )
+    global current_post
+    ps = s_posts[id - 1]
+    # объект содержит разницу между датами
+    p = Post(ps.name, ps.place, ps.phone, ps.text)
+    p.get_from_db(ps)
+    current_post = p
+    delta = datetime.datetime.today() - p.updated
+    pos = id
+    prev = 0
+    if pos > 0:
+        prev = id - 1
+    next = 0
+    if pos < len(s_posts) - 1:
+        next = id + 1
+    return render_template(
+        "posts/show_post.html",
+        post=p,
+        days=delta.days,
+        prev=prev,
+        next=next,
+        current=pos + 1,
+        last=len(s_posts),
+    )
 
 
 @bp.route("/search")
