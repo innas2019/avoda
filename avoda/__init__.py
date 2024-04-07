@@ -31,10 +31,4 @@ def create_app():
     app.register_blueprint(managing.bp)
     from avoda import posts
     app.register_blueprint(posts.bp)
-    
-    #app.register_error_handler(404, page_not_found)
     return app
-
-
-#flask --app avoda db migrate   консольные команды
-#flask --app avoda db upgrade

@@ -1,1 +1,13 @@
 Single-database configuration for Flask.
+Перед запуском миграции неободимо 1.установить пакет:
+2.В папке проекта сделать папку instance и положить туда существующую базу чтобы 
+сохранились пользователи и настройки
+Миграция:
+Выполнить 1 раз. Создается папка migrations для проекта. 
+flask -app avoda db init
+Первый раз для настройки миграции. Создвется скрипт для миграции:
+flask --app avoda db migrate -m "Initial migration." 
+Выполнение скрипта:
+flask --app avoda db upgrade
+Все последующие миграции при изменении объектов DB:
+flask --app avoda db migrate

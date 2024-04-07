@@ -63,10 +63,9 @@ def login():
 
         username = request.form["name"]
         password = request.form["password"]
-        user = db.one_or_404(db.select(Users).where(Users.name == username))
-        """ user = db.session.execute(
+        user = db.session.execute(
             db.select(Users).where(Users.name == username)
-        ).scalar() """
+        ).scalar() 
          
         
         if user is None or not check_password_hash(user.password, password):
