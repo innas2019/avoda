@@ -1,5 +1,5 @@
 from flask_paginate import Pagination, get_page_parameter
-
+from flask_login import login_required
 from flask import (
     Blueprint,
     flash,
@@ -37,8 +37,8 @@ class Post:
         self.place = _place
         self.phone = _phone
         self.text = _text
-        self.len = {}
-        self.occupations = []
+        self.len = {} #dictionary len:level
+        self.occupations = []  
         self.o_kind = []
         self.sex = ""
         self.id = 0
@@ -167,10 +167,14 @@ def load_ref():
     towns = m.get_ref("places")
     o_list = m.get_ref("occupations")
 
+# показывает список заявок
+# если метод post то разбираем request.form
+# это может быть фильтр или поиск
 
 @bp.route("/list", methods=["POST", "GET"])
+@login_required
 def list():
-    # список заявок
+ 
     title = "Все публикации"
     global s_posts
     global current_post
@@ -192,7 +196,8 @@ def list():
 
 
 @bp.route("/filter/<string:p>")
-# all/set
+@login_required
+# all/set  устанавливает или сбрасывает фильтр
 def filter(p):
     if p == "set":
         return render_template(
@@ -208,6 +213,7 @@ def filter(p):
 
 
 @bp.route("/create", methods=["POST", "GET"])
+@login_required
 def create():
     if request.method == "POST":
         form = request.form
@@ -241,6 +247,7 @@ def create():
 
 
 @bp.route("/post/<int:id>", methods=["GET", "POST"])
+@login_required
 def post(id):
     global current_post
     if request.method == "POST":
@@ -275,6 +282,7 @@ def post(id):
 
 
 @bp.route("/show/<int:id>")
+@login_required
 def show_post(id):
     global current_post
     ps = s_posts[id - 1]
@@ -300,7 +308,8 @@ def show_post(id):
         last=len(s_posts),
     )
 
-
+#для поиска по имени или телефону
 @bp.route("/search")
+@login_required
 def search():
     return render_template("posts/search.html")

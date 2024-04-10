@@ -10,7 +10,7 @@ from flask import (
 )
 from avoda import db
 from avoda.models import Refs
-
+from flask_login import login_required
 
 # читаем все справочники
 def get_ref(name):
@@ -29,6 +29,7 @@ o_list = []
 
 # функция для показа всех записей справочника
 @bp.route("/refs/<int:id>", methods=["POST", "GET"])
+@login_required
 def refs(id):
     ref = None
     if request.method == "GET":

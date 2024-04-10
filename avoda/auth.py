@@ -1,15 +1,6 @@
 from flask import Blueprint
-from flask import (
-    Blueprint,
-    flash,
-    g,
-    redirect,
-    render_template,
-    request,
-    url_for,
-    session,
-)
-
+from flask import ( Blueprint, flash, redirect, render_template, request, url_for,  session)
+from flask_login import current_user, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from avoda import db
 from avoda.models import Users
@@ -21,6 +12,8 @@ def get_roles(user):
         
 
 def update_settings(s):
+    id=session["_user_id"] #user-login set parameter 
+    user=db.session.get(Users, int(id)) 
     user.settings = s
     db.session.commit()
     
@@ -47,6 +40,16 @@ def register():
             error = "ошибка при вводе пароля"
             flash(error)
             return render_template("auth/register.html")
+        user = db.session.execute(
+            db.select(Users).where(Users.name == username)
+        ).scalar() 
+         
+        
+        if user is not None:
+            error = "такой логин уже есть"
+            flash(error)
+            return render_template("auth/register.html") 
+        
         if error is None:
             user = Users(name=username, password=generate_password_hash(password))
             db.session.add(user)
@@ -59,6 +62,9 @@ def register():
 
 @bp.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('posts.list'))
+    
     if request.method == "POST":
 
         username = request.form["name"]
@@ -71,10 +77,12 @@ def login():
         if user is None or not check_password_hash(user.password, password):
             error = "пользователь не найден"
             flash(error)
-            return render_template("title.html", title="Вход")
+            return render_template("title.html")
         else:
+            
             session.clear()
             get_roles(user)
+            login_user(user)
             session["name"] = username
             if user.settings == None:
                 session["filter"] = ""
@@ -83,10 +91,11 @@ def login():
             return redirect(url_for("posts.list"))
             
     else:
-        return render_template("title.html", title="Вход")
+        return render_template("title.html")
 
 
 @bp.route("/logout")
 def logout():
     session.clear()
+    logout_user()
     return redirect(url_for("auth.title"))

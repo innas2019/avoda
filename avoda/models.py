@@ -2,8 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from avoda import db
-
-class Users(db.Model):
+from flask_login import UserMixin
+from avoda import login
+     
+class Users(UserMixin,db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True, nullable=False)
@@ -51,4 +53,6 @@ class Refs(db.Model):
     name = db.Column(db.String(20), nullable=False)
     value = db.Column(db.String(40), nullable=False)
      
-  
+@login.user_loader
+def load_user(id):
+    return db.session.get(Users, int(id))  
