@@ -96,6 +96,7 @@ def create_post(n_post):
         o_kind=json.dumps(n_post.o_kind),
         sex=n_post.sex,
     )
+    
     db.session.add(new_post)
     db.session.commit()
     flash(n_post.name + " добавлено")
@@ -116,6 +117,7 @@ def update_post(n_post):
     db_post.sex = n_post.sex
     db.session.commit()
     flash(n_post.name + " изменено")
+    print(db_post.occupations)
     return "ok"
 
 
@@ -127,6 +129,18 @@ def validation(post):
 
 # формирует условия для запроса к базе. если хоть  одно условие задано то в начале стоит and
 def filters(flt):
+    res={}
+    res["len"]="%:%"
+    for f in flt.keys():
+        if str(f) == "place" and flt[f] != "-":
+            res["place"]=flt[f]
+        if str(f).find("len_") != -1:
+            len_key = str(f).split("_")
+            len =  "%" + len_key[1] + "%"
+            res["len"]=len
+    return res
+
+def filtersold(flt):
     conditions = ""
     len = ""
     oc = ""
@@ -174,18 +188,29 @@ def load_ref():
 @bp.route("/list", methods=["POST", "GET"])
 @login_required
 def list():
- 
     title = "Все публикации"
+    if session.get("filter") != "":
+        title = "Выбранные публикации"
+    # в случае если задан фильтр для заявок то метод POST
+    if request.method == "POST":
+        session["filter"] = filters(request.form)
+    
     global s_posts
-    global current_post
+    global current_post        
     current_post = None
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit = 10
-    query = db.select(Posts).order_by(Posts.updated.desc())
+    #query = db.select(Posts).where(Posts.place=="Тель-Авив",Posts.len.like("%ru%"))
+    if session.get("filter") != "":
+        query = db.select(Posts).where(Posts.place==session.get("filter")["place"],Posts.len.like(session.get("filter")["len"])).order_by(Posts.updated.desc())
+    else:
+        query = db.select(Posts).order_by(Posts.updated.desc())
     # читаем по страницам
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
     s_posts = ps.items
-    pagination = Pagination(page=page, page_per=limit, total=ps.total)
+    pagination = Pagination(page=page, page_per=limit, total=ps.total,
+                           display_msg = "показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
+                           record_name="объявлений")
     return render_template(
         "posts/list.html",
         pagination=pagination,
