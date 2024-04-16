@@ -3,7 +3,7 @@ import random
 import unittest
 from avoda import create_app, db
 from avoda.models import Role, Posts, Refs
-
+#для запуска тестов: python -m unittest   
 
 class PostCase(unittest.TestCase):
     def setUp(self):

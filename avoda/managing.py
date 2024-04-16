@@ -11,15 +11,29 @@ from flask import (
 from avoda import db
 from avoda.models import Refs
 from flask_login import login_required
+allrefs={}
+
+# читаем все справочники потом с учетом выбранного языка
+def get_refs():
+    global allrefs
+    ps = db.session.execute(db.select(Refs)).scalars()
+    allrefs=ps.all()
+    res={}
+    for p in allrefs:
+        res[str(p.id)]=p.value
+    return res
 
 # читаем все справочники
 def get_ref(name):
-    res = []
-    ps = db.session.execute(db.select(Refs).where(Refs.name == name)).scalars()
-    for p in ps:
-        res.append(p.value)
+    global allrefs
+    res=[]
+    if not allrefs:
+        ps=db.session.execute(db.select(Refs)).scalars()
+        allrefs=ps.all()
+    for p in allrefs:
+        if p.name==name:
+         res.append(p.value)
     return res
-
 
 bp = Blueprint("mng", __name__)
 len = []

@@ -29,21 +29,38 @@ towns = []
 o_list = []
 o_kind = ["полная", "частичная"]
 current_post = None  # frontend ob
+allrefs = {}
 
-
+#объект для показа объявлений. содержит методы для преобразования текстовых значений справочников в id
 class Post:
     def __init__(self, _name, _place, _phone, _text):
         self.name = _name
         self.place = _place
         self.phone = _phone
         self.text = _text
-        self.len = {} #dictionary len:level
-        self.occupations = []  
+        self.len = {}  # dictionary len:level
+        self.occupations = []
         self.o_kind = []
         self.sex = ""
         self.id = 0
         self.created = datetime.date.today()
         self.updated = datetime.date.today()
+
+    # функция возвращает id справочника по его значению
+    def get_id_from_value(self, value):
+        print(value)
+        if isinstance(value, str):
+            for x in allrefs:
+                if allrefs[x] == value:
+                    return str(x)
+                     
+        else:
+            new_val=[]
+            for v in value:
+                for x in allrefs:
+                   if allrefs[x] == v:
+                        new_val.append(str(x))
+            return new_val   
 
     # функция возвращает список языков для показа во вью
     def get_len(self):
@@ -70,33 +87,41 @@ class Post:
             elif str(f).find("sex") != -1:
                 self.sex = map[f]
 
+    def get_name_by_id(self,ids):
+        new_val=[]
+        for i in ids:
+           new_val.append(allrefs[i])
+        return new_val
+    
     # функция добавляет все поля объекта из SQL
     def get_from_db(self, p):
         self.id = p.id
-        if p.len!=None:
-           self.len = json.loads(p.len)
-        if p.occupations!=None:
-           self.occupations = json.loads(p.occupations)
-        if p.o_kind!=None:
+        if p.len != None:
+            self.len = json.loads(p.len)
+        if p.occupations != None:
+            self.occupations = self.get_name_by_id(json.loads(p.occupations))
+        if p.o_kind != None:
             self.o_kind = json.loads(p.o_kind)
         self.sex = p.sex
         self.updated = p.updated
-
-
+        self.place = allrefs[p.place]
+    
+    
+    
 def create_post(n_post):
     new_post = Posts(
         created=n_post.created,
         updated=n_post.updated,
         name=n_post.name,
-        place=n_post.place,
+        place=n_post.get_id_from_value(n_post.place),
         phone=n_post.phone,
         text=n_post.text,
         len=json.dumps(n_post.len),
-        occupations=json.dumps(n_post.occupations),
+        occupations=json.dumps(n_post.get_id_from_value(n_post.occupations)),
         o_kind=json.dumps(n_post.o_kind),
         sex=n_post.sex,
     )
-    
+
     db.session.add(new_post)
     db.session.commit()
     flash(n_post.name + " добавлено")
@@ -105,14 +130,14 @@ def create_post(n_post):
 
 def update_post(n_post):
     db_post = db.one_or_404(db.select(Posts).where(Posts.id == n_post.id))
-    #db_post = db.session.execute(db.select(Posts).where(Posts.id == n_post.id)).scalar()
+    # db_post = db.session.execute(db.select(Posts).where(Posts.id == n_post.id)).scalar()
     db_post.updated = n_post.updated
     db_post.name = n_post.name
-    db_post.place = n_post.place
+    db_post.place = n_post.get_id_from_value(n_post.place)
     db_post.phone = n_post.phone
     db_post.text = n_post.text
     db_post.len = json.dumps(n_post.len)
-    db_post.occupations = json.dumps(n_post.occupations)
+    db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
     db_post.o_kind = json.dumps(n_post.o_kind)
     db_post.sex = n_post.sex
     db.session.commit()
@@ -129,16 +154,23 @@ def validation(post):
 
 # формирует условия для запроса к базе. если хоть  одно условие задано то в начале стоит and
 def filters(flt):
-    res={}
-    res["len"]="%:%"
+    n_post = Post("", "", "", "")
+    n_post.get_from_form(flt)
+    res = {}
+    res["len"] = "%:%"
+    res["occupations"]= '5'
+    res["place"] = n_post.get_id_from_value(flt["place"])
+    #res["occupations"] = n_post.get_id_from_value(flt["occupations"])
     for f in flt.keys():
-        if str(f) == "place" and flt[f] != "-":
-            res["place"]=flt[f]
+        # if str(f) == "place" and flt[f] != "-":
+        # res["place"]=flt[f]
         if str(f).find("len_") != -1:
             len_key = str(f).split("_")
-            len =  "%" + len_key[1] + "%"
-            res["len"]=len
+            len = "%" + len_key[1] + "%"
+            res["len"] = len
+    print(res)
     return res
+
 
 def filtersold(flt):
     conditions = ""
@@ -175,15 +207,19 @@ def load_ref():
     global len_levels
     global towns
     global o_list
+    global allrefs
 
     # заполняем справочники
+    allrefs = m.get_refs()
     len_levels = m.get_ref("levels")
     towns = m.get_ref("places")
     o_list = m.get_ref("occupations")
 
+
 # показывает список заявок
 # если метод post то разбираем request.form
 # это может быть фильтр или поиск
+
 
 @bp.route("/list", methods=["POST", "GET"])
 @login_required
@@ -194,29 +230,40 @@ def list():
     # в случае если задан фильтр для заявок то метод POST
     if request.method == "POST":
         session["filter"] = filters(request.form)
-    
     global s_posts
-    global current_post        
+    global current_post
     current_post = None
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit = 10
-    #query = db.select(Posts).where(Posts.place=="Тель-Авив",Posts.len.like("%ru%"))
+    # query = db.select(Posts).where(Posts.place=="Тель-Авив",Posts.len.like("%ru%"))
     if session.get("filter") != "":
-        query = db.select(Posts).where(Posts.place==session.get("filter")["place"],Posts.len.like(session.get("filter")["len"])).order_by(Posts.updated.desc())
+        query = (
+            db.select(Posts)
+            .where(
+                Posts.place == session.get("filter")["place"],
+                Posts.len.like(session.get("filter")["len"]),
+                #Posts.occupations.in_(session.get("filter")["occupations"])
+            )
+            .order_by(Posts.updated.desc())
+        )
     else:
         query = db.select(Posts).order_by(Posts.updated.desc())
     # читаем по страницам
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
     s_posts = ps.items
-    pagination = Pagination(page=page, page_per=limit, total=ps.total,
-                           display_msg = "показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
-                           record_name="объявлений")
+    pagination = Pagination(
+        page=page,
+        page_per=limit,
+        total=ps.total,
+        display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
+        record_name="объявлений",
+    )
     return render_template(
         "posts/list.html",
         pagination=pagination,
         title=title,
         posts=s_posts,
-        user=user,
+        refs=allrefs,
     )
 
 
@@ -333,7 +380,8 @@ def show_post(id):
         last=len(s_posts),
     )
 
-#для поиска по имени или телефону
+
+# для поиска по имени или телефону
 @bp.route("/search")
 @login_required
 def search():
