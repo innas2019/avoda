@@ -41,7 +41,16 @@
             <p>{{ post.get_len()}}</p>
          </div>
          <div class="col">
-            {{ post["sex"]}}
+            {% if post.sex!=None %} {{ post["sex"]}}    {% endif %}
+         </div>
+      </div>
+      <div class="row">
+         <div class="col">
+            {% if post.docs!=None %}
+            {% for os in post.docs %}
+            {{os}}
+            {% endfor %}
+            {% endif %}
          </div>
       </div>
       <div class="row">

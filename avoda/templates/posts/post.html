@@ -101,6 +101,24 @@
                         {% endfor %}
                   </div>
                   <div class="row">
+                        <div class="col">
+                              <span class="form-text"> Документы: </span>
+                              {% for oc in docs %}
+                              <div class="form-check form-check-inline">
+                                    {% if post.docs!=None and post.docs.count(oc)>0 %}
+                                    <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"d_"+oc}}
+                                          id={{"d_"+oc}} checked>
+
+                                    {% else %}
+                                    <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"d_"+oc}}
+                                          id={{"d_"+oc}}>
+                                    {% endif %}
+                                    <label class="form-check-label" for={{"d_"+oc}}> {{oc}} </label>
+                              </div>
+                              {% endfor %}
+                        </div>
+                  </div>
+                  <div class="row">
                         <div class="col-md-8">
                               <label for="note" class="form-text">Текст объявления</label>
                               <textarea class="form-control" name="text" , id="note" rows="3"
@@ -110,22 +128,22 @@
                   <div class="row">
                         <div class="col-md-2">
                               <div class="form-check">
-                                    {%if post.sex=="мужчина" %}
-                                    <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина"
+                                    {%if post.sex==sex[0] %}
+                                    <input class="form-check-input" type="radio" name="sex" id="s1" value={{sex[0]}}
                                           checked>
                                     {% else %}
-                                    <input class="form-check-input" type="radio" name="sex" id="s1" value="мужчина">
+                                    <input class="form-check-input" type="radio" name="sex" id="s1" value={{sex[0]}}>
                                     {% endif %}
-                                    <label class="form-check-label" for="s1"> мужчина </label>
+                                    <label class="form-check-label" for="s1"> {{sex[0]}} </label>
                               </div>
                               <div class="form-check">
-                                    {%if post.sex=="женщина" %}
-                                    <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина"
+                                    {%if post.sex=="sex[1]" %}
+                                    <input class="form-check-input" type="radio" name="sex" id="s2" value={{sex[1]}}
                                           checked>
                                     {% else %}
-                                    <input class="form-check-input" type="radio" name="sex" id="s2" value="женщина">
+                                    <input class="form-check-input" type="radio" name="sex" id="s2" value={{sex[1]}}>
                                     {% endif %}
-                                    <label class="form-check-label" for="s2"> женщина </label>
+                                    <label class="form-check-label" for="s2"> {{sex[1]}} </label>
                               </div>
                         </div>
                   </div>

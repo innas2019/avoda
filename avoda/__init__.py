@@ -12,10 +12,11 @@ login.login_view = 'auth.login'
 def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
-        SECRET_KEY="dev",
-        #DATABASE="avoda.db",
+        SECRET_KEY="fdjlfgjfcafmehtrjq",
         BOOTSTRAP_SERVE_LOCAL=True,
-        SQLALCHEMY_DATABASE_URI = "sqlite:///avoda.db",
+        #SQLALCHEMY_DATABASE_URI = "sqlite:///avoda.db",
+         SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///avoda.db',
         #BOOTSTRAP_BOOTSWATCH_THEME="Cosmo"
         POSTS_PER_PAGE = 10,
         SESSION_PERMANENT = False

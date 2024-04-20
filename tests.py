@@ -16,7 +16,7 @@ class PostCase(unittest.TestCase):
         db.session.remove()
         self.app_context.pop()
 
-    def add_posts(self):
+    def test_add_posts(self):
         now = datetime.now(timezone.utc)
         rand_phone = ""
         for x in range(3):
@@ -38,17 +38,11 @@ class PostCase(unittest.TestCase):
         self.assertIsNotNone(res, "ошибка добавления записи")
 
     def test_refs(self):
-        res = db.session.execute(db.select(Refs).where(Refs.name == "levels")).scalars()
-        list = res.all()
-        res = db.session.execute(db.select(Refs).where(Refs.name == "places")).scalars()
-        list2 = res.all()
-        res = db.session.execute(
-            db.select(Refs).where(Refs.name == "occupations")
-        ).scalars()
-        list3 = res.all()
-        self.assertTrue(
-            (len(list) > 0) & (len(list2) > 0) & (len(list3) > 0), "справочники пустые"
-        )
+        refs=["levels","occupations","places","documents","conditions"]
+        for k in refs:
+            res = db.session.execute(db.select(Refs).where(Refs.name == k)).scalars()
+            self.assertTrue(len(res.all())>0,k+" справочник не заполнен")
+        
 
     def test_create_refs(self):
         res = db.session.execute(db.select(Refs).where(Refs.name == "levels")).scalars()
@@ -57,12 +51,14 @@ class PostCase(unittest.TestCase):
             p1 = Refs(name="levels", value="начальный")
             p2 = Refs(name="levels", value="хороший")
             db.session.add_all([p1, p2])
+        
         res = db.session.execute(db.select(Refs).where(Refs.name == "places")).scalars()
         list = res.all()
         if len(list) == 0:
             p3 = Refs(name="places", value="Тель-Авив")
             p4 = Refs(name="places", value="Хайфа")
             db.session.add_all([p3, p4])
+        
         res = db.session.execute(
             db.select(Refs).where(Refs.name == "occupations")
         ).scalars()
@@ -71,10 +67,29 @@ class PostCase(unittest.TestCase):
             p5 = Refs(name="occupations", value="стройка")
             p6 = Refs(name="occupations", value="завод")
             db.session.add_all([p5, p6])
+        
+        res = db.session.execute(
+            db.select(Refs).where(Refs.name == "documents")
+        ).scalars()
+        list = res.all()
+        if len(list) == 0:
+            p7 = Refs(name="documents", value="ТЗ")
+            p8 = Refs(name="documents", value="права")
+            db.session.add_all([p7, p8])
+
+        res = db.session.execute(
+            db.select(Refs).where(Refs.name == "conditions")
+        ).scalars()
+        list = res.all()
+        if len(list) == 0:
+            p9 = Refs(name="conditions", value="полная")
+            p10 = Refs(name="conditions", value="частичная")
+            db.session.add_all([p9, p10])
+             
         db.session.commit()
         res = db.session.execute(db.select(Refs)).scalars()
         list = res.all()
-        self.assertTrue(len(list) > 5, "ошибка добавления справочников")
+        self.assertTrue(len(list) > 9, "ошибка добавления справочников")
 
     def test_create_roles(self):
 

@@ -1,75 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
-   <h3>{{ title }}</h3>
-   <div class="container">
-     <form action = "http://localhost:5000/list" method = "post">
-      <div class="row"> 
-            <div class="col-md-4"> Количество дней </div>  <div class="col-md-4"><input type = "text" name = "count_days"  value=30 > </div> </div>
+<h3>{{ title }}</h3>
+<div class="container">
+      <form action="http://localhost:5000/list" method="post">
             <div class="row">
-            <div class="col-md-3">    
-                  <div class="text-bg-primary p-3">Регион:</div>
-                  <select name="place" class="form-select" aria-label="Город:" required>
-                        <option selected>-</option>
-                        {% for town in towns %}
-                        <option value={{town}}>{{town}}</option>
-                        {% endfor %}
-                  </select>        
-            </div>    
-            <div class="col-md-3"> 
-                  {% for l in languages %}  
-                  <div class="col-md-1">   
-                  <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" value="{{l}}" name={{"len_"+l}} id={{"len_"+l}}>
-                        <label class="form-check-label" for={{"len_"+l}}> {{l}} </label>
+                  <div class="col-md-4">
+                        <p class="form-text">Количество дней </p>
+                        <div class="col-md-4"><input type="text" class="form-control" name="days" value=30 required>
+                        </div>
                   </div>
-                  </div>
-                  {% endfor %}    
-            </div>
-            <div class="col-md-2"> 
-              <div class="form-check">
-                  <input class="form-check-input" type="radio" name="sex" id="s1", value="мужчина">
-                  <label class="form-check-label" for="s1"> мужчина </label>
-               </div>
-               <div class="form-check">
-                  <input class="form-check-input" type="radio" name="sex" id="s2",value="женщина" >
-                  <label class="form-check-label" for="s2"> женщина </label>
-                </div>
-            </div>
-      </div>
-      <div class="row">&nbsp;</div>
-      <div class="row">    
-            <div class="col-md-6"> 
-                  {% for oc in occupations %}  
-                  <div class="col-md-5">   
-                    <div class="form-check ">
-                        <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}} id={{"oc_"+oc}}>
-                        <label class="form-check-label" for={{"oc_"+oc}}> {{oc}} </label>
-                    </div>
-                  </div>
-                  {% endfor %}
-            </div>   
-            <div class="col-md-2"> 
-                  <span class="form-label ">Занятость:</span>
-                  {% for ok in o_kind %} 
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" name="ok" id={{ok}} value="{{ok}}">
-                      <label class="form-check-label" for={{ok}}> {{ok}} </label>
-                   </div>
-                   {% endfor %} 
-                </div>        
-      </div>       
-      <div class="row">
-            <div class="col-md-5">   
-                  <div class="form-check ">
-                      <input class="form-check-input" type="checkbox" value="да" name="permanent" id="per">
-                      <label class="form-check-label" for="per"> Сохранить в настройках </label>
-                  </div>
-                </div>
-               
-            <div class="col-md-3"><input type = "button" class="btn btn-primary mt-3 mb-2" value = "отмена" onclick="window.location.href='/list';"/> </div> 
+                  <div class="row">
+                        <div class="col-md-3">
+                              <span class="form-text">Регион:</ызфт>
+                                    <select name="place" class="form-select" aria-label="Город:" required>
+                                          <option selected>-</option>
+                                          {% for town in towns %}
+                                          <option value={{town}}>{{town}}</option>
+                                          {% endfor %}
+                                    </select>
+                        </div>
+                        <div class="col-md-3">
+                              <span class="form-text">Профессия:</span>
+                              <select name="oc" class="form-select" aria-label="Профессия:">
+                                    <option selected>-</option>
+                                    {% for oc in occupations %}
+                                    <option value={{oc}}>{{oc}}</option>
+                                    {% endfor %}
+                              </select>
+                        </div>
 
-            <div class="col-md-3"><input type = "submit" class="btn btn-primary mt-3 mb-2" value = "Ok" /> </div>
-       </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-5">
+                              <div class="form-check ">
+                                    <input class="form-check-input" type="checkbox" value="да" name="permanent"
+                                          id="per">
+                                    <label class="form-check-label" for="per"> Сохранить в настройках </label>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="отмена"
+                                    onclick="window.location.href='/list';" /> </div>
+
+                        <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Ok" />
+                        </div>
+                  </div>
       </form>
-   </div>
-      {% endblock %}
+</div>
+{% endblock %}

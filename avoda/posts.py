@@ -1,23 +1,13 @@
 from flask_paginate import Pagination, get_page_parameter
 from flask_login import login_required
-from flask import (
-    Blueprint,
-    flash,
-    g,
-    redirect,
-    render_template,
-    request,
-    url_for,
-    session,
-    current_app,
-)
+from flask import Blueprint, flash, redirect, render_template, request, url_for, session
 from avoda import db
 from avoda.models import Posts
 from avoda import managing as m
 from avoda import auth as a
 import datetime
 import json
-
+from sqlalchemy import text
 
 bp = Blueprint("posts", __name__)
 s_posts = []
@@ -27,11 +17,14 @@ len_levels = []
 leng = ["en", "he", "ru"]
 towns = []
 o_list = []
-o_kind = ["полная", "частичная"]
+o_kind = []
+docs = []
+sex = ["мужчина", "женщина"]
 current_post = None  # frontend ob
 allrefs = {}
 
-#объект для показа объявлений. содержит методы для преобразования текстовых значений справочников в id
+
+# объект для показа объявлений. содержит методы для преобразования текстовых значений справочников в id
 class Post:
     def __init__(self, _name, _place, _phone, _text):
         self.name = _name
@@ -45,6 +38,7 @@ class Post:
         self.id = 0
         self.created = datetime.date.today()
         self.updated = datetime.date.today()
+        self.docs = []
 
     # функция возвращает id справочника по его значению
     def get_id_from_value(self, value):
@@ -53,14 +47,14 @@ class Post:
             for x in allrefs:
                 if allrefs[x] == value:
                     return str(x)
-                     
+
         else:
-            new_val=[]
+            new_val = []
             for v in value:
                 for x in allrefs:
-                   if allrefs[x] == v:
+                    if allrefs[x] == v:
                         new_val.append(str(x))
-            return new_val   
+            return new_val
 
     # функция возвращает список языков для показа во вью
     def get_len(self):
@@ -86,13 +80,16 @@ class Post:
                 self.o_kind.append(map[f])
             elif str(f).find("sex") != -1:
                 self.sex = map[f]
+            elif str(f).find("d") != -1:
+                self.docs.append(map[f])
+        print("занятость", self.o_kind)
 
-    def get_name_by_id(self,ids):
-        new_val=[]
+    def get_name_by_id(self, ids):
+        new_val = []
         for i in ids:
-           new_val.append(allrefs[i])
+            new_val.append(allrefs[i])
         return new_val
-    
+
     # функция добавляет все поля объекта из SQL
     def get_from_db(self, p):
         self.id = p.id
@@ -101,14 +98,18 @@ class Post:
         if p.occupations != None:
             self.occupations = self.get_name_by_id(json.loads(p.occupations))
         if p.o_kind != None:
-            self.o_kind = json.loads(p.o_kind)
-        self.sex = p.sex
+            self.o_kind = self.get_name_by_id(json.loads(p.o_kind))
+        if p.docs != None:
+            self.docs = self.get_name_by_id(json.loads(p.docs))
+        print("прочитали: ", self.o_kind, self.docs)
+        if p.sex != None and p.sex !="" :
+            self.sex = sex[p.sex]
         self.updated = p.updated
         self.place = allrefs[p.place]
-    
-    
-    
+
+
 def create_post(n_post):
+    global sex
     new_post = Posts(
         created=n_post.created,
         updated=n_post.updated,
@@ -118,8 +119,9 @@ def create_post(n_post):
         text=n_post.text,
         len=json.dumps(n_post.len),
         occupations=json.dumps(n_post.get_id_from_value(n_post.occupations)),
-        o_kind=json.dumps(n_post.o_kind),
-        sex=n_post.sex,
+        o_kind=json.dumps(n_post.get_id_from_value(n_post.o_kind)),
+        docs=json.dumps(n_post.get_id_from_value(n_post.docs)),
+        sex=sex.index(n_post.sex)
     )
 
     db.session.add(new_post)
@@ -129,6 +131,7 @@ def create_post(n_post):
 
 
 def update_post(n_post):
+    global sex
     db_post = db.one_or_404(db.select(Posts).where(Posts.id == n_post.id))
     # db_post = db.session.execute(db.select(Posts).where(Posts.id == n_post.id)).scalar()
     db_post.updated = n_post.updated
@@ -138,11 +141,11 @@ def update_post(n_post):
     db_post.text = n_post.text
     db_post.len = json.dumps(n_post.len)
     db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
-    db_post.o_kind = json.dumps(n_post.o_kind)
-    db_post.sex = n_post.sex
+    db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
+    db_post.docs = json.dumps(n_post.get_id_from_value(n_post.docs))
+    db_post.sex=sex.index(n_post.sex)
     db.session.commit()
     flash(n_post.name + " изменено")
-    print(db_post.occupations)
     return "ok"
 
 
@@ -155,19 +158,10 @@ def validation(post):
 # формирует условия для запроса к базе. если хоть  одно условие задано то в начале стоит and
 def filters(flt):
     n_post = Post("", "", "", "")
-    n_post.get_from_form(flt)
     res = {}
-    res["len"] = "%:%"
-    res["occupations"]= '5'
+    res["occupations"] = n_post.get_id_from_value(flt["oc"])
     res["place"] = n_post.get_id_from_value(flt["place"])
-    #res["occupations"] = n_post.get_id_from_value(flt["occupations"])
-    for f in flt.keys():
-        # if str(f) == "place" and flt[f] != "-":
-        # res["place"]=flt[f]
-        if str(f).find("len_") != -1:
-            len_key = str(f).split("_")
-            len = "%" + len_key[1] + "%"
-            res["len"] = len
+    res["days"] = flt["days"]
     print(res)
     return res
 
@@ -207,13 +201,18 @@ def load_ref():
     global len_levels
     global towns
     global o_list
+    global o_kind
+    global docs
     global allrefs
-
+    global sex
+ 
     # заполняем справочники
     allrefs = m.get_refs()
     len_levels = m.get_ref("levels")
     towns = m.get_ref("places")
     o_list = m.get_ref("occupations")
+    o_kind = m.get_ref("conditions")
+    docs = m.get_ref("documents")
 
 
 # показывает список заявок
@@ -237,12 +236,18 @@ def list():
     limit = 10
     # query = db.select(Posts).where(Posts.place=="Тель-Авив",Posts.len.like("%ru%"))
     if session.get("filter") != "":
+        current_time = datetime.datetime.now()
+        delta = current_time - datetime.timedelta(
+            days=int(session.get("filter")["days"])
+        )
+        s = '%"' + session.get("filter")["occupations"] + '"%'
+        print("oc", s)
         query = (
             db.select(Posts)
             .where(
                 Posts.place == session.get("filter")["place"],
-                Posts.len.like(session.get("filter")["len"]),
-                #Posts.occupations.in_(session.get("filter")["occupations"])
+                Posts.occupations.like(s),
+                Posts.updated > delta,
             )
             .order_by(Posts.updated.desc())
         )
@@ -278,6 +283,7 @@ def filter(p):
             languages=leng,
             occupations=o_list,
             o_kind=o_kind,
+            title="Настройки фильтра",
         )
     else:
         session["filter"] = ""
@@ -287,6 +293,7 @@ def filter(p):
 @bp.route("/create", methods=["POST", "GET"])
 @login_required
 def create():
+    global sex
     if request.method == "POST":
         form = request.form
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
@@ -304,6 +311,7 @@ def create():
             occupations=o_list,
             o_kind=o_kind,
             levels=len_levels,
+            docs=docs,sex=sex
         )
     else:
         p = Post("", "", "", "")
@@ -315,6 +323,7 @@ def create():
             occupations=o_list,
             o_kind=o_kind,
             levels=len_levels,
+            docs=docs, sex=sex
         )
 
 
@@ -339,6 +348,8 @@ def post(id):
             occupations=o_list,
             o_kind=o_kind,
             levels=len_levels,
+            docs=docs,
+            sex=sex
         )
     else:
 
@@ -350,6 +361,7 @@ def post(id):
             occupations=o_list,
             o_kind=o_kind,
             levels=len_levels,
+            docs=docs,sex=sex
         )
 
 
@@ -378,6 +390,7 @@ def show_post(id):
         next=next,
         current=pos + 1,
         last=len(s_posts),
+        sex=sex
     )
 
 

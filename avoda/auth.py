@@ -3,13 +3,31 @@ from flask import ( Blueprint, flash, redirect, render_template, request, url_fo
 from flask_login import current_user, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from avoda import db
-from avoda.models import Users
+from avoda.models import Users,Role
 
 def get_roles(user):
     session["roles"] = []
     for r in user.roles:
         session["roles"].append(r.name)
-        
+
+def add_roles(username, rolename):
+    user = db.session.execute(
+            db.select(Users).where(Users.name == username)
+        ).scalar() 
+    if user is None:
+            error = username+" не найден"
+            flash(error)
+            return False
+             
+    role = db.one_or_404(db.select(Role).where(Role.name == rolename))
+    if role is None:
+            error = rolename+" не найдена"
+            flash(error)
+            return False  
+          
+    user.roles.append(role)
+    db.session.commit()   
+    return True    
 
 def update_settings(s):
     id=session["_user_id"] #user-login set parameter 
@@ -48,10 +66,13 @@ def register():
         if user is not None:
             error = "такой логин уже есть"
             flash(error)
-            return render_template("auth/register.html") 
+            return render_template("auth/register.html")
         
         if error is None:
             user = Users(name=username, password=generate_password_hash(password))
+            #временно для тестирования
+            role = db.one_or_404(db.select(Role).where(Role.name == "create_post"))
+            user.roles.append(role)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for("auth.login"))
