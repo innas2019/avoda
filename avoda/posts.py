@@ -102,10 +102,11 @@ class Post:
         if p.docs != None:
             self.docs = self.get_name_by_id(json.loads(p.docs))
         print("прочитали: ", self.o_kind, self.docs)
-        if p.sex != None and p.sex !="" :
+        if p.sex != None and p.sex != "":
             self.sex = sex[p.sex]
         self.updated = p.updated
-        self.place = allrefs[p.place]
+        if p.place != None and p.place != "":
+            self.place = allrefs[p.place]
 
 
 def create_post(n_post):
@@ -121,7 +122,7 @@ def create_post(n_post):
         occupations=json.dumps(n_post.get_id_from_value(n_post.occupations)),
         o_kind=json.dumps(n_post.get_id_from_value(n_post.o_kind)),
         docs=json.dumps(n_post.get_id_from_value(n_post.docs)),
-        sex=sex.index(n_post.sex)
+        sex=sex.index(n_post.sex),
     )
 
     db.session.add(new_post)
@@ -143,7 +144,7 @@ def update_post(n_post):
     db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
     db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
     db_post.docs = json.dumps(n_post.get_id_from_value(n_post.docs))
-    db_post.sex=sex.index(n_post.sex)
+    db_post.sex = sex.index(n_post.sex)
     db.session.commit()
     flash(n_post.name + " изменено")
     return "ok"
@@ -205,7 +206,7 @@ def load_ref():
     global docs
     global allrefs
     global sex
- 
+
     # заполняем справочники
     allrefs = m.get_refs()
     len_levels = m.get_ref("levels")
@@ -240,17 +241,26 @@ def list():
         delta = current_time - datetime.timedelta(
             days=int(session.get("filter")["days"])
         )
-        s = '%"' + session.get("filter")["occupations"] + '"%'
-        print("oc", s)
-        query = (
-            db.select(Posts)
-            .where(
-                Posts.place == session.get("filter")["place"],
-                Posts.occupations.like(s),
-                Posts.updated > delta,
+        if session.get("filter")["occupations"] != None:
+            s = '%"' + session.get("filter")["occupations"] + '"%'
+            query = (
+                db.select(Posts)
+                .where(
+                    Posts.place == session.get("filter")["place"],
+                    Posts.occupations.like(s),
+                    Posts.updated > delta,
+                )
+                .order_by(Posts.updated.desc())
             )
-            .order_by(Posts.updated.desc())
-        )
+        else:
+            query = (
+                db.select(Posts)
+                .where(
+                    Posts.place == session.get("filter")["place"],
+                    Posts.updated > delta
+                )
+                .order_by(Posts.updated.desc())
+            )
     else:
         query = db.select(Posts).order_by(Posts.updated.desc())
     # читаем по страницам
@@ -311,7 +321,8 @@ def create():
             occupations=o_list,
             o_kind=o_kind,
             levels=len_levels,
-            docs=docs,sex=sex
+            docs=docs,
+            sex=sex,
         )
     else:
         p = Post("", "", "", "")
@@ -323,7 +334,8 @@ def create():
             occupations=o_list,
             o_kind=o_kind,
             levels=len_levels,
-            docs=docs, sex=sex
+            docs=docs,
+            sex=sex,
         )
 
 
@@ -349,7 +361,7 @@ def post(id):
             o_kind=o_kind,
             levels=len_levels,
             docs=docs,
-            sex=sex
+            sex=sex,
         )
     else:
 
@@ -361,7 +373,8 @@ def post(id):
             occupations=o_list,
             o_kind=o_kind,
             levels=len_levels,
-            docs=docs,sex=sex
+            docs=docs,
+            sex=sex,
         )
 
 
@@ -369,6 +382,8 @@ def post(id):
 @login_required
 def show_post(id):
     global current_post
+    if len(s_posts) == 0:
+        return redirect(url_for("posts.list"))
     ps = s_posts[id - 1]
     # объект содержит разницу между датами
     p = Post(ps.name, ps.place, ps.phone, ps.text)
@@ -390,7 +405,7 @@ def show_post(id):
         next=next,
         current=pos + 1,
         last=len(s_posts),
-        sex=sex
+        sex=sex,
     )
 
 
