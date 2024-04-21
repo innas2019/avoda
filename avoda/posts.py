@@ -118,13 +118,16 @@ def create_post(n_post):
         place=n_post.get_id_from_value(n_post.place),
         phone=n_post.phone,
         text=n_post.text,
-        len=json.dumps(n_post.len),
-        occupations=json.dumps(n_post.get_id_from_value(n_post.occupations)),
-        o_kind=json.dumps(n_post.get_id_from_value(n_post.o_kind)),
-        docs=json.dumps(n_post.get_id_from_value(n_post.docs)),
-        sex=sex.index(n_post.sex),
+        len=json.dumps(n_post.len)    
     )
-
+    if (n_post.occupations!=""):
+        new_post.occupations=json.dumps(n_post.get_id_from_value(n_post.occupations))
+    if (n_post.docs!=""):
+        new_post.docs=json.dumps(n_post.get_id_from_value(n_post.docs))
+    if (n_post.o_kind!=""):
+        new_post.o_kind=json.dumps(n_post.get_id_from_value(n_post.o_kind))
+    if (n_post.sex!=""):
+        new_post.sex=sex.index(n_post.sex)
     db.session.add(new_post)
     db.session.commit()
     flash(n_post.name + " добавлено")
@@ -141,10 +144,15 @@ def update_post(n_post):
     db_post.phone = n_post.phone
     db_post.text = n_post.text
     db_post.len = json.dumps(n_post.len)
-    db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
-    db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
-    db_post.docs = json.dumps(n_post.get_id_from_value(n_post.docs))
-    db_post.sex = sex.index(n_post.sex)
+    if (n_post.occupations!=""):
+        db_post.occupations=json.dumps(n_post.get_id_from_value(n_post.occupations))
+    if (n_post.docs!=""):
+        db_post.docs=json.dumps(n_post.get_id_from_value(n_post.docs))
+    if (n_post.o_kind!=""):
+        db_post.o_kind=json.dumps(n_post.get_id_from_value(n_post.o_kind))
+    if (n_post.sex!=""):
+        db_post.sex=sex.index(n_post.sex)
+  
     db.session.commit()
     flash(n_post.name + " изменено")
     return "ok"

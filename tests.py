@@ -16,7 +16,7 @@ class PostCase(unittest.TestCase):
         db.session.remove()
         self.app_context.pop()
 
-    def test_add_posts(self):
+    def add_posts(self):
         now = datetime.now(timezone.utc)
         rand_phone = ""
         for x in range(3):
@@ -25,7 +25,7 @@ class PostCase(unittest.TestCase):
             created=now,
             updated=now,
             name="test " + rand_phone,
-            place="test",
+            place="0",
             phone=rand_phone,
             text="test__posts",
         )
@@ -37,6 +37,31 @@ class PostCase(unittest.TestCase):
 
         self.assertIsNotNone(res, "ошибка добавления записи")
 
+    def find_in_refs(self,ind):
+        res = db.session.execute(db.select(Refs).where(Refs.name=="places",Refs.id==ind)).scalar()
+        return(res)
+    
+    def repare_post(self,id):
+        p = db.session.execute(db.select(Posts).where(Posts.id==id)).scalar()
+        p.place=""
+        db.session.commit()
+        print("fixed: ",p.name)
+
+    def test_posts(self):
+        res = db.session.execute(db.select(Posts)).scalars()
+        list = res.all()
+        if len(list) > 0:
+           for p in list:
+               if p.place!="":
+                    try:
+                       if self.find_in_refs(int(p.place))is None:
+                           self.repare_post(p.id)
+                    except:
+                       self.repare_post(p.id)
+        else:
+           self.add_posts()
+        self.assertTrue(True)   
+        
     def test_refs(self):
         refs=["levels","occupations","places","documents","conditions"]
         for k in refs:

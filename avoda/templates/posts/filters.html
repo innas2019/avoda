@@ -5,13 +5,13 @@
       <form action="/list" method="post">
             <div class="row">
                   <div class="col-md-4">
-                        <p class="form-text">Количество дней </p>
+                        <p class="form-text">Количество дней *</p>
                         <div class="col-md-4"><input type="text" class="form-control" name="days" value=30 required>
                         </div>
                   </div>
                   <div class="row">
                         <div class="col-md-3">
-                              <span class="form-text">Регион:</ызфт>
+                              <span class="form-text">Регион *</ызфт>
                                     <select name="place" class="form-select" aria-label="Город:" required>
                                           <option selected>-</option>
                                           {% for town in towns %}
