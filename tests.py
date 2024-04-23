@@ -144,7 +144,7 @@ class PostCase(unittest.TestCase):
             db.select(Users).where(Users.name == name)
         ).scalar()
         if res.roles.count("adminisrators")==0:
-           add_roles("usera", "adminisrators")
+           add_roles(name, "adminisrators")
         self.assertTrue(True, "ошибка добавления роли")
 
 if __name__ == "__main__":
