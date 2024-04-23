@@ -2,7 +2,9 @@ from datetime import datetime, timezone
 import random
 import unittest
 from avoda import create_app, db
-from avoda.models import Role, Posts, Refs
+from avoda.models import Role, Posts, Refs, Users
+from avoda.auth import add_roles
+
 #для запуска тестов: python -m unittest   
 
 class PostCase(unittest.TestCase):
@@ -136,6 +138,14 @@ class PostCase(unittest.TestCase):
         res = db.session.execute(db.select(Role)).scalars()
         self.assertTrue(len(res.all()) == 2, "ошибка добавления ролей")
 
+    def test_add_role(self):
+        name="admin"
+        res = db.session.execute(
+            db.select(Users).where(Users.name == name)
+        ).scalar()
+        if res.roles.count("adminisrators")==0:
+           add_roles("usera", "adminisrators")
+        self.assertTrue(True, "ошибка добавления роли")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

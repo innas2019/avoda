@@ -41,7 +41,8 @@
         <td class="col-1"> {{ post["name"] }}</td>
         <td class="col-1"> {{ post["phone"] }}</td>
         <td class="col-1"> {{ refs[post["place"]]}}</td> 
-        <td class="col-7">{{ post["text"] }}</td>
+        
+        <td class="col-7">{{ post["text"][:200] }}</td>
 
       </tr>
       {% endfor %}
