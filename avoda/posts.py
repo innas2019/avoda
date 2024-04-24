@@ -138,7 +138,7 @@ def update_post(n_post):
     global sex
     db_post = db.one_or_404(db.select(Posts).where(Posts.id == n_post.id))
     # db_post = db.session.execute(db.select(Posts).where(Posts.id == n_post.id)).scalar()
-    db_post.updated = n_post.updated
+    db_post.updated = datetime.date.today()
     db_post.name = n_post.name
     db_post.place = n_post.get_id_from_value(n_post.place)
     db_post.phone = n_post.phone
@@ -161,6 +161,16 @@ def update_post(n_post):
 def validation(post):
     if post.place == "":
         return False
+    if post.id!=0:
+        return True
+    
+    p = db.session.execute(
+            db.select(Posts).where(Posts.phone == post.phone )
+        ).scalar() 
+    if p is not None:
+        flash(post.phone + " такой номер уже есть")
+        return False
+    
     return True
 
 
@@ -280,6 +290,10 @@ def list():
         total=ps.total,
         display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
         record_name="объявлений",
+        prev_label="назад",
+        next_label="вперед",
+        bs_version=5
+
     )
     return render_template(
         "posts/list.html",
@@ -388,6 +402,7 @@ def post(id):
 
 @bp.route("/show/<int:id>")
 @login_required
+#получаем объект по номеру из списка
 def show_post(id):
     global current_post
     if len(s_posts) == 0:
@@ -403,7 +418,7 @@ def show_post(id):
     if pos > 0:
         prev = id - 1
     next = 0
-    if pos < len(s_posts) - 1:
+    if pos < len(s_posts) :
         next = id + 1
     return render_template(
         "posts/show_post.html",
@@ -411,9 +426,9 @@ def show_post(id):
         days=delta.days,
         prev=prev,
         next=next,
-        current=pos + 1,
+        current=pos,
         last=len(s_posts),
-        sex=sex,
+        sex=sex
     )
 
 

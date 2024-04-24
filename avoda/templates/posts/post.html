@@ -40,11 +40,12 @@
                               <span class="form-text">Занятость: </span>
                               {% for ok in o_kind %}
                               <div class="form-check form-check-inline">
-                                    {% if post.o_kind.count(ok)>0 %}
-                                    <input class="form-check-input" type="radio" name="ok" id={{ok}} value={{ok}}
+                                   
+                                    {% if post.o_kind!=None and post.o_kind.count(ok)>0 %}
+                                    <input class="form-check-input" type="checkbox" name={{"ok_"+ok}} id={{"ok_"+ok}} value={{ok}}
                                           checked>
                                     {% else %}
-                                    <input class="form-check-input" type="radio" name="ok" id={{ok}} value={{ok}}>
+                                    <input class="form-check-input" type="checkbox" name={{"ok_"+ok}} id={{"ok_"+ok}} value={{ok}}>
                                     {% endif %}
                                     <label class="form-check-label" for={{ok}}> {{ok}} </label>
                               </div>

@@ -20,7 +20,7 @@
             {% if post["o_kind"]!=None %}
                Занятость:
                {% for o in post["o_kind"] %}
-               {{o}}
+               {{o}},
                {% endfor %}
             {% endif %}
          </div>
@@ -48,7 +48,7 @@
          <div class="col">
             {% if post.docs!=None %}
             {% for os in post.docs %}
-            {{os}}
+            {{os}},
             {% endfor %}
             {% endif %}
          </div>
