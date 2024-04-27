@@ -1,75 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
 <h3>Справочники</h3>
-<div class="row">
-  <div class="col">
-    <table id="data" class="table table-hover border-top border-bottom border-light">
-      <thead>
-        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-          <th class="col-3">Род занятий</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for o in o_list %}
-        <tr
-          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-          <th>
-            <a class="link-underline-primary" href="/refs/{{ o["id"] }}">
-              {{ o["id"] }}</td>
-            </a>
-          </th>
-          <td class="col-3"> {{ o["value"] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <div class="col">
-    <table id="data" class="table table-hover border-top border-bottom border-light">
-      <thead>
-        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-          <th class="col-2">Города</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for o1 in towns %}
-        <tr
-          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-          <th>
-            <a class="link-underline-primary" href="/refs/{{ o1["id"] }}">
-              {{ o1["id"] }}</td>
-            </a>
-          </th>
-          <td class="col-3"> {{ o1["value"] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <div class="col">
-    <table id="data" class="table table-hover border-top border-bottom border-light">
-      <thead>
-        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-          <th class="col-3">Язык уровни</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for o in len %}
-        <tr
-          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-          <th>
-            <a class="link-underline-primary" href="/refs/{{ o["id"] }}">
-              {{ o["id"] }}</td>
-            </a>
-          </th>
-
-          <td class="col-3"> {{ o["value"] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+<div class="col"> 
+  {{ pagination.info }}
 </div>
+{{ pagination.links }}
+
+<div class="row">
+    <table id="data" class="table table-hover border-top border-bottom border-light">
+      <thead>
+        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
+          <th class="col-3">id</th>
+          <th class="col-3">тип</th>
+          <th class="col-3">значение</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in list %}
+        <tr
+          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+          <th>
+            <a class="link-underline-primary" href="/refs/{{ o["id"] }}?page={{pagination.page}}">
+              {{ o["id"] }}</td>
+            </a>
+          </th>
+          <td class="col-3"> {{ o["name"] }}</td>
+          <td class="col-3"> {{ o["value"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
 <div class="row">
   <form action="" method="post">
     <div class="row">
@@ -79,9 +41,9 @@
       <div class="col-2">
         <select name="name" id="n" class="form-select" aria-label="Справочник:" required>
           <option selected>{{r.name}}</option>
-          <option value=places>places</option>
-          <option value=occupations>occupations</option>
-          <option value=levels>levels</option>
+          {% for ref in refs %}
+          <option value={{ref}}>{{ref}}</option>
+          {% endfor %}
         </select>
       </div>
       <div class="col-1">
@@ -93,6 +55,12 @@
       <div class="col-2">
         <input type="submit" class="btn btn-primary rounded-2" value="Сохранить">
       </div>
+     {% if r.id !=None %}
+      <div class="col-2">
+        <input type="button" class="btn btn-primary rounded-2" value="Удалить"
+          onclick="window.location.href='/refs/del/{{r.id}}';">
+      </div>
+      {% endif %}
       <div class="row">
         <div class="col-2">
           <input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Выйти"

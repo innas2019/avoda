@@ -10,7 +10,7 @@ class Users(UserMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(40))
-    password = db.Column(db.String(40), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
     isactive = db.Column(db.Integer())
     settings = db.Column(db.String(40))
     roles = db.relationship("Role", secondary="user_role")
