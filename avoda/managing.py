@@ -119,35 +119,3 @@ def delete(id):
     flash(value + " удалено")
     return redirect("/refs/0")  
 
-def refsold(id):
-    ref = None
-    if request.method == "GET":
-        res = db.session.execute(db.select(Refs)).scalars()
-        all = res.all()
-        o_list = [r for r in all if r.name == "occupations"]
-        len = [r for r in all if r.name == "levels"]
-        towns = [r for r in all if r.name == "places"]
-        o_kind = [r for r in all if r.name == "conditions"]
-        docs = [r for r in all if r.name == "documents"]
-        if id == 0:
-            ref = Refs(name="", value="")
-        else:
-            res = [r for r in all if r.id == id]
-            ref = res[0]
-            print(res, ref.id)
-
-        return render_template("manag.html", len=len, towns=towns, o_list=o_list, r=ref)
-        # return render_template("manag.html", all=all, r=ref)
-    else:
-        if id != 0:
-            ref = db.one_or_404(db.select(Refs).where(Refs.id == id))
-            ref.name = request.form["name"]
-            ref.value = request.form["value"]
-            flash(ref.value + " добавлено")
-        else:
-            ref = Refs(name=request.form["name"], value=request.form["value"])
-            db.session.add(ref)
-            flash(ref.value + " изменено")
-        db.session.commit()
-
-        return redirect("/refs/0")

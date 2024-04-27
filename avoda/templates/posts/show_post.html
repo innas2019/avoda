@@ -16,12 +16,12 @@
          <p class="text fw-semibold font-family-Inter">{{ post["phone"] }}</p>
       </div>
       <div class="row justify-content-start">
-         <div class="col-md-3"> 
+         <div class="col-md-3">
             {% if post["o_kind"]!=None %}
-               Занятость:
-               {% for o in post["o_kind"] %}
-               {{o}},
-               {% endfor %}
+            Занятость:
+            {% for o in post["o_kind"] %}
+            {{o}},
+            {% endfor %}
             {% endif %}
          </div>
          <div class="col-md-3"> {{ post["place"] }} </div>
@@ -41,7 +41,7 @@
             <p>{{ post.get_len()}}</p>
          </div>
          <div class="col">
-            {% if post.sex!=None %} {{ post["sex"]}}    {% endif %}
+            {% if post.sex!=None %} {{ post["sex"]}} {% endif %}
          </div>
       </div>
       <div class="row">
@@ -65,30 +65,38 @@
       </div>
       <div class="row justify-content-start mt-4">
          <div class="col">
-         <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="" />
+            <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="" />
          </div>
       </div>
-      <div class="row mt-3 opacity-50"> 
+      <div class="row mt-3 opacity-50">
          <div class="col">
-         {{current}}-й из {{last}}
+            {{current}}-й из {{last}}
          </div>
       </div>
       <div class="row justify-content-start">
          <div class="col-3">
             {% if prev!=0 %}
-            <input type="button" class="btn btn-primary rounded-2" value="Предыдущая анкета"
+            <input type="button" class="btn btn-primary rounded-2" value="Предыдущее"
                onclick="window.location.href='/show/{{prev}}';" />
             {% endif %}
          </div>
          <div class="col-3">
             {% if next!=0 %}
-            <input type="button" class="btn btn-primary rounded-2" value="Следующая анкета"
+            <input type="button" class="btn btn-primary rounded-2" value="Следующее"
                onclick="window.location.href='/show/{{next}}';" />
             {% endif %}
          </div>
+      </div>
+      <div class="row">
          <div class="col-2">
             {% if session['roles'].count("create_post")>0 %}
-            <a class="link-underline-primary" href="/post/{{post.id }}"> редактировать </a>
+            <a class="link-underline-primary" href="/post/{{post.id }}"> изменить </a>
+            {% endif %}
+         </div>
+         <div class="col-2">
+            {% if session['roles'].count("adminisrators")>0 %}
+
+            <a class="link-underline-primary" href="/del/{{post.id }}"> удалить </a>
             {% endif %}
          </div>
       </div>

@@ -437,3 +437,13 @@ def show_post(id):
 @login_required
 def search():
     return render_template("posts/search.html")
+
+@bp.route("/del/<int:id>")
+@login_required
+def delete(id):
+    p = db.one_or_404(db.select(Posts).where(Posts.id == id))
+    value=p.phone
+    db.session.delete(p)
+    db.session.commit()
+    flash(value + " удалено")
+    return redirect("/list")  
