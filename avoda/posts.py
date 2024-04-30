@@ -386,6 +386,10 @@ def post(id):
             sex=sex,
         )
     else:
+        if current_post is None:
+          ps = db.one_or_404(db.select(Posts).where(Posts.id == id))
+          current_post = Post(ps.name, ps.place, ps.phone, ps.text)
+          current_post.get_from_db(ps)  
 
         return render_template(
             "posts/post.html",
