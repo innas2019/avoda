@@ -20,7 +20,7 @@ o_list = []
 o_kind = []
 docs = []
 sex = ["мужчина", "женщина"]
-current_post = None  # frontend ob
+
 allrefs = {}
 
 
@@ -364,7 +364,7 @@ def create():
 @bp.route("/post/<int:id>", methods=["GET", "POST"])
 @login_required
 def post(id):
-    global current_post
+    
     if request.method == "POST":
         form = request.form
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
@@ -386,10 +386,9 @@ def post(id):
             sex=sex,
         )
     else:
-        if current_post is None:
-          ps = db.one_or_404(db.select(Posts).where(Posts.id == id))
-          current_post = Post(ps.name, ps.place, ps.phone, ps.text)
-          current_post.get_from_db(ps)  
+        ps = db.one_or_404(db.select(Posts).where(Posts.id == id))
+        current_post = Post(ps.name, ps.place, ps.phone, ps.text)
+        current_post.get_from_db(ps)  
 
         return render_template(
             "posts/post.html",
@@ -408,11 +407,11 @@ def post(id):
 @login_required
 #получаем объект по номеру из списка
 def show_post(id):
-    global current_post
     if len(s_posts) == 0:
         return redirect(url_for("posts.list"))
-    ps = s_posts[id - 1]
+    pstemp = s_posts[id - 1]
     # объект содержит разницу между датами
+    ps = db.one_or_404(db.select(Posts).where(Posts.id == pstemp.id))
     p = Post(ps.name, ps.place, ps.phone, ps.text)
     p.get_from_db(ps)
     current_post = p
