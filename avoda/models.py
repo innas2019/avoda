@@ -37,7 +37,7 @@ class Posts(db.Model):
     name = db.Column(db.String(40), nullable=False)
     place = db.Column(db.String(40), nullable=False)
     phone = db.Column(db.String(40), nullable=False, unique=True)
-    text = db.Column(db.String)
+    text = db.Column(db.String(500))
     len=db.Column(db.String(100))
     occupations = db.Column(db.String(100))
     o_kind = db.Column(db.String(100))

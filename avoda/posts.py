@@ -5,7 +5,7 @@ from avoda import db
 from avoda.models import Posts
 from avoda import managing as m
 from avoda import auth as a
-import datetime
+from datetime import datetime, timezone
 import json
 from sqlalchemy import text
 
@@ -36,8 +36,6 @@ class Post:
         self.o_kind = []
         self.sex = ""
         self.id = 0
-        self.created = datetime.date.today()
-        self.updated = datetime.date.today()
         self.docs = []
 
     # функция возвращает id справочника по его значению
@@ -111,9 +109,10 @@ class Post:
 
 def create_post(n_post):
     global sex
+    now = datetime.now(timezone.utc)
     new_post = Posts(
-        created=n_post.created,
-        updated=n_post.updated,
+        created=now,
+        updated=now,
         name=n_post.name,
         place=n_post.get_id_from_value(n_post.place),
         phone=n_post.phone,
@@ -136,9 +135,11 @@ def create_post(n_post):
 
 def update_post(n_post):
     global sex
+    now = datetime.now(timezone.utc)
     db_post = db.one_or_404(db.select(Posts).where(Posts.id == n_post.id))
     # db_post = db.session.execute(db.select(Posts).where(Posts.id == n_post.id)).scalar()
-    db_post.updated = datetime.date.today()
+    now = datetime.now(timezone.utc)
+    db_post.updated = now
     db_post.name = n_post.name
     db_post.place = n_post.get_id_from_value(n_post.place)
     db_post.phone = n_post.phone
@@ -248,9 +249,7 @@ def list():
     # в случае если задан фильтр для заявок то метод POST
     if request.method == "POST":
         session["filter"] = filters(request.form)
-    global s_posts
-    global current_post
-    current_post = None
+    
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit = 10
     # query = db.select(Posts).where(Posts.place=="Тель-Авив",Posts.len.like("%ru%"))
@@ -283,7 +282,10 @@ def list():
         query = db.select(Posts).order_by(Posts.updated.desc())
     # читаем по страницам
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
-    s_posts = ps.items
+    s_posts = []
+    for p in ps.items:
+        s_posts.append(p.id)
+    session["items"]=s_posts    
     pagination = Pagination(
         page=page,
         page_per=limit,
@@ -299,7 +301,7 @@ def list():
         "posts/list.html",
         pagination=pagination,
         title=title,
-        posts=s_posts,
+        posts=ps.items,
         refs=allrefs,
     )
 
@@ -407,15 +409,15 @@ def post(id):
 @login_required
 #получаем объект по номеру из списка
 def show_post(id):
+    s_posts=session["items"]
     if len(s_posts) == 0:
         return redirect(url_for("posts.list"))
     pstemp = s_posts[id - 1]
     # объект содержит разницу между датами
-    ps = db.one_or_404(db.select(Posts).where(Posts.id == pstemp.id))
+    ps = db.one_or_404(db.select(Posts).where(Posts.id == pstemp))
     p = Post(ps.name, ps.place, ps.phone, ps.text)
     p.get_from_db(ps)
-    current_post = p
-    delta = datetime.datetime.today() - p.updated
+    delta = datetime.today() - p.updated
     pos = id
     prev = 0
     if pos > 0:
