@@ -5,7 +5,7 @@ from avoda import db
 from avoda.models import Posts
 from avoda import managing as m
 from avoda import auth as a
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import json
 from sqlalchemy import text
 
@@ -254,8 +254,8 @@ def list():
     limit = 10
     # query = db.select(Posts).where(Posts.place=="Тель-Авив",Posts.len.like("%ru%"))
     if session.get("filter") != "":
-        current_time = datetime.datetime.now()
-        delta = current_time - datetime.timedelta(
+        current_time = datetime.now()
+        delta = current_time - timedelta(
             days=int(session.get("filter")["days"])
         )
         if session.get("filter")["occupations"] != None:
