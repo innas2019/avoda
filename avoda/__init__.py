@@ -17,11 +17,10 @@ def create_app():
         BOOTSTRAP_SERVE_LOCAL=True,
         # SQLALCHEMY_DATABASE_URI = "sqlite:///avoda.db",
         SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL") or "sqlite:///avoda.db",
-        #SQLALCHEMY_ENGINE_OPTIONS={"connect_args": {"connect_timeout": 5}},
         # BOOTSTRAP_BOOTSWATCH_THEME="Cosmo"
         POSTS_PER_PAGE=10,
         SESSION_PERMANENT=False,
-        # PERMANENT_SESSION_LIFETIME = timedelta(days=30)
+        # PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
     )
 
     # initialize the app with the extension

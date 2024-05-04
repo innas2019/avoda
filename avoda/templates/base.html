@@ -24,7 +24,7 @@
                 <div class="d-flex">
                     <img src={{ url_for('static', filename='LogoHeader_144X40.png' ) }}>
                 </div>
-                <a class="navbar-brand" href="{{ url_for('auth.title') }}">
+                <a class="navbar-brand" href="{{ url_for('posts.list') }}">
                     Поиск сотрудников</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,10 +33,11 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ui class="navbar-nav me-auto mb-2 mb-md-0">
                         {% if session['name'] %}
-                        <li class="nav-item "><a class="nav-link active" href="{{ url_for('posts.list') }}">Объявления
-                            </a>
-                        </li>
-
+                          {% if session['page'] %}
+                            <li class="nav-item "><a class="nav-link active" href="/list?page={{session['page']}}">Объявления</a> </li>
+                          {% else %}
+                          <li class="nav-item "><a class="nav-link active" href="/list">Объявления</a> </li>
+                          {% endif %} 
 
                         {% if session['roles'].count("adminisrators")>0 %}
                         <li class="nav-item">

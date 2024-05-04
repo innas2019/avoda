@@ -2,9 +2,12 @@
 {% block content %}
 <div class="container-md">
    <div class="px-6 mt-3">
-      <div class="row">
+      {% if session['page'] %}
+         <a class="link-underline-primary font-family-Inter"  href="/list?page={{session['page']}}">Вернуться к списку</a> 
+      {% else %}
          <a class="link-underline-primary font-family-Inter" href="/list"> Вернуться к списку </a>
-      </div>
+      {% endif %} 
+   </div>
       <div class="row">
          <p class="font-family-Inter  opacity-50" style="font-size: 0.75rem;">
             Опубликовано {{days}} дней назад {{post["updated"]}}</p>
@@ -63,7 +66,7 @@
             </div>
          </div>
       </div>
-      <div class="row justify-content-start mt-4">
+      <i class="bi-search"> </i>
          <div class="col">
             <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="" />
          </div>

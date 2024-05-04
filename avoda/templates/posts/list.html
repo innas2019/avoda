@@ -5,19 +5,28 @@
     <div class="col">
       <span class="text fs-5 fw-semibold">{{title}}</span>
     </div>
-    <div class="col"> 
-    {{ pagination.info }}
+    <div class="col">
+      {{ pagination.info }}
     </div>
   </div>
-  <input type="button" class="btn btn-light btn-sm" value="Фильтр" onclick="window.location.href='/filter/set';" />
-  <!-- <input type="button" class="btn btn-light btn-sm" value="поиск" onclick="window.location.href='/search';" /> -->
-  {% if session['filter']!="" %}
-  <input type="button" class="btn btn-light btn-sm" value="Все" onclick="window.location.href='/filter/all';" />
-  {% endif %}
-  {% if session['roles'].count("create_post")>0 %}
-  <input type="button" class="btn btn-light btn-sm" value="Создать объявление" onclick="window.location.href='/create';" />
-  {% endif %}
-
+  <div class="row">
+    <div class="col-1"><input type="button" class="btn btn-light btn-sm" value="Фильтр"
+        onclick="window.location.href='/filter/set';" />
+      {% if session['filter']!="" %}
+       <div class="col-1"> <input type="button" class="btn btn-light btn-sm" value="Все" onclick="window.location.href='/filter/all';" />
+       </div>
+       {% endif %}
+    </div>
+    {% if session['roles'].count("create_post")>0 %}
+    <div class="col-4"><input type="button" class="btn btn-light btn-sm" value="Создать объявление"
+        onclick="window.location.href='/create';" /></div>
+    {% endif %}
+    <div class="col-6">
+      <form action="/search" method="post">
+        <input type="text" class="form-control-sm" name="phone" /> <input type="submit" class="btn btn-light btn-sm" value="Найти" />
+      </form>
+    </div>
+  </div>
   {{ pagination.links }}
   <table id="data" class="table table-hover border-top border-bottom border-light">
     <thead>
@@ -40,8 +49,8 @@
         </th>
         <td class="col-1"> {{ post["name"] }}</td>
         <td class="col-1"> {{ post["phone"] }}</td>
-        <td class="col-1"> {{ refs[post["place"]]}}</td> 
-        
+        <td class="col-1"> {{ refs[post["place"]]}}</td>
+
         <td class="col-7">{{ post["text"][:200] }}</td>
 
       </tr>

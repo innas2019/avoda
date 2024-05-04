@@ -252,7 +252,6 @@ def list():
     
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit = 10
-    # query = db.select(Posts).where(Posts.place=="Тель-Авив",Posts.len.like("%ru%"))
     if session.get("filter") != "":
         current_time = datetime.now()
         delta = current_time - timedelta(
@@ -282,6 +281,7 @@ def list():
         query = db.select(Posts).order_by(Posts.updated.desc())
     # читаем по страницам
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
+    session["page"]=page
     s_posts = []
     for p in ps.items:
         s_posts.append(p.id)
@@ -438,10 +438,37 @@ def show_post(id):
 
 
 # для поиска по имени или телефону
-@bp.route("/search")
+@bp.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
-    return render_template("posts/search.html")
+    if request.method == "POST":    
+        phone=request.form["phone"]
+        query = db.select(Posts).where(Posts.phone.like("%"+phone)).order_by(Posts.updated.desc())
+        res=db.session.execute(query).scalars()
+        s_posts = []
+        posts=res.all()
+        for p in posts:
+            s_posts.append(p.id)
+
+        session["items"]=s_posts   
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        pagination = Pagination(
+        page=page,
+        page_per=10,
+        total=len(posts),
+        display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
+        record_name="объявлений",
+        prev_label="назад",
+        next_label="вперед",
+        bs_version=5)
+        
+        return render_template(
+        "posts/list.html",
+        pagination=pagination,
+        title="поиск по телефону",
+        posts=posts,
+        refs=allrefs)
+  
 
 @bp.route("/del/<int:id>")
 @login_required
