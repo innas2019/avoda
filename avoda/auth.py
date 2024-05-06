@@ -2,8 +2,11 @@ from flask import Blueprint
 from flask import ( Blueprint, flash, redirect, render_template, request, url_for,  session)
 from flask_login import current_user, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
-from avoda import db
+from avoda import db 
+from flask import current_app
 from avoda.models import Users,Role
+import logging
+import json
 
 def get_roles(user):
     session["roles"] = []
@@ -32,7 +35,7 @@ def add_roles(username, rolename):
 def update_settings(s):
     id=session["_user_id"] #user-login set parameter 
     user=db.session.get(Users, int(id)) 
-    user.settings = s
+    user.settings = json.dumps(s)
     db.session.commit()
     
 
@@ -109,6 +112,11 @@ def login():
                 session["filter"] = ""
             else:
                 session["filter"] = user.settings
+            
+            
+            l=current_app.logger
+            l.setLevel(logging.INFO)
+            l.info(username+' login')    
             return redirect(url_for("posts.list"))
             
     else:

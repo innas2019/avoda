@@ -30,7 +30,7 @@
   {{ pagination.links }}
   <table id="data" class="table table-hover border-top border-bottom border-light">
     <thead>
-      <tr class="d-none d-lg-table-row table-secondary border-start border-end border-light text-left">
+      <tr class="table-secondary border-start border-end border-light text-left">
         <th class="col-1">№</th>
         <th class="col-1">Имя</th>
         <th class="col-1">Контакт</th>
@@ -41,7 +41,7 @@
     <tbody>
       {% for post in posts %}
       <tr
-        class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+        class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
         <th>
           <a class="link-underline-primary" href="/show/{{loop.index}}">
             {{loop.index + pagination.skip}}

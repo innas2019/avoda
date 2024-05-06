@@ -7,7 +7,6 @@ from avoda import managing as m
 from avoda import auth as a
 from datetime import datetime, timezone, timedelta
 import json
-from sqlalchemy import text
 
 bp = Blueprint("posts", __name__)
 s_posts = []
@@ -182,7 +181,8 @@ def filters(flt):
     res["occupations"] = n_post.get_id_from_value(flt["oc"])
     res["place"] = n_post.get_id_from_value(flt["place"])
     res["days"] = flt["days"]
-    print(res)
+    if flt["permanent"]:
+        a.update_settings(res)
     return res
 
 
@@ -349,7 +349,7 @@ def create():
             sex=sex,
         )
     else:
-        p = Post("", "", "", "")
+        p = Post("N/A", "", "", "")
         return render_template(
             "posts/post.html",
             towns=towns,
