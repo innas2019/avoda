@@ -34,9 +34,9 @@
                     <ui class="navbar-nav me-auto mb-2 mb-md-0">
                         {% if session['name'] %}
                           {% if session['page'] %}
-                            <li class="nav-item "><a class="nav-link active" href="/list?page={{session['page']}}">Объявления</a> </li>
+                            <li class="nav-item "><a class="nav-link active" href="/list?page={{session['page']}}">Эта страница</a> </li>
                           {% else %}
-                          <li class="nav-item "><a class="nav-link active" href="/list">Объявления</a> </li>
+                          <li class="nav-item "><a class="nav-link active" href="/list"></a>Эта страница </li>
                           {% endif %} 
 
                         {% if session['roles'].count("adminisrators")>0 %}
@@ -44,7 +44,7 @@
                             <a class="nav-link active" href="/refs/0">Управление</a>
                         </li>
                         {% endif %}
-                        <span class="navbar-text"> User name: {{ session['name'] }} </span>
+                        <span class="navbar-text "> User name: {{ session['name'] }} </span>
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a>
                         </li>
@@ -70,7 +70,7 @@
             <div class="bg-primary row d-flex">
                 <div class="col-6 px-1 py-1  justify-content-left">
                     <span class="text-white  font-family-Inter m-0 px-3 py-2" style="font-size: 0.75rem;">
-                        ver 1.01 Hatul Madan
+                        ver 1.01 8.05 Hatul Madan
                     </span>
                 </div>
                 <div class="col-6 px-1 py-1  justify-content-right">

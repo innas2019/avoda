@@ -5,7 +5,7 @@
       {% if session['page'] %}
          <a class="link-underline-primary font-family-Inter"  href="/list?page={{session['page']}}">Вернуться к списку</a> 
       {% else %}
-         <a class="link-underline-primary font-family-Inter" href="/list"> Вернуться к списку </a>
+         <a class="link-underline-primary font-family-Inter" href="/list"> Вернуться на страницу </a>
       {% endif %} 
    </div>
       <div class="row">
@@ -68,7 +68,8 @@
       </div>
       <i class="bi-search"> </i>
          <div class="col">
-            <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="" />
+            <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="window.print()" />
+       
          </div>
       </div>
       <div class="row mt-3 opacity-50">

@@ -111,7 +111,7 @@ def login():
             if user.settings == None:
                 session["filter"] = ""
             else:
-                session["filter"] = user.settings
+                session["filter"] = json.loads(user.settings)
             
             
             l=current_app.logger

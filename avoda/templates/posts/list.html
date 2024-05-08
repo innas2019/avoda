@@ -11,12 +11,11 @@
   </div>
   <div class="row">
     <div class="col-1"><input type="button" class="btn btn-light btn-sm" value="Фильтр"
-        onclick="window.location.href='/filter/set';" />
-      {% if session['filter']!="" %}
-       <div class="col-1"> <input type="button" class="btn btn-light btn-sm" value="Все" onclick="window.location.href='/filter/all';" />
+        onclick="window.location.href='/filter/set';" /> </div>
+       {% if session['filter']!="" %}
+       <div class="col-1"> <input type="button" class="btn btn-light btn-sm" value="Показать все" onclick="window.location.href='/filter/all';" />
        </div>
        {% endif %}
-    </div>
     {% if session['roles'].count("create_post")>0 %}
     <div class="col-4"><input type="button" class="btn btn-light btn-sm" value="Создать объявление"
         onclick="window.location.href='/create';" /></div>
@@ -51,7 +50,11 @@
         <td class="col-1"> {{ post["phone"] }}</td>
         <td class="col-1"> {{ refs[post["place"]]}}</td>
 
-        <td class="col-7">{{ post["text"][:200] }}</td>
+        <td class="col-7">{{ post["text"][:200] }}
+          {% if post["text"]|length > 200 %}
+          ...
+          {% endif %}
+        </td>
 
       </tr>
       {% endfor %}

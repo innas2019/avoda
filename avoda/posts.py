@@ -87,11 +87,18 @@ class Post:
             new_val.append(allrefs[i])
         return new_val
 
+    def transform_len_by_id(self,len):
+        for x in len.keys():
+          if len[x] in allrefs:
+             len[x]=allrefs[len[x]]
+        
+        return len
+
     # функция добавляет все поля объекта из SQL
     def get_from_db(self, p):
         self.id = p.id
         if p.len != None:
-            self.len = json.loads(p.len)
+            self.len = self.transform_len_by_id(json.loads(p.len))
         if p.occupations != None:
             self.occupations = self.get_name_by_id(json.loads(p.occupations))
         if p.o_kind != None:
@@ -104,6 +111,11 @@ class Post:
         self.updated = p.updated
         if p.place != None and p.place != "":
             self.place = allrefs[p.place]
+    
+    def transform_len_to_id(self):
+        for x in self.len.keys():
+          self.len[x]=self.get_id_from_value(self.len[x])
+        return self.len    
 
 
 def create_post(n_post):
@@ -116,7 +128,8 @@ def create_post(n_post):
         place=n_post.get_id_from_value(n_post.place),
         phone=n_post.phone,
         text=n_post.text,
-        len=json.dumps(n_post.len)    
+        
+        len=json.dumps(n_post.transform_len_to_id())    
     )
     if (n_post.occupations!=""):
         new_post.occupations=json.dumps(n_post.get_id_from_value(n_post.occupations))
@@ -143,7 +156,7 @@ def update_post(n_post):
     db_post.place = n_post.get_id_from_value(n_post.place)
     db_post.phone = n_post.phone
     db_post.text = n_post.text
-    db_post.len = json.dumps(n_post.len)
+    db_post.len = json.dumps(n_post.transform_len_to_id())
     if (n_post.occupations!=""):
         db_post.occupations=json.dumps(n_post.get_id_from_value(n_post.occupations))
     if (n_post.docs!=""):
@@ -181,7 +194,7 @@ def filters(flt):
     res["occupations"] = n_post.get_id_from_value(flt["oc"])
     res["place"] = n_post.get_id_from_value(flt["place"])
     res["days"] = flt["days"]
-    if flt["permanent"]:
+    if "permanent" in flt.keys():
         a.update_settings(res)
     return res
 
@@ -230,6 +243,7 @@ def load_ref():
     allrefs = m.get_refs()
     len_levels = m.get_ref("levels")
     towns = m.get_ref("places")
+    towns.sort()
     o_list = m.get_ref("occupations")
     o_kind = m.get_ref("conditions")
     docs = m.get_ref("documents")
@@ -243,9 +257,9 @@ def load_ref():
 @bp.route("/list", methods=["POST", "GET"])
 @login_required
 def list():
-    title = "Все публикации"
+    title = "Все объявления"
     if session.get("filter") != "":
-        title = "Выбранные публикации"
+        title = "Выбранные "
     # в случае если задан фильтр для заявок то метод POST
     if request.method == "POST":
         session["filter"] = filters(request.form)
@@ -257,8 +271,10 @@ def list():
         delta = current_time - timedelta(
             days=int(session.get("filter")["days"])
         )
+        title=title+" за "+session.get("filter")["days"]+" дней, "+allrefs[session.get("filter")["place"]]
         if session.get("filter")["occupations"] != None:
             s = '%"' + session.get("filter")["occupations"] + '"%'
+            title=title+", "+allrefs[session.get("filter")["occupations"]]
             query = (
                 db.select(Posts)
                 .where(
