@@ -114,7 +114,9 @@ class Post:
     
     def transform_len_to_id(self):
         for x in self.len.keys():
-          self.len[x]=self.get_id_from_value(self.len[x])
+          value=self.get_id_from_value(self.len[x])
+          if value !=None: 
+             self.len[x]=self.get_id_from_value(self.len[x])
         return self.len    
 
 

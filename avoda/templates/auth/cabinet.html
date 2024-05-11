@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row px-6 mt-6 mb-6">
+      <div class="col-3 justify-content-center px-6">
+            <a class="link-underline-primary" href="{{ url_for('posts.list') }}">
+                  Вернуться на главную</a>
+      </div>
+      <div class="row justify-content-center px-2 py-2 ">
+            <h4>{{ title }}</h4>
+            <form action="{{ url_for('auth.register') }}" method="post">
+
+                  <div class="row">
+                        <div class="col-md-7"><input type="text" class="form-control" name="name" placeholder="логин"
+                                    required> </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-7">
+                              <a class="link-underline-primary" href="">
+                                    изменить пароль</a>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-7"><input type="email" placeholder="e-mail" class="form-control" name="email">
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-7">
+                              сохраненный фильтр: дней: город: Ашдод
+                        </div>
+                        <div class="col-md-7">
+                              <a class="link-underline-primary" href="">
+                                    изменить</a>
+
+                        </div>
+                  </div>
+                  <div class="form-check ">
+                        <input class="form-check-input" type="checkbox" value="да" name="newsletter" id="per">
+                        <label class="form-check-label" for="per"> рассылка на почту </label>
+                  </div>
+
+                  <div class="row mb-5">
+                        <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                                    value="Сохранить">
+                        </div>
+                  </div>
+            </form>
+
+      </div>
+</div>
+{% endblock %}

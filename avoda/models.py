@@ -12,7 +12,7 @@ class Users(UserMixin,db.Model):
     email = db.Column(db.String(40))
     password = db.Column(db.String(256), nullable=False)
     isactive = db.Column(db.Integer())
-    settings = db.Column(db.String(40))
+    settings = db.Column(db.String(256))
     roles = db.relationship("Role", secondary="user_role")
 
 

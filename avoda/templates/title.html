@@ -15,20 +15,19 @@
 </head>
 
 <body>
-   <!-- bg-white justify-content-center align-items-center" -->
    <div id="component" class="container-md">
     {% from 'bootstrap5/utils.html' import render_messages %}
     {{ render_messages() }}
       <!-- logo+login -->
       <div class="row mt-5 justify-content-center" style ="height: 450px;">
          <!-- logo+text -->
-         <div class="col-4 mt-5 px-3 justify-content-end">
+         <div class="col-md-3 mt-3 py-3">
             <div class="row justify-content-end">
-               <div class="col-7 justify-content-end d-flex">
+               <div class="col-md-8 justify-content-end d-flex">
                   <img src={{ url_for('static', filename='LogoStartScreen_224X62.png' ) }}>
 
                </div>
-               <div class="col-7">
+               <div class="col-md-8 justify-content-end d-flex">
                   <p class="text-end text-dark fs-4 fw-semibold font-family-Inter m-0 px-3 py-2">
                      Поиск сотрудников для вашего бизнеса
                   </p>
@@ -36,14 +35,14 @@
             </div>
          </div>
       <!-- login -->
-         <div class="col-3 justify-content-start mt-3 px-3">
-            <div class="row justify-content-center px-6 py-1 bg-secondary-subtle">
-               <div class="col py-3 justify-content-center align-items-center">
+         <div class="col-md-3 justify-content-start mt-3 px-3">
+            <div class="row px-6 py-1 justify-content-center bg-secondary-subtle">
+               <div class="col-10 align-items-center">
                   <p class="text-dark fs-5 fw-semibold font-family-Inter px-3 py-2">
                      Вход для работодателей
                   </p>
                </div>
-               <div class="col px-3 py-2 justify-content-center align-items-center">
+               <div class="col-10 align-items-center">
                   <form action="{{ url_for('auth.login')}}" method="post">
 
                      <div class="row ">
@@ -61,16 +60,16 @@
                         </div>       
                      </div>
                      <div class="row">
-                        <div class="col-4"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                        <div class="col-md-4"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
                               value="Войти">
                         </div>
-                        <div class="col-4"><input type="button" class="btn btn-secondary-subtle mt-3 mb-2 rounded-2 text-primary"
+                        <div class="col-md-4"><input type="button" class="btn btn-secondary-subtle mt-3 mb-2 rounded-2 text-primary"
                               value="Регистрация" onclick="window.location.href='/register';"> </div>
                      </div>
                   </form>
                </div>
             </div>
-            <div class="col-12 row d-flex">
+            <div class="row ">
                <span class="text-end text-dark  font-family-Inter" style="font-size: 0.75rem;">
                   ver 1.01 Hatul Madan </span>
                   <span   class="text-end text-primary font-family-Inter text-decoration-underline" style="font-size: 0.75rem;">

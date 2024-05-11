@@ -128,3 +128,7 @@ def logout():
     session.clear()
     logout_user()
     return redirect(url_for("auth.title"))
+
+@bp.route("/cabinet")
+def cabinet():
+   return render_template("auth/cabinet.html",title="Личный кабинет") 
