@@ -27,14 +27,14 @@
     </div>
   </div>
   {{ pagination.links }}
-  <table id="data" class="table table-hover border-top border-bottom border-light">
+  <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
     <thead>
       <tr class="table-secondary border-start border-end border-light text-left">
-        <th class="col-1">№</th>
-        <th class="col-1">Имя</th>
-        <th class="col-1">Контакт</th>
-        <th class="col-1">Город</th>
-        <th class="col-7 ">Описание</th>
+        <th width="5%">№</th>
+        <th width="10%">Имя</th>
+        <th width="10%">Контакт</th>
+        <th width="10%">Город</th>
+        <th >Описание</th>
       </tr>
     </thead>
     <tbody>
@@ -46,11 +46,11 @@
             {{loop.index + pagination.skip}}
           </a>
         </th>
-        <td class="col-1"> {{ post["name"] }}</td>
-        <td class="col-1"> {{ post["phone"] }}</td>
-        <td class="col-1"> {{ refs[post["place"]]}}</td>
+        <td> {{ post["name"] }}</td>
+        <td> {{ post["phone"] }}</td>
+        <td> {{ refs[post["place"]]}}</td>
 
-        <td class="col-7">{{ post["text"][:200] }}
+        <td >{{ post["text"][:200] }}
           {% if post["text"]|length > 200 %}
           ...
           {% endif %}
