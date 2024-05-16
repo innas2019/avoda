@@ -79,7 +79,7 @@ class Post:
                 self.sex = map[f]
             elif str(f).find("d") != -1:
                 self.docs.append(map[f])
-        print("занятость", self.o_kind)
+        
 
     def get_name_by_id(self, ids):
         new_val = []
@@ -247,6 +247,7 @@ def load_ref():
     towns = m.get_ref("places")
     towns.sort()
     o_list = m.get_ref("occupations")
+    o_list.sort()
     o_kind = m.get_ref("conditions")
     docs = m.get_ref("documents")
 
@@ -348,6 +349,7 @@ def create():
     global sex
     if request.method == "POST":
         form = request.form
+        print(form["place"]) 
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
         n_post.get_from_form(form)
         if validation(n_post):

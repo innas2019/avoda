@@ -9,20 +9,24 @@
       {{ pagination.info }}
     </div>
   </div>
-  <div class="row">
-    <div class="col-1"><input type="button" class="btn btn-light btn-sm" value="Фильтр"
+  <div class="row justify-content-end">
+    <div class="col-1"><input type="button" class="btn btn-dark btn-sm" value="Фильтр"
         onclick="window.location.href='/filter/set';" /> </div>
        {% if session['filter']!="" %}
-       <div class="col-1"> <input type="button" class="btn btn-light btn-sm" value="Показать все" onclick="window.location.href='/filter/all';" />
+       <div class="col-5"> <input type="button" class="btn btn-dark btn-sm" value="Показать все" onclick="window.location.href='/filter/all';" />
        </div>
        {% endif %}
     {% if session['roles'].count("create_post")>0 %}
-    <div class="col-4"><input type="button" class="btn btn-light btn-sm" value="Создать объявление"
+    <div class="col-2"><input type="button" class="btn btn-dark btn-sm" value="Создать объявление"
         onclick="window.location.href='/create';" /></div>
     {% endif %}
-    <div class="col-6">
-      <form action="/search" method="post">
-        <input type="text" class="form-control-sm" name="phone" /> <input type="submit" class="btn btn-light btn-sm" value="Найти" />
+    <div class="col-3">
+      <form class="form-floating" action="/search" method="post">
+        
+        <input type="text" class="form-control-sm" name="phone" placeholder="телефон"/> 
+        <input type="submit" class="btn btn-dark btn-sm" value="Найти" data-bs-toggle="tooltip" data-bs-placement="top" title="поиск по номеру телефона"
+         />
+        
       </form>
     </div>
   </div>

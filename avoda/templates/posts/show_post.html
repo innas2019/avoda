@@ -13,21 +13,25 @@
             Опубликовано {{days}} дней назад {{post["updated"]}}</p>
       </div>
       <div class="row">
-         <p class="text fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</p>
+         <div class="col-4 text fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</div>
+   
+      <div class="col-2">
+         {% if post.sex!=None %} <span class="badge text-bg-secondary">{{ post["sex"]}}</span> {% endif %}
       </div>
       <div class="row">
-         <p class="text fw-semibold font-family-Inter">{{ post["phone"] }}</p>
+         <div class="col-4 text fw-semibold font-family-Inter">{{ post["phone"] }}</div>
+         <div class="col-2"> {{ post["place"] }} </div>
       </div>
       <div class="row justify-content-start">
          <div class="col-md-3">
             {% if post["o_kind"]!=None %}
-            Занятость:
+            <div class="opacity-50"> Занятость:</div>
             {% for o in post["o_kind"] %}
-            {{o}},
+            {{o}}
             {% endfor %}
             {% endif %}
          </div>
-         <div class="col-md-3"> {{ post["place"] }} </div>
+         
       </div>
       <div class="row">
          <div class="col">
@@ -40,16 +44,15 @@
       </div>
       <div class="row">
          <div class="col">
-            <span class="opacity-50"> Языки</span>
+            <span class="opacity-50"> Языки:</span>
             <p>{{ post.get_len()}}</p>
          </div>
-         <div class="col">
-            {% if post.sex!=None %} {{ post["sex"]}} {% endif %}
-         </div>
+         
       </div>
       <div class="row">
          <div class="col">
             {% if post.docs!=None %}
+            <div class="opacity-50"> Документы:</div>
             {% for os in post.docs %}
             {{os}},
             {% endfor %}
@@ -58,7 +61,7 @@
       </div>
       <div class="row">
          <div class="col">
-            <span class="opacity-50"> Объявление</span>
+            <span class="opacity-50"> Объявление:</span>
             <div>
                <div class="col width=70%">
                   {{ post["text"] }}
