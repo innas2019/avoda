@@ -11,3 +11,5 @@ flask --app avoda db migrate -m "Initial migration."
 flask --app avoda db upgrade
 Все последующие миграции при изменении объектов DB:
 flask --app avoda db migrate
+если не находит номер поседней ревизии
+flask --app avoda db revision --rev-id #####

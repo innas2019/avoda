@@ -354,7 +354,6 @@ def create():
         n_post.get_from_form(form)
         if validation(n_post):
             if create_post(n_post):
-                flash("Запись добавлена!")
                 return redirect(url_for("posts.list"))
 
         return render_template(

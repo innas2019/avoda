@@ -13,6 +13,7 @@ class Users(UserMixin,db.Model):
     password = db.Column(db.String(256), nullable=False)
     isactive = db.Column(db.Integer())
     settings = db.Column(db.String(256))
+    issend = db.Column(db.Integer())
     roles = db.relationship("Role", secondary="user_role")
 
 
