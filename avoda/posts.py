@@ -119,6 +119,18 @@ class Post:
              self.len[x]=self.get_id_from_value(self.len[x])
         return self.len    
 
+@bp.context_processor
+def utility_processor():
+    
+    def show_in_view(s):
+        if s != None:
+            res=""
+            ids=json.loads(s)
+            for i in ids:
+                res=res+ " "+ allrefs[i]
+            return res
+        return ""      
+    return dict(show_in_view=show_in_view)  
 
 def create_post(n_post):
     global sex
@@ -304,6 +316,7 @@ def list():
     s_posts = []
     for p in ps.items:
         s_posts.append(p.id)
+    
     session["items"]=s_posts    
     pagination = Pagination(
         page=page,

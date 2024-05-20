@@ -9,24 +9,27 @@
       {{ pagination.info }}
     </div>
   </div>
+  
   <div class="row justify-content-end">
-    <div class="col-1"><input type="button" class="btn btn-dark btn-sm" value="Фильтр"
-        onclick="window.location.href='/filter/set';" /> </div>
-       {% if session['filter']!="" %}
-       <div class="col-5"> <input type="button" class="btn btn-dark btn-sm" value="Показать все" onclick="window.location.href='/filter/all';" />
-       </div>
-       {% endif %}
     {% if session['roles'].count("create_post")>0 %}
-    <div class="col-2"><input type="button" class="btn btn-dark btn-sm" value="Создать объявление"
+    <div class="col-md-2"><input type="button" class="btn btn-dark btn-sm" value="Создать объявление"
         onclick="window.location.href='/create';" /></div>
     {% endif %}
+    <div class="col-md-1"><input type="button" class="btn btn-dark btn-sm" value="Фильтр"
+        onclick="window.location.href='/filter/set';" /> </div>
+    {% if session['filter']!="" %}
+    <div class="col-md-2"> <input type="button" class="btn btn-dark btn-sm" value="Показать все"
+        onclick="window.location.href='/filter/all';" />
+    </div>
+    {% endif %}
+    
     <div class="col-3">
       <form class="form-floating" action="/search" method="post">
-        
-        <input type="text" class="form-control-sm" name="phone" placeholder="телефон"/> 
-        <input type="submit" class="btn btn-dark btn-sm" value="Найти" data-bs-toggle="tooltip" data-bs-placement="top" title="поиск по номеру телефона"
-         />
-        
+
+        <input type="text" class="form-control-sm" name="phone" placeholder="телефон" />
+        <input type="submit" class="btn btn-dark btn-sm" value="Найти" data-bs-toggle="tooltip" data-bs-placement="top"
+          title="поиск по номеру телефона" />
+
       </form>
     </div>
   </div>
@@ -38,13 +41,12 @@
         <th width="10%">Имя</th>
         <th width="10%">Контакт</th>
         <th width="10%">Город</th>
-        <th >Описание</th>
+        <th>Описание</th>
       </tr>
     </thead>
     <tbody>
       {% for post in posts %}
-      <tr
-        class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+      <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
         <th>
           <a class="link-underline-primary" href="/show/{{loop.index}}">
             {{loop.index + pagination.skip}}
@@ -52,14 +54,17 @@
         </th>
         <td> {{ post["name"] }}</td>
         <td> {{ post["phone"] }}</td>
+
         <td> {{ refs[post["place"]]}}</td>
 
-        <td >{{ post["text"][:200] }}
+        <td class="d-none d-md-block">{{ post["text"][:200] }}
           {% if post["text"]|length > 200 %}
           ...
           {% endif %}
         </td>
-
+        <td class="d-md-none">
+          {{ show_in_view(post["occupations"]) }}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

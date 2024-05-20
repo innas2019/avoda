@@ -19,19 +19,20 @@
 
 <body>
     <div class="container-md">
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4 nav-fill">
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
             <div class="container-fluid">
                 <div class="d-flex">
                     <img src={{ url_for('static', filename='LogoHeader_144X40.png' ) }}>
                 </div>
                 <a class="navbar-brand" href="{{ url_for('posts.list') }}">
                     Поиск сотрудников</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> -->
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ui class="navbar-nav me-auto mb-2 mb-md-0">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ui class="navbar-nav me-auto">
                         {% if session['name'] %}
                           {% if session['page'] %}
                             <li class="nav-item "><a class="nav-link active" href="/list?page={{session['page']}}">Эта страница</a> </li>
