@@ -19,9 +19,15 @@
                   <div class="row">
                         <div class="col-md-2">
                               <p class="form-text">Телефон *</p>
+                              
                         </div>
                         <div class="col-md-4"><input type="text" class="form-control" name="phone" required
-                                    value={{post.phone}}> </div>
+                                     pattern="[0-9]{8,}" title=" допускаются только цифры, длина не менее 8" value={{post.phone}} >
+                                    {% if post.id==0 %}
+                                    <a href=# id=check_input>проверка</a> 
+                              <nbsp class="text-danger" id=result></nbsp>
+                              {% endif %}      
+                        </div>
                   </div>
 
                   <div class="row">
@@ -29,7 +35,7 @@
                               <span class="form-text"> Регион *</span>
                         </div>
                         <div class="col-md-2">
-                              <select class="form-select" name="place" id="place" >
+                              <select class="form-select" name="place" id="place" required>
                                     <option selected>{{post.place}}</option>
                                     {% for town in towns %}
                                     <option value={{town}}>{{town}}</option>
@@ -149,11 +155,15 @@
       </div>
 </div>
 <div class="row">
+     
       <div class="col-md-3"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Выйти"
                   onclick="window.location.href='/list';" /> </div>
 
-      <div class="col-md-3"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить" /> </div>
-</div>
+      <div class="col-md-3">
+           
+            <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить" /> </div>
+            
+      </div>
 </form>
 </div>
 {% endblock %}

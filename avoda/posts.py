@@ -7,6 +7,7 @@ from avoda import managing as m
 from avoda import auth as a
 from datetime import datetime, timezone, timedelta
 import json
+from flask import jsonify
 
 bp = Blueprint("posts", __name__)
 s_posts = []
@@ -131,6 +132,16 @@ def utility_processor():
             return res
         return ""      
     return dict(show_in_view=show_in_view)  
+
+@bp.route('/check')
+def check_phone():
+  phone = request.args.get('phone', 0, type=str)
+  query = db.select(Posts).where(Posts.phone.like("%"+phone))
+  res=db.session.execute(query).scalar()
+  if res is not None:
+          return jsonify(result='такой номер уже есть')
+  else:
+        return jsonify(result='такого номера нет! можно продолжать')
 
 def create_post(n_post):
     global sex

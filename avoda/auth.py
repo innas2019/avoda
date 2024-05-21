@@ -108,7 +108,7 @@ def login():
             get_roles(user)
             login_user(user)
             session["name"] = username
-            if user.settings == None:
+            if user.settings == None or user.settings =="":
                 session["filter"] = ""
             else:
                 session["filter"] = json.loads(user.settings)
@@ -137,26 +137,31 @@ def cabinet():
             issend=1
         else:
             issend=0    
-        email = request.form["email"]
+        email = request.form["email"]           
         user = db.session.execute(
             db.select(Users).where(Users.name == request.form["name"])
         ).scalar()
         user.email = email
         user.issend = issend
+        if "clean" in request.form.keys():
+            user.settings=""
         db.session.commit()
         flash(user.name + " настройки  изменены")
+        session["filter"] = ""
         return redirect(url_for("posts.list"))
     else:
         # пока для текущего юзера
         user = db.session.execute(
             db.select(Users).where(Users.name == session["name"])
         ).scalar()
-        filter = json.loads(user.settings)
-        allrefs = m.get_refs()
-        filterstr = filter["days"] + " дней, " + allrefs[filter["place"]]
-        if filter["occupations"] != None:
-            filterstr = filterstr + ", " + allrefs[filter["occupations"]]
-
+        if  user.settings!=None and user.settings!="":
+            filter = json.loads(user.settings)
+            allrefs = m.get_refs()
+            filterstr = filter["days"] + " дней, " + allrefs[filter["place"]]
+            if filter["occupations"] != None:
+                filterstr = filterstr + ", " + allrefs[filter["occupations"]]
+        else:
+            filterstr=None
         return render_template(
             "auth/cabinet.html", title="Личный кабинет", user=user, filterstr=filterstr
         )

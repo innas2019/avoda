@@ -53,7 +53,9 @@
           </a>
         </th>
         <td> {{ post["name"] }}</td>
-        <td> {{ post["phone"] }}</td>
+        <td>  <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
+
+        </td>
 
         <td> {{ refs[post["place"]]}}</td>
 

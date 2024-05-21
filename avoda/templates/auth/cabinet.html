@@ -21,8 +21,8 @@
                         <div class="col-md-2">
                               <p class="form-text">e-mail</p>
                         </div>
-                        {% if user.email!=None %}
-                        <div class="col-md-3"><input type="email" value={{user.email}} placeholder="e-mail" class="form-control" name="email">  </div>
+                        {% if user.email!=None and user.email!="" %}
+                        <div class="col-md-3"><input type="email" value={{user.email}}  class="form-control" name="email">  </div>
                      {% else %} 
                         <div class="col-md-3"><input type="email"  placeholder="e-mail" class="form-control" name="email">  </div>
                      {% endif %}   
@@ -34,12 +34,21 @@
                         </div>
                   </div>
                   <div class="row">
-                        <div class="col-md-4">
+                     {% if filterstr!=None %}
+                        <div class="col-md-4">                             
                               <span class="opacity-50">сохраненный фильтр: </span>{{filterstr}}
+                             
+                              <div class="form-check ">
+                                    <input class="form-check-input" type="checkbox" value="да" name="clean"
+                                          id="per">
+                                    <label class="form-check-label" for="per">  очистить сохраненный фильтр</label>
+                                 
+                              </div>    
                         </div>
-                        <div class="col-md-2">
+                      {% endif %}
+                        <div class="col-md-4">
                               <a class="link-underline-primary" href="/filter/set">
-                                    изменить</a>
+                                    изменить сохраненный фильтр</a>
 
                         </div>
                   </div>
@@ -53,6 +62,9 @@
                   </div>
 
                   <div class="row mb-5">
+                        <div class="col"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Выйти"
+                              onclick="window.location.href='/list';" /> </div>
+
                         <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
                                     value="Сохранить">
                         </div>

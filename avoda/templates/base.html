@@ -89,7 +89,21 @@
             {% endblock %}
         </footer>
         {% block scripts %}
-        <!-- Optional JavaScript -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type=text/javascript>
+              $(function() {
+                $('a#check_input').bind('click', function() {
+                    $.getJSON('/check', {
+                      phone: $('input[name="phone"]').val(),
+                    }, function(data) {
+                      $("#result").text(data.result);
+                     
+                    });
+                    return false;
+                });
+
+              });
+        </script>
         {{ bootstrap.load_js() }}
         {% endblock %}
     </div>
