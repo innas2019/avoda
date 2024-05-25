@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col">
+  <span class="text fs-5 fw-semibold">Пользователи</span>
+
+  {{ pagination.info }}
+</div>
+{{ pagination.links }}
+
+<div class="row">
+  <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
+    <thead>
+      <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
+        <th class="col-1">id</th>
+        <th class="col-3">логин</th>
+        <th class="col-3">e-mail</th>
+        <th class="col-3">рассылка</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in list %}
+      <tr
+        class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+        <th>
+          <a class="link-underline-primary" href="/users/{{ o["id"] }}?page={{pagination.page}}">
+            {{ o["id"] }}</td>
+          </a>
+        </th>
+        <td class="col-3">
+          <a class="link-underline-primary" href="/users/{{ o["id"] }}?page={{pagination.page}}">
+            {{ o["name"] }}
+        </td>
+        </a>
+
+        <td class="col-3"> 
+          {% if o.email!=None %}
+          {{ o["email"] }}
+          {% endif %}
+        </td>
+        <td class="col-3">
+          {% if o.issend!=None and o.issend==1%}
+             Да
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if r.id!=None %}
+<div class="row">
+  <form action="" method="post">
+    <div class="row">
+      <div class="col-1">
+        <div class="form-text">Пользователь:</div>
+      </div>
+      <div class="col-2">
+        {{r.name}}
+      </div>    
+     
+      
+      <div class="col-1">
+        <label for="v" class="form-text">E-mail:</label>
+      </div>
+      <div class="col-2">
+        {% if r.email!=None %}
+        <input type="text" class="form-control" name="email" id="v" value={{r.email}}>
+        {% else %}
+        <input type="text" class="form-control" name="email" id="v">
+        {% endif %}
+      </div>
+      <div class="form-check ">
+        {% if r.issend!=None and r.issend==1%}
+        <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per" checked>
+        {% else %}
+        <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per">
+        {% endif %}
+        <label class="form-check-label" for="per"> рассылка на почту </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-1">
+        <div class="form-text">Роли:</div>
+    </div>
+    <div class="col-6">
+      {% for rs in roles %}
+      <div class="form-check form-check-inline">
+            {% if r.roles!=None and r.roles.count(rs)>0 %}
+            <input class="form-check-input" type="checkbox" name={{"rs_"+rs.name}} id={{"rs_"+rs.name}} value={{rs.name}}
+                  checked>
+            {% else %}
+            <input class="form-check-input" type="checkbox" name={{"rs_"+rs.name}} id={{"rs_"+rs.name}} value={{rs.name}}>
+            {% endif %}
+            <label class="form-check-label" for={{rs}}> {{rs.name}} </label>
+      </div>
+      {% endfor %}
+
+     </div>
+      <div class="col-2">
+        <input type="button" class="btn btn-primary rounded-2 btn-sm" value="Удалить"
+          onclick="window.location.href='/users/d/{{r.id}}';">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <input type="button" class="btn btn-primary rounded-2" value="Выйти"
+          onclick="window.location.href='/list';">
+      </div>
+      <div class="col-2">
+        <input type="submit" class="btn btn-primary rounded-2" value="Сохранить">
+      </div>
+    </div>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

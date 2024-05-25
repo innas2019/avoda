@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
+from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import check_password_hash, generate_password_hash
 from avoda import db
 from flask import current_app
@@ -8,7 +9,6 @@ from avoda.models import Users, Role
 import logging
 import json
 from avoda import managing as m
-
 
 def get_roles(user):
     session["roles"] = []
@@ -165,6 +165,82 @@ def cabinet():
         return render_template(
             "auth/cabinet.html", title="Личный кабинет", user=user, filterstr=filterstr
         )
-    """     user = db.session.execute(
-            db.select(Users).where(Users.id==id)
-        ).scalar()  """
+
+@bp.route("/users/<int:id>", methods=["POST", "GET"])
+@login_required
+def list_users(id):
+  roles=db.session.execute(
+            db.select(Role)
+        ).scalars()
+  if request.method == "GET":
+    query = db.select(Users).order_by(Users.name)
+    # читаем по страницам
+    limit = 10
+    if id == 0:
+        u = Users(name="")
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    ps = db.paginate(query, page=page, per_page=limit, error_out=True)
+    all=ps.items
+    pagination = Pagination(
+        page=page,
+        page_per=limit,
+        total=ps.total,
+        display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
+        record_name="записей",
+        prev_label="назад",
+        next_label="вперед",
+        bs_version=5,
+    )
+    
+    if id == 0:
+        u = Users(name="")
+        
+    else:
+      try:
+        u = [r for r in all if r.id == id]
+        u = u[0]
+      except:
+        u = Users(name="")
+    
+    return render_template(
+        "auth/users.html",
+        pagination=pagination,
+        title="пользователи",
+        list=all,
+        r=u,
+        roles=roles
+    )
+  else:
+        #если post изменяем запись
+        r=roles.all()
+        email=""
+        if "email" in request.form.keys():
+         email = request.form["email"]
+        if "newsletter" in request.form.keys():
+            issend=1
+        else:
+            issend=0  
+            
+        #проверка на роли. если их состав изменился, то перезаписываем
+        uroles=[]
+        if "rs_adminisrators" in request.form.keys():
+            uroles.append(r[0])
+        if "rs_create_post" in request.form.keys():
+            uroles.append(r[1])  
+        u = db.one_or_404(db.select(Users).where(Users.id == id))
+        u.email=email
+        u.issend =issend   
+        u.roles=uroles
+        db.session.commit()    
+        flash(u.email + " изменено")
+        
+        return redirect("/users/0")  
+
+@bp.route("/users/d/<int:id>")
+def delete(id):
+    u = db.one_or_404(db.select(Users).where(Users.id == id))
+    value=u.name
+    db.session.delete(u)
+    db.session.commit()
+    flash(value + " удалено")
+    return redirect("/users/0") 

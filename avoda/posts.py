@@ -136,6 +136,9 @@ def utility_processor():
 @bp.route('/check')
 def check_phone():
   phone = request.args.get('phone', 0, type=str)
+  if phone=="":
+      return jsonify(result='сначала введите номер')
+
   query = db.select(Posts).where(Posts.phone.like("%"+phone))
   res=db.session.execute(query).scalar()
   if res is not None:
