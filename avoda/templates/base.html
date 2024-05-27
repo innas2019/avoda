@@ -41,12 +41,17 @@
                           {% endif %} 
 
                         {% if session['roles'].count("adminisrators")>0 %}
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/refs/0">Справочники</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/users/0">Пользователи</a>
-                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Управление
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="/refs/0">Справочники</a>
+                              <a class="dropdown-item" href="/users/0">Пользователи</a>
+                              
+                            </div>
+                          </li>
+                        
                         {% endif %}
                       
                         <li class="nav-item">

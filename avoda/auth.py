@@ -1,4 +1,3 @@
-from flask import Blueprint
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_paginate import Pagination, get_page_parameter
@@ -63,6 +62,11 @@ def register():
             error = "ошибка при вводе пароля"
             flash(error)
             return render_template("auth/register.html")
+        if password == "11111111" or password=="12345678":
+            error = "используйте более сложный пароль"
+            flash(error)
+            return render_template("auth/register.html")
+        
         user = db.session.execute(
             db.select(Users).where(Users.name == username)
         ).scalar()
@@ -75,8 +79,8 @@ def register():
         if error is None:
             user = Users(name=username, password=generate_password_hash(password))
             # временно для тестирования
-            role = db.one_or_404(db.select(Role).where(Role.name == "create_post"))
-            user.roles.append(role)
+            #role = db.one_or_404(db.select(Role).where(Role.name == "create_post"))
+            #user.roles.append(role)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for("auth.login"))
@@ -244,3 +248,4 @@ def delete(id):
     db.session.commit()
     flash(value + " удалено")
     return redirect("/users/0") 
+
