@@ -4,7 +4,7 @@ bp = Blueprint("errs", __name__)
 
 @bp.app_errorhandler(404)
 def not_found_error(error):
-    return render_template('404.html', title="ничего не найдено"), 404
+    return render_template('404.html', title="страница не найдена"), 404
 
 @bp.app_errorhandler(400)
 def internal_error(error):

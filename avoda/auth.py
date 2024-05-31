@@ -8,6 +8,7 @@ from avoda.models import Users, Role
 import logging
 import json
 from avoda import managing as m
+from avoda.posts import Post
 
 def get_roles(user):
     session["roles"] = []
@@ -195,7 +196,7 @@ def list_users(id):
         next_label="вперед",
         bs_version=5,
     )
-    
+    filterstr=""
     if id == 0:
         u = Users(name="")
         
@@ -203,6 +204,13 @@ def list_users(id):
       try:
         u = [r for r in all if r.id == id]
         u = u[0]
+        if  u.settings!=None and u.settings!="":
+            filter = json.loads(u.settings)
+            allrefs = m.get_refs()
+            filterstr = filter["days"] + " дней, " + allrefs[filter["place"]]
+            if filter["occupations"] != None:
+                filterstr = filterstr + ", " + allrefs[filter["occupations"]]
+       
       except:
         u = Users(name="")
     
@@ -212,7 +220,8 @@ def list_users(id):
         title="пользователи",
         list=all,
         r=u,
-        roles=roles
+        roles=roles,
+        filterstr=filterstr
     )
   else:
         #если post изменяем запись
@@ -249,3 +258,17 @@ def delete(id):
     flash(value + " удалено")
     return redirect("/users/0") 
 
+#для сохранения фильтра администратором
+@bp.route("/users/f/<int:id>", methods=["POST", "GET"])
+def save_filter(id):
+    if request.method == "POST":
+        flt=request.form
+        n_post = Post("", "", "", "")
+        res = {}
+        res["occupations"] = n_post.get_id_from_value(flt["oc"])
+        res["place"] = n_post.get_id_from_value(flt["place"])
+        res["days"] = flt["days"]
+        user = db.session.get(Users, int(id))
+        user.settings = json.dumps(res)
+        db.session.commit()
+        return redirect("/users/"+str(id))

@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3>{{ title }}</h3>
+<h3>{{ title }}</h3> 
 <div class="container">
-      <form action="/list" method="post">
+   {% if id==0 %}
+   <form action="/list" method="post"> 
+   {% else %}
+   <form action="/users/f/{{id}}" method="post">
+   {% endif %}
             <div class="row">
                   <div class="col-md-4">
                         <nbsp class="form-text">Показывать объявления за последние 30 дней, или укажите другое число: </nbsp>

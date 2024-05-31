@@ -6,14 +6,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import logging
 from logging.handlers import  RotatingFileHandler
-from flask_mail import Mail
+#from flask_mail import Mail
 
 db = SQLAlchemy()
 login = LoginManager()
 login.login_view = "auth.login"
-mail=None
+#mail=None
 def create_app():
-    global mail
+    #global mail
     app = Flask(__name__)
     app.config.from_mapping(
         SECRET_KEY="fdjlfgjfcafmehtrjq",
@@ -35,7 +35,7 @@ def create_app():
     migrate = Migrate(app, db)
     bootstrap = Bootstrap(app)
     
-    mail = Mail(app)
+    #mail = Mail(app)
     from avoda import error
 
     if not os.path.exists("logs"):

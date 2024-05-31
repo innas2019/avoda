@@ -80,7 +80,6 @@ class Post:
                 self.sex = map[f]
             elif str(f).find("d") != -1:
                 self.docs.append(map[f])
-        
 
     def get_name_by_id(self, ids):
         new_val = []
@@ -88,11 +87,11 @@ class Post:
             new_val.append(allrefs[i])
         return new_val
 
-    def transform_len_by_id(self,len):
+    def transform_len_by_id(self, len):
         for x in len.keys():
-          if len[x] in allrefs:
-             len[x]=allrefs[len[x]]
-        
+            if len[x] in allrefs:
+                len[x] = allrefs[len[x]]
+
         return len
 
     # функция добавляет все поля объекта из SQL
@@ -112,39 +111,45 @@ class Post:
         self.updated = p.updated
         if p.place != None and p.place != "":
             self.place = allrefs[p.place]
-    
+
     def transform_len_to_id(self):
         for x in self.len.keys():
-          value=self.get_id_from_value(self.len[x])
-          if value !=None: 
-             self.len[x]=self.get_id_from_value(self.len[x])
-        return self.len    
+            value = self.get_id_from_value(self.len[x])
+            if value != None:
+                self.len[x] = self.get_id_from_value(self.len[x])
+        return self.len
 
+
+# для показа рода занятий  из списка постов
 @bp.context_processor
 def utility_processor():
-    
+
     def show_in_view(s):
         if s != None:
-            res=""
-            ids=json.loads(s)
+            res = ""
+            ids = json.loads(s)
             for i in ids:
-                res=res+ " "+ allrefs[i]
+                res = res + " " + allrefs[i]
             return res
-        return ""      
-    return dict(show_in_view=show_in_view)  
+        return ""
 
-@bp.route('/check')
+    return dict(show_in_view=show_in_view)
+
+
+# для проверки номера телефона при создании поста
+@bp.route("/check")
 def check_phone():
-  phone = request.args.get('phone', 0, type=str)
-  if phone=="":
-      return jsonify(result='сначала введите номер')
+    phone = request.args.get("phone", 0, type=str)
+    if phone == "":
+        return jsonify(result="сначала введите номер")
 
-  query = db.select(Posts).where(Posts.phone.like("%"+phone))
-  res=db.session.execute(query).scalar()
-  if res is not None:
-          return jsonify(result='такой номер уже есть')
-  else:
-        return jsonify(result='такого номера нет! можно продолжать')
+    query = db.select(Posts).where(Posts.phone.like("%" + phone))
+    res = db.session.execute(query).scalar()
+    if res is not None:
+        return jsonify(result="такой номер уже есть")
+    else:
+        return jsonify(result="такого номера нет! можно продолжать")
+
 
 def create_post(n_post):
     global sex
@@ -156,17 +161,16 @@ def create_post(n_post):
         place=n_post.get_id_from_value(n_post.place),
         phone=n_post.phone,
         text=n_post.text,
-        
-        len=json.dumps(n_post.transform_len_to_id())    
+        len=json.dumps(n_post.transform_len_to_id()),
     )
-    if (n_post.occupations!=""):
-        new_post.occupations=json.dumps(n_post.get_id_from_value(n_post.occupations))
-    if (n_post.docs!=""):
-        new_post.docs=json.dumps(n_post.get_id_from_value(n_post.docs))
-    if (n_post.o_kind!=""):
-        new_post.o_kind=json.dumps(n_post.get_id_from_value(n_post.o_kind))
-    if (n_post.sex!=""):
-        new_post.sex=sex.index(n_post.sex)
+    if n_post.occupations != "":
+        new_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
+    if n_post.docs != "":
+        new_post.docs = json.dumps(n_post.get_id_from_value(n_post.docs))
+    if n_post.o_kind != "":
+        new_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
+    if n_post.sex != "":
+        new_post.sex = sex.index(n_post.sex)
     db.session.add(new_post)
     db.session.commit()
     flash(n_post.name + " добавлено")
@@ -185,15 +189,15 @@ def update_post(n_post):
     db_post.phone = n_post.phone
     db_post.text = n_post.text
     db_post.len = json.dumps(n_post.transform_len_to_id())
-    if (n_post.occupations!=""):
-        db_post.occupations=json.dumps(n_post.get_id_from_value(n_post.occupations))
-    if (n_post.docs!=""):
-        db_post.docs=json.dumps(n_post.get_id_from_value(n_post.docs))
-    if (n_post.o_kind!=""):
-        db_post.o_kind=json.dumps(n_post.get_id_from_value(n_post.o_kind))
-    if (n_post.sex!=""):
-        db_post.sex=sex.index(n_post.sex)
-  
+    if n_post.occupations != "":
+        db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
+    if n_post.docs != "":
+        db_post.docs = json.dumps(n_post.get_id_from_value(n_post.docs))
+    if n_post.o_kind != "":
+        db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
+    if n_post.sex != "":
+        db_post.sex = sex.index(n_post.sex)
+
     db.session.commit()
     flash(n_post.name + " изменено")
     return "ok"
@@ -202,20 +206,42 @@ def update_post(n_post):
 def validation(post):
     if post.place == "":
         return False
-    if post.id!=0:
+    if post.id != 0:
         return True
-    
-    p = db.session.execute(
-            db.select(Posts).where(Posts.phone == post.phone )
-        ).scalar() 
+
+    p = db.session.execute(db.select(Posts).where(Posts.phone == post.phone)).scalar()
     if p is not None:
         flash(post.phone + " такой номер уже есть")
         return False
-    
+
     return True
 
 
-# формирует условия для запроса к базе. если хоть  одно условие задано то в начале стоит and
+# формирует запрос для списка постов и для рассылки. количество дней не берем из фильтра специально
+def create_query(filter, days):
+    current_time = datetime.now()
+    delta = current_time - timedelta(days=days)
+    s = ""
+    if filter["occupations"] != None:
+        s = '%"' + filter["occupations"] + '"%'
+        return (
+            db.select(Posts)
+            .where(
+                Posts.place == filter["place"],
+                Posts.occupations.like(s),
+                Posts.updated > delta,
+            )
+            .order_by(Posts.updated.desc())
+        )
+    else:
+        return (
+            db.select(Posts)
+            .where(Posts.place == filter["place"], Posts.updated > delta)
+            .order_by(Posts.updated.desc())
+        )
+
+
+# формирует фильтр из формы
 def filters(flt):
     n_post = Post("", "", "", "")
     res = {}
@@ -292,49 +318,34 @@ def list():
     # в случае если задан фильтр для заявок то метод POST
     if request.method == "POST":
         session["filter"] = filters(request.form)
-    
+
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit = 10
+
     if session.get("filter") != "":
-        current_time = datetime.now()
-        delta = current_time - timedelta(
-            days=int(session.get("filter")["days"])
+        query = create_query(session.get("filter"), int(session.get("filter")["days"]))
+        title = (
+            title
+            + " за "
+            + session.get("filter")["days"]
+            + " дней, "
+            + allrefs[session.get("filter")["place"]]
         )
-        title=title+" за "+session.get("filter")["days"]+" дней, "+allrefs[session.get("filter")["place"]]
         if session.get("filter")["occupations"] != None:
-            s = '%"' + session.get("filter")["occupations"] + '"%'
-            title=title+", "+allrefs[session.get("filter")["occupations"]]
-            query = (
-                db.select(Posts)
-                .where(
-                    Posts.place == session.get("filter")["place"],
-                    Posts.occupations.like(s),
-                    Posts.updated > delta,
-                )
-                .order_by(Posts.updated.desc())
-            )
-        else:
-            query = (
-                db.select(Posts)
-                .where(
-                    Posts.place == session.get("filter")["place"],
-                    Posts.updated > delta
-                )
-                .order_by(Posts.updated.desc())
-            )
+            title = title + ", " + allrefs[session.get("filter")["occupations"]]
     else:
         query = db.select(Posts).order_by(Posts.updated.desc())
     # читаем по страницам
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
-    session["page"]=page
+    session["page"] = page
     s_posts = []
     for p in ps.items:
         s_posts.append(p.id)
-    
-    session["items"]=s_posts    
-    msg="показано {record_name} с <b>{start} по {end}</b> "
-    if session['roles'].count("administrators")>0 :
-      msg=msg+" из <b>{total}</b>"
+
+    session["items"] = s_posts
+    msg = "показано {record_name} с <b>{start} по {end}</b> "
+    if session["roles"].count("administrators") > 0:
+        msg = msg + " из <b>{total}</b>"
     pagination = Pagination(
         page=page,
         page_per=limit,
@@ -343,8 +354,7 @@ def list():
         record_name="объявлений",
         prev_label="назад",
         next_label="вперед",
-        bs_version=5
-
+        bs_version=5,
     )
     return render_template(
         "posts/list.html",
@@ -358,6 +368,7 @@ def list():
 @bp.route("/filter/<string:p>")
 @login_required
 # all/set  устанавливает или сбрасывает фильтр
+#set_userID исполььзуется для редактирования профиля администратором
 def filter(p):
     if p == "set":
         return render_template(
@@ -367,11 +378,23 @@ def filter(p):
             occupations=o_list,
             o_kind=o_kind,
             title="Настройки фильтра",
+            id=0
         )
-    else:
+    elif p == "all":
         session["filter"] = ""
         return redirect(url_for("posts.list"))
 
+    else:
+        id=p.split("_")[1]
+        return render_template(
+            "posts/filters.html",
+            towns=towns,
+            languages=leng,
+            occupations=o_list,
+            o_kind=o_kind,
+            title="Настройки фильтра",
+            id=id
+            )
 
 @bp.route("/create", methods=["POST", "GET"])
 @login_required
@@ -379,7 +402,7 @@ def create():
     global sex
     if request.method == "POST":
         form = request.form
-        print(form["place"]) 
+        print(form["place"])
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
         n_post.get_from_form(form)
         if validation(n_post):
@@ -415,7 +438,7 @@ def create():
 @bp.route("/post/<int:id>", methods=["GET", "POST"])
 @login_required
 def post(id):
-    
+
     if request.method == "POST":
         form = request.form
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
@@ -439,7 +462,7 @@ def post(id):
     else:
         ps = db.one_or_404(db.select(Posts).where(Posts.id == id))
         current_post = Post(ps.name, ps.place, ps.phone, ps.text)
-        current_post.get_from_db(ps)  
+        current_post.get_from_db(ps)
 
         return render_template(
             "posts/post.html",
@@ -456,9 +479,9 @@ def post(id):
 
 @bp.route("/show/<int:id>")
 @login_required
-#получаем объект по номеру из списка
+# получаем объект по номеру из списка
 def show_post(id):
-    s_posts=session["items"]
+    s_posts = session["items"]
     if len(s_posts) == 0:
         return redirect(url_for("posts.list"))
     pstemp = s_posts[id - 1]
@@ -472,7 +495,7 @@ def show_post(id):
     if pos > 0:
         prev = id - 1
     next = 0
-    if pos < len(s_posts) :
+    if pos < len(s_posts):
         next = id + 1
     return render_template(
         "posts/show_post.html",
@@ -482,7 +505,7 @@ def show_post(id):
         next=next,
         current=pos,
         last=len(s_posts),
-        sex=sex
+        sex=sex,
     )
 
 
@@ -490,41 +513,47 @@ def show_post(id):
 @bp.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
-    if request.method == "POST":    
-        phone=request.form["phone"]
-        query = db.select(Posts).where(Posts.phone.like("%"+phone)).order_by(Posts.updated.desc())
-        res=db.session.execute(query).scalars()
+    if request.method == "POST":
+        phone = request.form["phone"]
+        query = (
+            db.select(Posts)
+            .where(Posts.phone.like("%" + phone))
+            .order_by(Posts.updated.desc())
+        )
+        res = db.session.execute(query).scalars()
         s_posts = []
-        posts=res.all()
+        posts = res.all()
         for p in posts:
             s_posts.append(p.id)
 
-        session["items"]=s_posts   
+        session["items"] = s_posts
         page = request.args.get(get_page_parameter(), type=int, default=1)
         pagination = Pagination(
-        page=page,
-        page_per=10,
-        total=len(posts),
-        display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
-        record_name="объявлений",
-        prev_label="назад",
-        next_label="вперед",
-        bs_version=5)
-        
+            page=page,
+            page_per=10,
+            total=len(posts),
+            display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
+            record_name="объявлений",
+            prev_label="назад",
+            next_label="вперед",
+            bs_version=5,
+        )
+
         return render_template(
-        "posts/list.html",
-        pagination=pagination,
-        title="поиск по телефону",
-        posts=posts,
-        refs=allrefs)
-  
+            "posts/list.html",
+            pagination=pagination,
+            title="поиск по телефону",
+            posts=posts,
+            refs=allrefs,
+        )
+
 
 @bp.route("/del/<int:id>")
 @login_required
 def delete(id):
     p = db.one_or_404(db.select(Posts).where(Posts.id == id))
-    value=p.phone
+    value = p.phone
     db.session.delete(p)
     db.session.commit()
     flash(value + " удалено")
-    return redirect("/list")  
+    return redirect("/list")
