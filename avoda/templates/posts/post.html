@@ -139,7 +139,7 @@
                   <label class="form-check-label" for="s1"> {{sex[0]}} </label>
             </div>
             <div class="form-check">
-                  {%if post.sex=="sex[1]" %}
+                  {%if post.sex==sex[1] %}
                   <input class="form-check-input" type="radio" name="sex" id="s2" value={{sex[1]}} checked>
                   {% else %}
                   <input class="form-check-input" type="radio" name="sex" id="s2" value={{sex[1]}}>

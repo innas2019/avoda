@@ -6,18 +6,10 @@
                   Вернуться на главную</a>
       </div>
       <div class="row justify-content-center px-2 py-2 ">
-            <h4>{{ title }}</h4>
+            <h4>{{ title }}{{user.name}}</h4>
             <form action="{{ url_for('auth.cabinet') }}" method="post">
-
-                  <div class="row">
-                        <div class="col-md-2">
-                              <p class="form-text">Логин</p>
-                        </div>
-                        <div class="col-md-3"><input type="text" value={{user.name}} class="form-control"  name="name" placeholder="логин"
-                                    required> </div>
-                  </div>
-                  
-                  <div class="row">
+                      <input type="hidden"  name="name" value={{user.name}}>
+                      <div class="row">
                         <div class="col-md-2">
                               <p class="form-text">e-mail</p>
                         </div>
@@ -27,12 +19,7 @@
                         <div class="col-md-3"><input type="email"  placeholder="e-mail" class="form-control" name="email">  </div>
                      {% endif %}   
                   </div>
-                  <div class="row">
-                        <div class="col-md-5">
-                              <a class="link-underline-primary" href="">
-                                    изменить пароль</a>
-                        </div>
-                  </div>
+                  
                   <div class="row">
                      {% if filterstr!=None %}
                         <div class="col-md-4">                             

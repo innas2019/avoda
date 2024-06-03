@@ -344,7 +344,7 @@ def list():
 
     session["items"] = s_posts
     msg = "показано {record_name} с <b>{start} по {end}</b> "
-    if session["roles"].count("administrators") > 0:
+    if session["roles"].count("adminisrators") > 0:
         msg = msg + " из <b>{total}</b>"
     pagination = Pagination(
         page=page,

@@ -168,7 +168,7 @@ def cabinet():
         else:
             filterstr=None
         return render_template(
-            "auth/cabinet.html", title="Личный кабинет", user=user, filterstr=filterstr
+            "auth/cabinet.html", title="Личный кабинет для ", user=user, filterstr=filterstr
         )
 
 @bp.route("/users/<int:id>", methods=["POST", "GET"])

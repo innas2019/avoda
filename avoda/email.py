@@ -46,7 +46,7 @@ def send_news():
     l.info(m_str)
     count_mail=0
     for user in allUsers:
-        if user.settings != None:
+        if user.settings != None and user.settings !="":
             filter = json.loads(user.settings)
             query = create_query(filter, 1)
             news = db.session.execute(query).scalars()
