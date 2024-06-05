@@ -24,18 +24,17 @@
                 <div class="d-flex">
                     <img src={{ url_for('static', filename='LogoHeader_144X40.png' ) }}>
                 </div>
-                <a class="navbar-brand" href="{{ url_for('posts.list') }}">
-                    Поиск сотрудников</a>
-                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> -->
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ui class="navbar-nav me-auto">
-                      {% if session['name'] %}
+                        <a class="navbar-brand" href="{{ url_for('posts.list') }}">
+                            Поиск сотрудников</a>
+
+                        {% if session['name'] %}
                         <!-- {% if session['page'] %}
                         <li class="nav-item "><a class="nav-link active" href="/list?page={{session['page']}}">Эта
                                 страница</a> </li>
@@ -64,15 +63,18 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a>
                         </li>
-                     {% else %}
+                        {% else %}
 
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.login') }}">Вход</a>
                         </li>
-                    {% endif %}
+                        {% endif %}
                     </ui>
-                    <span class="navbar-text align-items-right"> Ваш логин {{ session['name'] }} </span>
+
                 </div>
+                {% if session['name'] %}
+                <span class="navbar-text align-items-right"> Ваш логин {{ session['name'] }} </span>
+                {% endif %}
             </div>
         </nav>
 
@@ -83,19 +85,20 @@
         </div>
         <footer class="container">
             {% block footer %}
-            <div class="bg-primary row d-flex">
-                <div class="col-6 px-1 py-1  justify-content-left">
+            <div class="bg-primary row ">
+                <div class="col-md-3 px-1 py-1  justify-content-left">
                     <span class="text-white  font-family-Inter m-0 px-3 py-2" style="font-size: 0.75rem;">
                         ver 1.03 3.06 Hatul Madan
                     </span>
                 </div>
-                <div class="col-6 px-1 py-1  justify-content-right">
-                    <span class="text-white  font-family-Inter text-decoration-underline m-0 px-3"
-                        style="font-size: 0.75rem;">
-                        Связаться с нами
+                <div class="col-md-8 px-1 py-1  justify-content-right">
+                    <span class="text-white  font-family-Inter  m-0 px-3" style="font-size: 0.75rem;">
+                        Связаться с нами: тел 053-640-5871,
+                    </span>
+                    <span class="text-white  font-family-Inter  m-0 px-3" style="font-size: 0.75rem;">
+                        e-mail <a class="link-light" href="mailto: avoda.site.il@gmail.com">avoda.site.il@gmail.com</a>
                     </span>
                 </div>
-
             </div>
 
             {% endblock %}

@@ -8,31 +8,32 @@
       <div class="row justify-content-center px-2 py-2 ">
             <h4>{{ title }}{{user.name}}</h4>
             <form action="{{ url_for('auth.cabinet') }}" method="post">
-                      <input type="hidden"  name="name" value={{user.name}}>
-                      <div class="row">
+                  <input type="hidden" name="name" value={{user.name}}>
+                  <div class="row">
                         <div class="col-md-2">
                               <p class="form-text">e-mail</p>
                         </div>
                         {% if user.email!=None and user.email!="" %}
-                        <div class="col-md-3"><input type="email" value={{user.email}}  class="form-control" name="email">  </div>
-                     {% else %} 
-                        <div class="col-md-3"><input type="email"  placeholder="e-mail" class="form-control" name="email">  </div>
-                     {% endif %}   
+                        <div class="col-md-3"><input type="email" value={{user.email}} class="form-control"
+                                    name="email"> </div>
+                        {% else %}
+                        <div class="col-md-3"><input type="email" placeholder="e-mail" class="form-control"
+                                    name="email" pattern="[^@\s]+@[^@\s]+"> </div>
+                        {% endif %}
                   </div>
-                  
+
                   <div class="row">
-                     {% if filterstr!=None %}
-                        <div class="col-md-4">                             
+                        {% if filterstr!=None %}
+                        <div class="col-md-4">
                               <span class="opacity-50">сохраненный фильтр: </span>{{filterstr}}
-                             
+
                               <div class="form-check ">
-                                    <input class="form-check-input" type="checkbox" value="да" name="clean"
-                                          id="per">
-                                    <label class="form-check-label" for="per">  очистить сохраненный фильтр</label>
-                                 
-                              </div>    
+                                    <input class="form-check-input" type="checkbox" value="да" name="clean" id="per">
+                                    <label class="form-check-label" for="per"> очистить сохраненный фильтр</label>
+
+                              </div>
                         </div>
-                      {% endif %}
+                        {% endif %}
                         <div class="col-md-4">
                               <a class="link-underline-primary" href="/filter/set">
                                     изменить сохраненный фильтр</a>
@@ -41,16 +42,16 @@
                   </div>
                   <div class="form-check ">
                         {% if user.issend!=None and user.issend==1%}
-                          <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per" checked>
+                        <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per" checked>
                         {% else %}
-                          <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per" >
+                        <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per">
                         {% endif %}
-                          <label class="form-check-label" for="per"> рассылка на почту </label>
+                        <label class="form-check-label" for="per"> рассылка на почту </label>
                   </div>
 
                   <div class="row mb-5">
                         <div class="col"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Выйти"
-                              onclick="window.location.href='/list';" /> </div>
+                                    onclick="window.location.href='/list';" /> </div>
 
                         <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
                                     value="Сохранить">
@@ -58,6 +59,20 @@
                   </div>
             </form>
 
+
+      </div>
+</div>
+<div class="row px-6 py-10  bg-secondary-subtle">
+      <div class="col-md-1">
+            <nbsp class="text-dark fs-1 fw-semibold font-family-Inter">!</nbsp>
+            <span class="navbar-toggler-icon"></span>
+      </div>
+      <div class="col-md-8 align-items-center">
+            <nbsp class="text-dark fs-6 fw-semibold font-family-Inter px-3 py-2">
+                  Кабинет предназначен для управления вашими настройками.
+                  Если Вы хотите получать рассылку о новых объявлениях на сайте,
+                  Вам нужно указать свой e-mail и отметить флажком "рассылка на почту".
+                  После этого нажать на кнопку "сохранить". Новые объявления - это те, которые появились за последние сутки </nbsp>
       </div>
 </div>
 {% endblock %}
