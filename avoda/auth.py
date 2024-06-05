@@ -92,8 +92,8 @@ def register():
 
 @bp.route("/login", methods=["GET", "POST"])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for("posts.list"))
+    #if current_user.is_authenticated:
+    #    return redirect(url_for("posts.list"))
 
     if request.method == "POST":
 
