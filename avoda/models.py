@@ -37,7 +37,7 @@ class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(40), nullable=False)
     place = db.Column(db.String(40), nullable=False)
-    phone = db.Column(db.String(40), nullable=False, unique=True)
+    phone = db.Column(db.String(40), unique=True)
     text = db.Column(db.String(500))
     len=db.Column(db.String(100))
     occupations = db.Column(db.String(100))
@@ -46,6 +46,7 @@ class Posts(db.Model):
     created = db.Column(db.DateTime())
     updated = db.Column(db.DateTime())
     docs = db.Column(db.String(50))
+    contacts = db.Column(db.String(40), unique=True)
     # Relationship
     user = db.relationship('Users')
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))

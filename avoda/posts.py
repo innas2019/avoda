@@ -30,6 +30,7 @@ class Post:
         self.name = _name
         self.place = _place
         self.phone = _phone
+        self.contacts=""
         self.text = _text
         self.len = {}  # dictionary len:level
         self.occupations = []
@@ -80,6 +81,8 @@ class Post:
                 self.sex = map[f]
             elif str(f).find("d") != -1:
                 self.docs.append(map[f])
+            elif str(f).find("contacts") != -1:
+                self.contacts=map[f]  
 
     def get_name_by_id(self, ids):
         new_val = []
@@ -97,6 +100,8 @@ class Post:
     # функция добавляет все поля объекта из SQL
     def get_from_db(self, p):
         self.id = p.id
+        if p.contacts!=None:
+            self.contacts=p.contacts
         if p.len != None:
             self.len = self.transform_len_by_id(json.loads(p.len))
         if p.occupations != None:
@@ -105,7 +110,6 @@ class Post:
             self.o_kind = self.get_name_by_id(json.loads(p.o_kind))
         if p.docs != None:
             self.docs = self.get_name_by_id(json.loads(p.docs))
-        print("прочитали: ", self.o_kind, self.docs)
         if p.sex != None and p.sex != "":
             self.sex = sex[p.sex]
         self.updated = p.updated
@@ -161,6 +165,7 @@ def create_post(n_post):
         place=n_post.get_id_from_value(n_post.place),
         phone=n_post.phone,
         text=n_post.text,
+        contacts=n_post.contacts,
         len=json.dumps(n_post.transform_len_to_id()),
     )
     if n_post.occupations != "":
@@ -188,6 +193,7 @@ def update_post(n_post):
     db_post.place = n_post.get_id_from_value(n_post.place)
     db_post.phone = n_post.phone
     db_post.text = n_post.text
+    db_post.contacts=n_post.contacts
     db_post.len = json.dumps(n_post.transform_len_to_id())
     if n_post.occupations != "":
         db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
@@ -209,11 +215,16 @@ def validation(post):
     if post.id != 0:
         return True
 
-    p = db.session.execute(db.select(Posts).where(Posts.phone == post.phone)).scalar()
-    if p is not None:
-        flash(post.phone + " такой номер уже есть")
-        return False
+    if (post.phone !=""):
+        p = db.session.execute(db.select(Posts).where(Posts.phone == post.phone)).scalar()
+        if p is not None:
+            flash(post.phone + " такой номер уже есть")
+            return False
 
+    if (post.phone =="") and (post.contacts  ==""):
+        flash(" нужно заполнить телефон или контакт")
+        return False
+    
     return True
 
 
@@ -463,7 +474,7 @@ def post(id):
         ps = db.one_or_404(db.select(Posts).where(Posts.id == id))
         current_post = Post(ps.name, ps.place, ps.phone, ps.text)
         current_post.get_from_db(ps)
-
+        
         return render_template(
             "posts/post.html",
             towns=towns,

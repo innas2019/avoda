@@ -19,7 +19,8 @@
          {% if post.sex!=None %} <span class="badge text-bg-secondary">{{ post["sex"]}}</span> {% endif %}
       </div>
       <div class="row">
-         <div class="col-4 text fw-semibold font-family-Inter">{{ post["phone"] }}</div>
+         <div class="col-2 text fw-semibold font-family-Inter">{{ post["phone"] }}</div>
+         {% if post.contacts!=None %} <div class="col-3">{{ post["contacts"]}}</span> {% endif %}
          <div class="col-2"> {{ post["place"] }} </div>
       </div>
       <div class="row justify-content-start">

@@ -53,11 +53,18 @@
           </a>
         </th>
         <td> {{ post["name"] }}</td>
-        <td>  <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
-
+        <td> 
+          {%if post["phone"] =="" %}
+          <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["contacts"] }} </a>
+         
+          {% else %}
+          <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
+          {% endif %}
         </td>
 
-        <td> {{ refs[post["place"]]}}</td>
+        <td> 
+         
+          {{ refs[post["place"]]}}</td>
 
         <td class="d-none d-md-block">{{ post["text"][:200] }}
           {% if post["text"]|length > 200 %}
