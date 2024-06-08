@@ -3,26 +3,33 @@
 <div class="container-md">
    <div class="px-6 mt-3">
       {% if session['page'] %}
-         <a class="link-underline-primary font-family-Inter"  href="/list?page={{session['page']}}">Вернуться к списку</a> 
+      <a class="link-underline-primary font-family-Inter" href="/list?page={{session['page']}}">Вернуться к списку</a>
       {% else %}
-         <a class="link-underline-primary font-family-Inter" href="/list"> Вернуться на страницу </a>
-      {% endif %} 
+      <a class="link-underline-primary font-family-Inter" href="/list"> Вернуться на страницу </a>
+      {% endif %}
    </div>
-      <div class="row">
-         <p class="font-family-Inter  opacity-50" style="font-size: 0.75rem;">
-            Опубликовано {{days}} дней назад {{post["updated"]}}</p>
-      </div>
-      <div class="row">
-         <div class="col-4 text fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</div>
-   
+   <div class="row">
+      <p class="font-family-Inter  opacity-50" style="font-size: 0.75rem;">
+         Опубликовано {{days}} дней назад {{post["updated"]}}</p>
+   </div>
+   <div class="row">
+      <div class="col-4 text fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</div>
+
       <div class="col-2">
          {% if post.sex!=None %} <span class="badge text-bg-secondary">{{ post["sex"]}}</span> {% endif %}
       </div>
       <div class="row">
-         <div class="col-2 text fw-semibold font-family-Inter">{{ post["phone"] }}</div>
-         {% if post.contacts!=None %} <div class="col-3">{{ post["contacts"]}}</span> {% endif %}
-         <div class="col-2"> {{ post["place"] }} </div>
+         <div class="col-md-2 text fw-semibold font-family-Inter">
+            {{ post["phone"] }}</div>
+         <div class="col-md-3"> {{ post["place"] }} </div>
       </div>
+      {% if post.contacts!=None %}
+      <div class="row">
+         <div class="col-md-2 opacity-50"> Ссылки: </div>
+         <div class="col-md-9">{{ post["contacts"]}}</span> 
+         </div>
+      </div>
+      {% endif %}
       <div class="row justify-content-start">
          <div class="col-md-3">
             {% if post["o_kind"]!=None %}
@@ -32,7 +39,7 @@
             {% endfor %}
             {% endif %}
          </div>
-         
+
       </div>
       <div class="row">
          <div class="col">
@@ -49,7 +56,7 @@
             <span class="opacity-50"> Языки:</span>
             <p>{{ post.get_len()}}</p>
          </div>
-         
+
       </div>
       <div class="row">
          <div class="col">
@@ -72,43 +79,43 @@
          </div>
       </div>
       <i class="bi-search"> </i>
-         <div class="col">
-            <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="window.print()" />
-       
-         </div>
-      </div>
-      <div class="row mt-3 opacity-50">
-         <div class="col">
-            {{current}}-й из {{last}}
-         </div>
-      </div>
-      <div class="row justify-content-start">
-         <div class="col-3">
-            {% if prev!=0 %}
-            <input type="button" class="btn btn-primary rounded-2" value="Предыдущее"
-               onclick="window.location.href='/show/{{prev}}';" />
-            {% endif %}
-         </div>
-         <div class="col-3">
-            {% if next!=0 %}
-            <input type="button" class="btn btn-primary rounded-2" value="Следующее"
-               onclick="window.location.href='/show/{{next}}';" />
-            {% endif %}
-         </div>
-      </div>
-      <div class="row">
-         <div class="col-2">
-            {% if session['roles'].count("create_post")>0 %}
-            <a class="link-underline-primary" href="/post/{{post.id }}"> изменить </a>
-            {% endif %}
-         </div>
-         <div class="col-2">
-            {% if session['roles'].count("adminisrators")>0 %}
+      <div class="col">
+         <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="window.print()" />
 
-            <a class="link-underline-primary" href="/del/{{post.id }}"> удалить </a>
-            {% endif %}
-         </div>
       </div>
    </div>
+   <div class="row mt-3 opacity-50">
+      <div class="col">
+         {{current}}-й из {{last}}
+      </div>
+   </div>
+   <div class="row justify-content-start">
+      <div class="col-3">
+         {% if prev!=0 %}
+         <input type="button" class="btn btn-primary rounded-2" value="Предыдущее"
+            onclick="window.location.href='/show/{{prev}}';" />
+         {% endif %}
+      </div>
+      <div class="col-3">
+         {% if next!=0 %}
+         <input type="button" class="btn btn-primary rounded-2" value="Следующее"
+            onclick="window.location.href='/show/{{next}}';" />
+         {% endif %}
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-2">
+         {% if session['roles'].count("create_post")>0 %}
+         <a class="link-underline-primary" href="/post/{{post.id }}"> изменить </a>
+         {% endif %}
+      </div>
+      <div class="col-2">
+         {% if session['roles'].count("adminisrators")>0 %}
+
+         <a class="link-underline-primary" href="/del/{{post.id }}"> удалить </a>
+         {% endif %}
+      </div>
+   </div>
+</div>
 </div>
 {% endblock %}
