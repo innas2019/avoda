@@ -13,27 +13,30 @@
          Опубликовано {{days}} дней назад {{post["updated"]}}</p>
    </div>
    <div class="row">
-      <div class="col-4 text fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</div>
+      <div class="col-md-2 text fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</div>
 
-      <div class="col-2">
+      <div class="col-md-2">
          {% if post.sex!=None %} <span class="badge text-bg-secondary">{{ post["sex"]}}</span> {% endif %}
       </div>
       <div class="row">
          <div class="col-md-2 text fw-semibold font-family-Inter">
             {{ post["phone"] }}</div>
-         <div class="col-md-3"> {{ post["place"] }} </div>
+         <div class="col-md-2">{{render_icon('geo-alt-fill', 16) }} {{ post["place"] }} </div>
       </div>
       {% if post.contacts!=None %}
       <div class="row">
          <div class="col-md-2 opacity-50"> Ссылки: </div>
-         <div class="col-md-9">{{ post["contacts"]}}</span> 
+         <div class="col-md-9">{{render_icon('facebook', 16) }} {{ post["contacts"]}}</span> 
          </div>
       </div>
       {% endif %}
       <div class="row justify-content-start">
-         <div class="col-md-3">
-            {% if post["o_kind"]!=None %}
+         <div class="col-md-2">
             <div class="opacity-50"> Занятость:</div>
+         </div>
+         <div class="col-md-9">
+         {% if post["o_kind"]!=None %}
+            {{render_icon('clock', 16) }}
             {% for o in post["o_kind"] %}
             {{o}},
             {% endfor %}
@@ -42,9 +45,12 @@
 
       </div>
       <div class="row">
-         <div class="col">
-            {% if post.occupations!=None %}
-            <div class="opacity-50"> Категория:</div>
+         <div class="col-md-2">
+           <span class="opacity-50"> Категория:</span>
+         </div> 
+         <div class="col-md-9">
+         {% if post.occupations!=None %}
+            {{render_icon('gear-fill', 16) }}
             {% for os in post.occupations %}
             <span class="badge text-bg-secondary">{{os}}</span>
             {% endfor %}
@@ -52,17 +58,22 @@
          </div>
       </div>
       <div class="row">
-         <div class="col">
+         <div class="col-md-2">
             <span class="opacity-50"> Языки:</span>
-            <p>{{ post.get_len()}}</p>
+         </div>   
+         <div class="col-md-9">
+          {{render_icon('globe', 16) }}
+           {{ post.get_len()}}
          </div>
 
       </div>
       <div class="row">
-         <div class="col">
-            {% if post.docs!=None %}
-            <div class="opacity-50"> Документы:</div>
-            {% for os in post.docs %}
+         <div class="col-md-2">
+           <span class="opacity-50"> Документы:</span>
+         </div>
+         <div class="col-md-9">
+           {% if post.docs!=None %}
+            {{render_icon('passport', 16) }}{% for os in post.docs %}
             {{os}},
             {% endfor %}
             {% endif %}
@@ -80,7 +91,7 @@
       </div>
       <i class="bi-search"> </i>
       <div class="col">
-         <input type="button" class="btn btn-primary rounded-2" value="Распечатать" onclick="window.print()" />
+         <input type="button" class="btn btn-dark btn-sm" value="Распечатать" onclick="window.print()" />
 
       </div>
    </div>

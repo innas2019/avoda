@@ -39,7 +39,7 @@
       <tr class="table-secondary border-start border-end border-light text-left">
         <th width="5%">№</th>
         <th width="10%">Имя</th>
-        <th width="10%">Контакт</th>
+        <th width="12%">Контакт</th>
         <th width="10%">Город</th>
         <th>Описание</th>
       </tr>
@@ -54,12 +54,12 @@
         </th>
         <td> {{ post["name"] }}</td>
         <td> 
-          {%if post["phone"] =="" %}
-          <a class="link-underline-primary" href="/show/{{loop.index}}"> Fb </a>
+          {%if post["contacts"]!=None %}
+          <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ render_icon('facebook', 16) }} </a>
          
-          {% else %}
-          <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
           {% endif %}
+          <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
+         
         </td>
 
         <td> 
