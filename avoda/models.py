@@ -15,6 +15,7 @@ class Users(UserMixin,db.Model):
     settings = db.Column(db.String(256))
     issend = db.Column(db.Integer())
     roles = db.relationship("Role", secondary="user_role")
+    addresses = db.relationship('Posts', lazy=True)
 
 
 # Define the Role data-model
@@ -46,7 +47,7 @@ class Posts(db.Model):
     created = db.Column(db.DateTime())
     updated = db.Column(db.DateTime())
     docs = db.Column(db.String(50))
-    contacts = db.Column(db.String(40))
+    contacts = db.Column(db.String(100))
     # Relationship
     user = db.relationship('Users')
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
@@ -55,7 +56,9 @@ class Refs(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(20), nullable=False)
     value = db.Column(db.String(40), nullable=False)
-     
+    levels = db.relationship('Refs')
+    levelUp = db.Column(db.Integer,db.ForeignKey("refs.id"))
+
 @login.user_loader
 def load_user(id):
     return db.session.get(Users, int(id))  

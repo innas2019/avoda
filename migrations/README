@@ -13,3 +13,6 @@ flask --app avoda db upgrade
 flask --app avoda db migrate
 если не находит номер поседней ревизии
 flask --app avoda db revision --rev-id #####
+
+если Target database is not up to date:
+flask --app avoda db stamp head  

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col"> 
+<div class="col">
   <span class="text fs-5 fw-semibold">Справочники</span>
 
   {{ pagination.info }}
@@ -8,30 +8,30 @@
 {{ pagination.links }}
 
 <div class="row">
-    <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
-      <thead>
-        <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
-          <th class="col-3">id</th>
-          <th class="col-3">тип</th>
-          <th class="col-3">значение</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for o in list %}
-        <tr
-          class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-          <th>
-            <a class="link-underline-primary" href="/refs/{{ o["id"] }}?page={{pagination.page}}">
-              {{ o["id"] }}</td>
-            </a>
-          </th>
-          <td class="col-3"> {{ o["name"] }}</td>
-          <td class="col-3"> {{ o["value"] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
+    <thead>
+      <tr class="d-none d-lg-table-row table-primary border-start border-end border-light text-center">
+        <th class="col-3">id</th>
+        <th class="col-3">тип</th>
+        <th class="col-3">значение</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in list %}
+      <tr
+        class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+        <th>
+          <a class="link-underline-primary" href="/refs/{{ o["id"] }}?page={{pagination.page}}">
+            {{ o["id"] }}</td>
+          </a>
+        </th>
+        <td class="col-3"> {{ o["name"] }}</td>
+        <td class="col-3"> {{ o["value"] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 <div class="row">
   <form action="" method="post">
@@ -52,11 +52,17 @@
       </div>
       <div class="col-2"><input type="text" class="form-control" name="value" id="v" required value={{r.value}}>
       </div>
-
+      <div class="col-1">
+        <label for="l" class="form-text">уровень выше:</label>
+      </div>
+      <div class="col-1"><input type="text" class="form-control" name="level" id="l" required value={{r.levelUp}}>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-2">
         <input type="submit" class="btn btn-primary rounded-2" value="Сохранить">
       </div>
-     {% if r.id !=None %}
+      {% if r.id !=None %}
       <div class="col-2">
         <input type="button" class="btn btn-primary rounded-2" value="Удалить"
           onclick="window.location.href='/refs/del/{{r.id}}';">
@@ -69,4 +75,6 @@
         </div>
       </div>
     </div>
-    {% endblock %}
+  </form>
+</div>
+{% endblock %}

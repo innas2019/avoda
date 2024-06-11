@@ -38,6 +38,14 @@ def get_ref(name):
             res.append(p.value)
     return res
 
+#hierarchy
+def get_hier_for_search():
+    global allrefs
+    res = {}  
+    for p in allrefs:
+        if p.levels!=[]:
+            res[p.id] = ([str(x.id) for x in list(p.levels)])
+    return res
 
 bp = Blueprint("mng", __name__)
 len = []
@@ -101,6 +109,7 @@ def refs(id):
             ref = db.one_or_404(db.select(Refs).where(Refs.id == id))
             ref.name = request.form["name"]
             ref.value = request.form["value"]
+            ref.levelUp = request.form["level"]
             flash(ref.value + " изменено")
         else:
             ref = Refs(name=request.form["name"], value=request.form["value"])

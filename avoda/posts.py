@@ -20,7 +20,7 @@ o_list = []
 o_kind = []
 docs = []
 sex = ["мужчина", "женщина"]
-
+hierarchy={}
 allrefs = {}
 
 
@@ -230,15 +230,22 @@ def validation(post):
 
 # формирует запрос для списка постов и для рассылки. количество дней не берем из фильтра специально
 def create_query(filter, days):
+    global hierarchy
     current_time = datetime.now()
     delta = current_time - timedelta(days=days)
     s = ""
+    #hierarchy
+    places=[filter["place"]]
+    place=int(filter["place"])
+    if hierarchy.get(place) != None:
+        places.extend(hierarchy[place])
+    
     if filter["occupations"] != None:
         s = '%"' + filter["occupations"] + '"%'
         return (
             db.select(Posts)
             .where(
-                Posts.place == filter["place"],
+                Posts.place.in_(places),                
                 Posts.occupations.like(s),
                 Posts.updated > delta,
             )
@@ -247,7 +254,8 @@ def create_query(filter, days):
     else:
         return (
             db.select(Posts)
-            .where(Posts.place == filter["place"], Posts.updated > delta)
+            .where(Posts.place.in_(places), 
+                   Posts.updated > delta)
             .order_by(Posts.updated.desc())
         )
 
@@ -303,7 +311,7 @@ def load_ref():
     global docs
     global allrefs
     global sex
-
+    global hierarchy
     # заполняем справочники
     allrefs = m.get_refs()
     len_levels = m.get_ref("levels")
@@ -313,6 +321,7 @@ def load_ref():
     o_list.sort()
     o_kind = m.get_ref("conditions")
     docs = m.get_ref("documents")
+    hierarchy=m.get_hier_for_search()
 
 
 # показывает список заявок
@@ -332,7 +341,6 @@ def list():
 
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit = 10
-
     if session.get("filter") != "":
         query = create_query(session.get("filter"), int(session.get("filter")["days"]))
         title = (
