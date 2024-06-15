@@ -54,11 +54,12 @@
         </th>
         <td> {{ post["name"] }}</td>
         <td> 
-          {%if post["contacts"]!=None %}
+          <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
+          {%if post["contacts"]!=None and post["contacts"]!=""%}
           <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ render_icon('facebook', 16) }} </a>
          
           {% endif %}
-          <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
+      
          
         </td>
 

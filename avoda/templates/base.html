@@ -22,7 +22,8 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-primary">
             <div class="container-fluid">
                 <div class="d-flex">
-                    <img src={{ url_for('static', filename='LogoHeader_144X40.png' ) }}>
+                    <a  href="{{ url_for('posts.list') }}">
+                    <img src={{ url_for('static', filename='LogoHeader_144X40.png' ) }}></a>
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

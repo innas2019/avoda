@@ -241,7 +241,12 @@ def create_query(filter, days):
         places.extend(hierarchy[place])
     
     if filter["occupations"] != None:
-        s = '%"' + filter["occupations"] + '"%'
+        """ occupation_list=[filter["occupations"]]
+        h=hierarchy.get(int(filter["occupations"]))
+        if h!= None:
+          occupation_list.extend(h)
+          s = '%"' + filter["occupations"] + '"%' """
+        s = '%"' + filter["occupations"] + '"%'  
         return (
             db.select(Posts)
             .where(
@@ -269,6 +274,8 @@ def filters(flt):
     res["days"] = flt["days"]
     if "permanent" in flt.keys():
         a.update_settings(res)
+    if "clean" in flt.keys():
+        a.update_settings("")
     return res
 
 

@@ -26,7 +26,11 @@
       {% if post.contacts!=None %}
       <div class="row">
          <div class="col-md-2 opacity-50"> Ссылки: </div>
-         <div class="col-md-9">{{render_icon('facebook', 16) }} {{ post["contacts"]}}</span> 
+         <div class="col-md-9">{{render_icon('facebook', 16) }}
+            {% if post["contacts"]!="" %} 
+            <a class="link-underline-primary" href="{{ post["contacts"]}}">  {{ post["contacts"]}} </a>
+            {% endif %}
+     
          </div>
       </div>
       {% endif %}
@@ -100,16 +104,14 @@
          {{current}}-й из {{last}}
       </div>
    </div>
-   <div class="row justify-content-start">
-      <div class="col-3">
+   <div class="row">
+      <div class="col-md-4">
          {% if prev!=0 %}
-         <input type="button" class="btn btn-primary rounded-2" value="Предыдущее"
+         <input type="button" class="btn btn-primary rounded-2" value="Назад"
             onclick="window.location.href='/show/{{prev}}';" />
          {% endif %}
-      </div>
-      <div class="col-3">
-         {% if next!=0 %}
-         <input type="button" class="btn btn-primary rounded-2" value="Следующее"
+        {% if next!=0 %}
+         <input type="button" class="btn btn-primary rounded-2" value="Вперед"
             onclick="window.location.href='/show/{{next}}';" />
          {% endif %}
       </div>
