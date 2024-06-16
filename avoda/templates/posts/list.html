@@ -9,7 +9,7 @@
       {{ pagination.info }}
     </div>
   </div>
-  
+
   <div class="row justify-content-end">
     {% if session['roles'].count("create_post")>0 %}
     <div class="col-md-2"><input type="button" class="btn btn-dark btn-sm" value="Создать объявление"
@@ -22,7 +22,7 @@
         onclick="window.location.href='/filter/all';" />
     </div>
     {% endif %}
-    
+
     <div class="col-md-3">
       <form class="form-floating" action="/search" method="post">
 
@@ -53,28 +53,26 @@
           </a>
         </th>
         <td> {{ post["name"] }}</td>
-        <td> 
+        <td>
           <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
           {%if post["contacts"]!=None and post["contacts"]!=""%}
           <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ render_icon('facebook', 16) }} </a>
-         
           {% endif %}
-      
-         
         </td>
-
-        <td> 
-         
+        <td>
           {{ refs[post["place"]]}}</td>
-
-        <td class="d-none d-md-block">{{ post["text"][:200] }}
-          {% if post["text"]|length > 200 %}
-          ...
-          {% endif %}
+        <td>
+          <span class="d-none d-md-block">{{ post["text"][:200] }}
+            {% if post["text"]|length > 200 %}
+            ...
+            {% endif %}
+          </span>
+          <span class="d-md-none">
+            {{ show_in_view(post["occupations"]) }}
+          </span>
         </td>
-        <td class="d-md-none">
-          {{ show_in_view(post["occupations"]) }}
-        </td>
+        
+        
       </tr>
       {% endfor %}
     </tbody>

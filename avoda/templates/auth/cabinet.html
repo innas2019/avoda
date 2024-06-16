@@ -15,6 +15,7 @@
 
 <form action="{{ url_for('auth.cabinet') }}" method="post">
       <div class="row">
+            <input type="hidden" value={{user.name}} name="name">
             <div class="col-md-3">
                   e-mail:
             </div>
