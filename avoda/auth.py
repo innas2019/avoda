@@ -37,7 +37,10 @@ def add_roles(username, rolename):
 def update_settings(s):
     id = session["_user_id"]  # user-login set parameter
     user = db.session.get(Users, int(id))
-    user.settings = json.dumps(s)
+    if s=="":
+        user.settings=s
+    else:
+        user.settings = json.dumps(s)
     db.session.commit()
 
 
@@ -117,7 +120,7 @@ def login():
                 session["filter"] = ""
             else:
                 session["filter"] = json.loads(user.settings)
-
+            session["search"] = "" 
             l = current_app.logger
             l.setLevel(logging.INFO)
             l.info(username + " login")
@@ -133,7 +136,7 @@ def logout():
     logout_user()
     return redirect(url_for("auth.title"))
 
-
+@login_required
 @bp.route("/cabinet", methods=["GET", "POST"])
 def cabinet():
     if request.method == "POST":
@@ -170,7 +173,7 @@ def cabinet():
         return render_template(
             "auth/cabinet.html", title="Личный кабинет для ", user=user, filterstr=filterstr
         )
-
+@login_required
 @bp.route("/users/<int:id>", methods=["POST", "GET"])
 @login_required
 def list_users(id):
@@ -249,6 +252,7 @@ def list_users(id):
         
         return redirect("/users/0")  
 
+@login_required
 @bp.route("/users/d/<int:id>")
 def delete(id):
     u = db.one_or_404(db.select(Users).where(Users.id == id))
@@ -258,6 +262,7 @@ def delete(id):
     flash(value + " удалено")
     return redirect("/users/0") 
 
+@login_required
 #для сохранения фильтра администратором
 @bp.route("/users/f/<int:id>", methods=["POST", "GET"])
 def save_filter(id):

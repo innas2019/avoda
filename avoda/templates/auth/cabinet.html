@@ -40,8 +40,9 @@
                   <label class="form-check-label" for="per"> рассылка на почту </label>
             </div>
       </div>
+      {% if filterstr!=None %}
       <div class="row">
-            {% if filterstr!=None %}
+           
             <div class="col-md-3">
                   <span class="opacity-50">сохраненный фильтр: </span>
 
@@ -51,11 +52,12 @@
 
                   {{filterstr}}
             </div>
+            
       </div>
       <div class="row">
             <div class="form-check ">
-                  <input class="form-check-input" type="checkbox" value="да" name="clean" id="per">
-                  <label class="form-check-label" for="per"> очистить сохраненный фильтр</label>
+                  <input class="form-check-input" type="checkbox" value="да" name="clean" id="c">
+                  <label class="form-check-label" for="c"> очистить сохраненный фильтр</label>
 
             </div>
       </div>

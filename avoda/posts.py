@@ -361,6 +361,17 @@ def list():
             title = title + ", " + allrefs[session.get("filter")["occupations"]]
     else:
         query = db.select(Posts).order_by(Posts.updated.desc())
+    #search
+    phone=session["search"]
+    if phone !="":
+        query = (
+            db.select(Posts)
+            .where(Posts.phone.like("%" + phone+"%"))
+            .order_by(Posts.updated.desc())
+        )
+        title = "Поиск по номеру "+phone      
+
+
     # читаем по страницам
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
     session["page"] = page
@@ -378,8 +389,8 @@ def list():
         total=ps.total,
         display_msg=msg,
         record_name="объявлений",
-        prev_label="назад",
-        next_label="вперед",
+        prev_label="<<",
+        next_label=">>",
         bs_version=5,
     )
     return render_template(
@@ -540,39 +551,12 @@ def show_post(id):
 @login_required
 def search():
     if request.method == "POST":
-        phone = request.form["phone"]
-        query = (
-            db.select(Posts)
-            .where(Posts.phone.like("%" + phone))
-            .order_by(Posts.updated.desc())
-        )
-        res = db.session.execute(query).scalars()
-        s_posts = []
-        posts = res.all()
-        for p in posts:
-            s_posts.append(p.id)
-
-        session["items"] = s_posts
-        page = request.args.get(get_page_parameter(), type=int, default=1)
-        pagination = Pagination(
-            page=page,
-            page_per=10,
-            total=len(posts),
-            display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
-            record_name="объявлений",
-            prev_label="назад",
-            next_label="вперед",
-            bs_version=5,
-        )
-
-        return render_template(
-            "posts/list.html",
-            pagination=pagination,
-            title="поиск по телефону",
-            posts=posts,
-            refs=allrefs,
-        )
-
+      phone = request.form["phone"]
+      session["search"] = phone
+    else:
+        session["search"] = ""  
+    
+    return redirect(url_for("posts.list"))
 
 @bp.route("/del/<int:id>")
 @login_required

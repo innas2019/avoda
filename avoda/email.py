@@ -53,7 +53,6 @@ def send_news():
             count = len(news.all())
             if count > 0:
                 send_str = "по условиям Вашего поиска найдено " + str(count)+ " новых соискателей"
-                #send_str ='only for you'
                 send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1

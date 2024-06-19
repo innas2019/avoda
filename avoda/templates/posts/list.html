@@ -21,16 +21,22 @@
       onclick="window.location.href='/filter/all';" />
   </div>
   {% endif %}
+  
 
   <div class="col-md-3">
     <form class="form-floating" action="/search" method="post">
 
-      <input type="text" class="form-control-sm" name="phone" placeholder="телефон" />
+      <input type="text" class="form-control-sm" name="phone" placeholder="телефон" required/>
       <input type="submit" class="btn btn-dark btn-sm" value="Найти" data-bs-toggle="tooltip" data-bs-placement="top"
         title="поиск по номеру телефона" />
 
     </form>
   </div>
+  {% if session['search']!="" %}
+  <div class="col-md-2"> <input type="button" class="btn btn-dark btn-sm" value="выйти из поиска"
+      onclick="window.location.href='/search';" />
+  </div>
+  {% endif %}
 </div>
 <div class="row">
   {{ pagination.links }}
