@@ -46,7 +46,8 @@ def send_news():
     l.info(m_str)
     count_mail=0
     for user in allUsers:
-        if user.settings != None and user.settings !="":
+      if user.settings != None and user.settings !="":
+        try: 
             filter = json.loads(user.settings)
             query = create_query(filter, 1)
             news = db.session.execute(query).scalars()
@@ -56,6 +57,10 @@ def send_news():
                 send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
+        except:
+            l.info("problem with send mail for " + user.name)
+            flash("проблема с рассылкой для "+user.name)
+    
     l.info("send mails "+ str(count_mail))  
     flash("Отправлено сообщений "+ str(count_mail))        
     return redirect("/users/0")

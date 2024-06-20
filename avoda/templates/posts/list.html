@@ -11,29 +11,29 @@
 
 <div class="row justify-content-end">
   {% if session['roles'].count("create_post")>0 %}
-  <div class="col-md-2"><input type="button" class="btn btn-dark btn-sm" value="Создать объявление"
+  <div class="col-md-2 mb-3"><input type="button" class="btn btn-dark btn-sm rounded-2" value="Создать объявление"
       onclick="window.location.href='/create';" /></div>
   {% endif %}
-  <div class="col-md-1"><input type="button" class="btn btn-dark btn-sm" value="Фильтр"
+  <div class="col-md-1 mb-3"><input type="button" class="btn btn-dark btn-sm rounded-2" value="Фильтр"
       onclick="window.location.href='/filter/set';" /> </div>
   {% if session['filter']!="" %}
-  <div class="col-md-2"> <input type="button" class="btn btn-dark btn-sm" value="Показать все"
+  <div class="col-md-2 mb-3"> <input type="button" class="btn btn-dark btn-sm rounded-2" value="Показать все"
       onclick="window.location.href='/filter/all';" />
   </div>
   {% endif %}
   
 
-  <div class="col-md-3">
+  <div class="col-md-3 mb-3">
     <form class="form-floating" action="/search" method="post">
 
       <input type="text" class="form-control-sm" name="phone" placeholder="телефон" required/>
-      <input type="submit" class="btn btn-dark btn-sm" value="Найти" data-bs-toggle="tooltip" data-bs-placement="top"
-        title="поиск по номеру телефона" />
+         <input type="submit" class="btn btn-dark btn-sm rounded-2" data-bs-toggle="tooltip" data-bs-placement="top"
+        title="поиск по номеру телефона" value="Найти"/>
 
     </form>
   </div>
   {% if session['search']!="" %}
-  <div class="col-md-2"> <input type="button" class="btn btn-dark btn-sm" value="выйти из поиска"
+  <div class="col-md-2 mb-3"> <input type="button" class="btn btn-dark btn-sm rounded-2" value="выйти из поиска"
       onclick="window.location.href='/search';" />
   </div>
   {% endif %}
@@ -45,17 +45,17 @@
   <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
     <thead>
       <tr class="table-secondary border-start border-end border-light text-left">
-        <th width="5%">№</th>
-        <th width="10%">Имя</th>
-        <th width="12%">Контакт</th>
-        <th width="10%">Город</th>
-        <th>Описание</th>
+        <th scope="col">№</th>
+        <th scope="col">Имя</th>
+        <th scope="col"">Контакт</th>
+        <th scope="col"">Город</th>
+        <th scope="col">Описание</th>
       </tr>
     </thead>
     <tbody>
       {% for post in posts %}
       <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-        <th>
+        <th scope="row">
           <a class="link-underline-primary" href="/show/{{loop.index}}">
             {{loop.index + pagination.skip}}
           </a>

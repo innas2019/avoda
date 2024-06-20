@@ -8,8 +8,8 @@
       <a class="link-underline-primary font-family-Inter" href="/list"> Вернуться на страницу </a>
       {% endif %}
    </div>
-   <div class="row">
-      <p class="font-family-Inter  opacity-50" style="font-size: 0.75rem;">
+   <div class="row mt-3">
+      <p class="font-family-Inter  opacity-50" >
          Опубликовано {{days}} дней назад {{post["updated"]}}</p>
    </div>
    <div class="row">
@@ -42,7 +42,7 @@
          {% if post["o_kind"]!=None %}
             {{render_icon('clock', 16) }}
             {% for o in post["o_kind"] %}
-            {{o}},
+            {{o}}
             {% endfor %}
             {% endif %}
          </div>
@@ -78,7 +78,7 @@
          <div class="col-md-9">
            {% if post.docs!=None %}
             {{render_icon('passport', 16) }}{% for os in post.docs %}
-            {{os}},
+            {{os}}
             {% endfor %}
             {% endif %}
          </div>
