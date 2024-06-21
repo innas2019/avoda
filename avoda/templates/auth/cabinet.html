@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row px-6 mt-6 mb-6">
-      <a class="link-underline-primary" href="{{ url_for('posts.list') }}">
-            Вернуться на главную</a>
-</div>
-<div class="row ">
-      <div class="col-md-3">
+<div class="row mt-5">
+      <div class="col-md-3 text fs-5 font-family-Inter">
             {{ title }}
       </div>
       <div class="col-md-5">
@@ -77,7 +73,7 @@
       </div>
 </form>
 
-<div class="row px-6 py-10  bg-secondary-subtle">
+<div class="row px-6 py-10 mt-5 bg-secondary-subtle">
       <div class="col-md-1">
             <nbsp class="text-dark fs-1 fw-semibold font-family-Inter">{{ render_icon('info-circle', 32) }}</nbsp>
             <span class="navbar-toggler-icon"></span>

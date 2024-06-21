@@ -82,15 +82,22 @@ def register():
 
         if error is None:
             user = Users(name=username, password=generate_password_hash(password))
-            # временно для тестирования
-            #role = db.one_or_404(db.select(Role).where(Role.name == "create_post"))
-            #user.roles.append(role)
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for("auth.login"))
+            l = current_app.logger
+            l.setLevel(logging.INFO)
+            l.info(username + " registered")
+            session.clear()
+            login_user(user)
+            session["name"] = username
+            session["roles"] = []
+            session["filter"] = ""  
+            session["search"] = "" 
+            #return redirect(url_for("auth.login"))
+            return render_template("auth/register.html", title="",info=True)
 
     else:
-        return render_template("auth/register.html", title="Регистрация")
+        return render_template("auth/register.html", title="Регистрация",info=False)
 
 
 @bp.route("/login", methods=["GET", "POST"])
@@ -119,7 +126,13 @@ def login():
             if user.settings == None or user.settings =="":
                 session["filter"] = ""
             else:
-                session["filter"] = json.loads(user.settings)
+                try:
+                  session["filter"] = json.loads(user.settings)
+                except:
+                  session["filter"] = ""  
+                  user.settings=""
+                  db.session.commit()        
+            
             session["search"] = "" 
             l = current_app.logger
             l.setLevel(logging.INFO)
@@ -136,8 +149,8 @@ def logout():
     logout_user()
     return redirect(url_for("auth.title"))
 
-@login_required
 @bp.route("/cabinet", methods=["GET", "POST"])
+@login_required
 def cabinet():
     if request.method == "POST":
         # для любого юзера

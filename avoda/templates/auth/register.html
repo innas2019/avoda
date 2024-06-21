@@ -1,32 +1,111 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="row px-6 mt-6 mb-6">
-      <div class="col-md-3 justify-content-center px-6">
-            <a class="link-underline-primary" href="{{ url_for('auth.title') }}">
-                  Вернуться на главную</a>
-            <div class="row justify-content-center px-2 py-2 bg-secondary-subtle ">
-                  <div class="align-items-center mt-4">
-                        <h4>{{ title }}</h4>
-                        <form action="{{ url_for('auth.register') }}" method="post">
-                              <div class="row">
-                                    <div class="col"><input type="text" class="form-control" name="name"
-                                                placeholder="логин" required> </div>
-                              </div>
-                              <div class="row">
-                                    <div class="col"><input type="password" placeholder="пароль" class="form-control"
-                                                name="password" pattern=".{8,}" title="длина не менее 8 символов" required> </div>
-                              </div>
-                              <div class="row">
-                                    <div class="col"><input type="password" class="form-control" name="password2"
-                                                placeholder="подтверждение пароля" required> </div>
-                              </div>
-                              <div class="row mb-5">
-                                    <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
-                                                value="Сохранить"> </div>
-                              </div>
-                        </form>
+<!doctype html>
+<html lang="en">
+
+<head>
+      {% block head %}
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="icon" href="{{ url_for('static', filename='hatul.png') }}">
+      {% block styles %}
+      <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
+      {% endblock %}
+      <title>עבודה</title>
+      {% endblock %}
+</head>
+
+<body>
+      <div id="component" class="container-md">
+            {% from 'bootstrap5/utils.html' import render_messages %}
+            {{ render_messages() }}
+            <!-- logo+login -->
+            <div class="row mt-5 justify-content-center" style="height: 450px;">
+                  <div class="col-md-3 mt-3 py-3">
+                        <div class="row justify-content-end">
+                           <div class="col-md-8 justify-content-end d-flex">
+                              <img src={{ url_for('static', filename='LogoStartScreen_224X62.png' ) }}>
+            
+                           </div>
+                           <div class="col-md-8 justify-content-end d-flex">
+                              <p class="text-end text-dark fs-4 fw-semibold font-family-Inter m-0 px-3 py-2">
+                                 Поиск сотрудников для вашего бизнеса
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  {% if info %}
+                  <div class="col-md-5 mt-4 bg-secondary-subtle">
+                        <div class="text-dark fs-5 fw-semibold font-family-Inter m-0 px-3 py-2">
+                              <p class="text-dark fs-4 fw-semibold font-family-Inter">Спасибо за регистрацию на нашем сайте!</p>
+                              Для просмотра объявлений перейдите на
+                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter" 
+                              href="{{ url_for('posts.list') }}">поиск сотрудников</a>
+                        </div>
+                        <p class="text-dark fs-5 fw-semibold font-family-Inter m-0 px-3 py-2">
+                              Для настройки рассылки сообщений о вакансиях перейдите в  
+                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter" 
+                              href="{{ url_for('auth.cabinet') }}">кабинет</a>
+                        </p>
+                        <p class="text-dark fs-5 fw-semibold font-family-Inter m-0 px-3 py-2">
+                              Для настройки фильтров для показа сообщений перейдите в  
+                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter" 
+                              href="/filter/set">фильтр</a>
+                        </p>
                   </div>
+                  {% else %}
+                  <!-- registration form -->
+                  <div class="col-md-3 mt-5 ">
+                        <div class="row justify-content-center px-2 py-2 bg-secondary-subtle ">
+                              <div class="col-md-10 align-items-center">
+                                    <nbsp class="text-dark fs-5 fw-semibold font-family-Inter px-3 py-2">
+                                          {{ title }} </nbsp>
+                              </div>
+                              <div class="col-md-10 align-items-center ">
+                                    <form action="{{ url_for('auth.register') }}" method="post">
+                                          <div class="row mt-2">
+                                                <div class="col"><input type="text" class="form-control" name="name"
+                                                            placeholder="логин" required> </div>
+                                          </div>
+                                          <div class="row">
+                                                <div class="col"><input type="password" placeholder="пароль"
+                                                            class="form-control" name="password" pattern=".{8,}"
+                                                            title="длина не менее 8 символов" required> </div>
+                                          </div>
+                                          <div class="row">
+                                                <div class="col"><input type="password" class="form-control"
+                                                            name="password2" placeholder="подтверждение пароля"
+                                                            required> </div>
+                                          </div>
+                                          <div class="row mb-2 mt-2">
+                                                <div class="col"><input type="submit"
+                                                            class="btn btn-primary rounded-2"
+                                                            value="Сохранить">
+                                                </div>
+                                                <div class="col">
+                                                      <a class="link-underline-primary"
+                                                            href="{{ url_for('auth.title') }}">Назад</a>
+                                                </div>
+                                          </div>
+                                    </form>
+                              </div>
+                        </div>
+                  </div>
+                  {%  endif %}
+            </div>
+            <!-- banner -->
+            <div class="row mt-5">
+                  <img src={{ url_for('static', filename='Banner2X.png' ) }}>
+            </div>
+            <div class="row">
+                  <span class="text-end text-dark  font-family-Inter" style="font-size: 0.75rem;">
+                        ver 1.05 Hatul Madan </span>
             </div>
       </div>
-</div>
-{% endblock %}
+
+      {% block scripts %}
+      <!-- Optional JavaScript -->
+      {{ bootstrap.load_js() }}
+      {% endblock %}
+</body>
+
+</html>
