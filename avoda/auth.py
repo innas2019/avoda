@@ -94,7 +94,7 @@ def register():
             session["filter"] = ""  
             session["search"] = "" 
             #return redirect(url_for("auth.login"))
-            return render_template("auth/register.html", title="",info=True)
+            return render_template("auth/register.html", title=" Спасибо за регистрацию на нашем сайте!",info=True)
 
     else:
         return render_template("auth/register.html", title="Регистрация",info=False)
@@ -290,3 +290,7 @@ def save_filter(id):
         user.settings = json.dumps(res)
         db.session.commit()
         return redirect("/users/"+str(id))
+
+@bp.route("/info")
+def info():
+    return render_template("auth/register.html", title=" О системе",info=True)

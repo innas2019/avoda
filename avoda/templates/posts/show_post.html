@@ -77,7 +77,8 @@
          </div>
          <div class="col-md-9">
            {% if post.docs!=None %}
-            {{render_icon('passport', 16) }}{% for os in post.docs %}
+            {{render_icon('passport', 16) }}
+            {% for os in post.docs %}
             {{os}}
             {% endfor %}
             {% endif %}
