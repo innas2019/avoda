@@ -15,52 +15,80 @@
 </head>
 
 <body>
-   
+
       <div id="component" class="container-md">
             {% from 'bootstrap5/utils.html' import render_messages %}
             {% from 'bootstrap5/utils.html' import render_icon %}
             {{ render_messages() }}
+            <div class="row">
+                 <a href="{{ url_for('posts.list') }}"> 
+                 {{ render_icon('arrow-left', 18) }}к объявлениям</a>
+              </div>
             <!-- logo+msg -->
-            <div class="row mt-5 justify-content-center" style="height: 450px;">
+            <div class="row mt-5 justify-content-center" style="min-height: 450px;">
                   <div class="col-md-3 mt-3 py-3">
                         <div class="row justify-content-end">
-                           <div class="col-md-8 justify-content-end d-flex">
-                              <img src={{ url_for('static', filename='LogoStartScreen_224X62.png' ) }}>
-            
-                           </div>
-                           <div class="col-md-8 justify-content-end d-flex">
-                             
-                              <p class="text-end text-dark fs-4 fw-semibold font-family-Inter m-0 px-3 py-2">
-                                 Поиск сотрудников для вашего бизнеса
-                              </p>
-                           </div>
+                              <div class="col-md-8 justify-content-end d-flex">
+                                    <img src={{ url_for('static', filename='LogoStartScreen_224X62.png' ) }}>
+
+                              </div>
+                              <div class="col-md-8 justify-content-end d-flex">
+
+                                    <p class="row  text-dark fs-4 fw-semibold font-family-Inter m-0 px-3 py-2">
+                                          Поиск сотрудников для вашего бизнеса
+                                    </p>
+                              </div>
+
+
                         </div>
-                     </div>
+                  </div>
                   {% if info %}
-                  <div class="col-md-5 mt-4 bg-secondary-subtle">
-                        <div class="row text-dark fs-5 fw-semibold font-family-Inter m-0 px-3 py-2">
-                              <div class="col-md-2">  {{ render_icon('info-circle', 32) }}</div>
+                  <div class="col-md-7 mt-4 bg-secondary-subtle">
+                        <div class="row text-dark fs-5 fw-semibold font-family-Inter m-0 px-1 py-1">
+                              <div class="col-md-2"> {{ render_icon('info-circle', 32) }}</div>
                               <div class="col-md-8 text-dark fs-4 fw-semibold font-family-Inter">
-                                  
                                     {{title}}
                               </div>
-                              <div class="col-md-10">
+                              <div class="col-md-10 mt-3 text-dark fs-5 ">
+                                    <nbsp class="fw-semibold font-family-Inter">Уважаемый пользователь!
+                                          База обновляется каждый день и содержит "холодные" и "теплые" контакты.
+                                          Обращайте внимание на дату размещения! </nbsp>
+
+                              </div>
+                        </div>
+                        <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
                               Для просмотра объявлений перейдите на
-                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter" 
-                              href="{{ url_for('posts.list') }}">поиск сотрудников</a>
-                        </div>
-                        </div>
-                        <p class="text-dark fs-5 fw-semibold font-family-Inter m-0 px-3 py-2">
-                              Для настройки рассылки сообщений о вакансиях перейдите в  
-                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter" 
-                              href="{{ url_for('auth.cabinet') }}">кабинет</a>
+                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter"
+                                    href="{{ url_for('posts.list') }}">поиск сотрудников</a>
                         </p>
-                        <p class="text-dark fs-5 fw-semibold font-family-Inter m-0 px-3 py-2">
-                              Для настройки фильтров для показа и рассылки сообщений  перейдите в  
-                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter" 
-                              href="/filter/set">фильтр</a>
+                        <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                              Для настройки рассылки сообщений о вакансиях перейдите в
+                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter"
+                                    href="{{ url_for('auth.cabinet') }}">кабинет</a>
                         </p>
+                        <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                              Для настройки фильтров для показа и рассылки сообщений перейдите в
+                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter"
+                                    href="/filter/set">фильтр</a>
+                        </p>
+                        <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                              Для того, чтобы найти объявление по телефону, воспользуйтесь кнопкой "поиск". Поиск
+                              работает по всем объявлениям, фильтр не учитывается
+
+                        </p>
+                        <div class="row d-flex m-0 px-3 ">
+                              <div class="col-md-6">
+                                    <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                                          Связаться с нами: тел 053-640-5871 </span>
+                              </div>
+                              <div class="col-md-6">
+                                    <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                                          e-mail <a href="mailto: avoda.site.il@gmail.com">avoda.site.il@gmail.com</a>
+                                    </span>
+                              </div>
+                        </div>
                   </div>
+
                   {% else %}
                   <!-- registration form -->
                   <div class="col-md-3 mt-5 ">
@@ -86,8 +114,7 @@
                                                             required> </div>
                                           </div>
                                           <div class="row mb-2 mt-2">
-                                                <div class="col"><input type="submit"
-                                                            class="btn btn-primary rounded-2"
+                                                <div class="col"><input type="submit" class="btn btn-primary rounded-2"
                                                             value="Сохранить">
                                                 </div>
                                                 <div class="col">
@@ -99,7 +126,7 @@
                               </div>
                         </div>
                   </div>
-                  {%  endif %}
+                  {% endif %}
             </div>
             <!-- banner -->
             <div class="row mt-5">

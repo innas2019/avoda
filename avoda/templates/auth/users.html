@@ -30,12 +30,12 @@
       <tr
         class="d-none d-lg-table-row {{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
         <th>
-          <a class="link-underline-primary" href="/users/{{ o["id"] }}?page={{pagination.page}}">
+          <a class="link-underline-primary" href="/user/{{o["id"] }}">
             {{ o["id"] }}</td>
           </a>
         </th>
         <td class="col-3">
-          <a class="link-underline-primary" href="/users/{{ o["id"] }}?page={{pagination.page}}">
+          <a class="link-underline-primary" href="/user/{{o["id"] }}">
             {{ o["name"] }}
         </td>
         </a>
@@ -55,75 +55,5 @@
     </tbody>
   </table>
 </div>
-{% if r.id!=None %}
-<div class="row">
-  <form action="/users/{{r.id}}" method="post">
-    <div class="row">
-      <div class="col-5">
-        <div class="form-text"> {{r.name}}</div>
-      </div>
-      <div class="col-2">
-        <input type="button" class="btn btn-dark btn-sm" value="Удалить пользователя"
-          onclick="window.location.href='/users/d/{{r.id}}';">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-1">
-        <label for="v" class="form-text">E-mail:</label>
-      </div>
-      <div class="col-2">
-        {% if r.email!=None %}
-        <input type="text" class="form-control" name="email" id="v" value={{r.email}}>
-        {% else %}
-        <input type="text" class="form-control" name="email" id="v">
-        {% endif %}
-      </div>
-      <div class="col-3">
-      <div class="form-check ">
-        {% if r.issend!=None and r.issend==1%}
-        <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per" checked>
-        {% else %}
-        <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per">
-        {% endif %}
-        <label class="form-check-label" for="per"> рассылка на почту </label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-5">
-        <span class="form-text">Сохраненный фильтр: </span>{{filterstr}}  
-      </div>
-      <div class="col-2">
-        <input type="button" class="btn btn-dark btn-sm" value="изменить фильтр"
-        onclick="window.location.href='/filter/set_{{r.id}}';">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-1">
-        <div class="form-text">Роли:</div>
-      </div>
-      <div class="col-6">
-        {% for rs in roles %}
-        <div class="form-check form-check-inline">
-          {% if r.roles!=None and r.roles.count(rs)>0 %}
-          <input class="form-check-input" type="checkbox" name={{"rs_"+rs.name}} id={{"rs_"+rs.name}} value={{rs.name}}
-            checked>
-          {% else %}
-          <input class="form-check-input" type="checkbox" name={{"rs_"+rs.name}} id={{"rs_"+rs.name}} value={{rs.name}}>
-          {% endif %}
-          <label class="form-check-label" for={{rs}}> {{rs.name}} </label>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <input type="button" class="btn btn-primary rounded-2" value="Выйти" onclick="window.location.href='/list';">
-      </div>
-      <div class="col-2">
-        <input type="submit" class="btn btn-primary rounded-2" value="Сохранить">
-      </div>
-    </div>
-  </form>
-</div>
-{% endif %}
+
 {% endblock %}

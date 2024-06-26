@@ -3,7 +3,7 @@
 <div id="component" class="container-md">
     <div class="row">
         <h3>{{title}}</h3>
-        <p><a href="{{ url_for('posts.list') }}">вернуться к объявлениям</a>
+        <p><a href="{{ url_for('posts.list') }}">   {{ render_icon('arrow-left', 18) }} к объявлениям</a>
     </div>
     <div class="row mt-5">
         <img src={{ url_for('static', filename='Banner2X.png' ) }}>

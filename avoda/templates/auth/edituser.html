@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+  <form action="/user/{{r.id}}" method="post">
+    <div class="row mt-5">
+      <div class="col-md-6 ">
+        <nbsp class="text fs-5 font-family-Inter">Управление настройками пользователя</nbsp>
+      </div>
+      <div class="col-md-2">
+        <nbsp class="text fs-5 fw-semibold font-family-Inter">{{r.name}}</nbsp>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <input type="button" class="btn btn-dark btn-sm" value="Удалить пользователя"
+          onclick="window.location.href='/users/d/{{r.id}}';">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-1">
+        <label for="v" class="form-text">E-mail:</label>
+      </div>
+      <div class="col-7">
+        {% if r.email!=None %}
+        <input type="text" class="form-control" name="email" id="v" value={{r.email}}>
+        {% else %}
+        <input type="text" class="form-control" name="email" id="v">
+        {% endif %}
+      </div>
+      <div class="col-6">
+        <div class="form-check ">
+          {% if r.issend!=None and r.issend==1%}
+          <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per" checked>
+          {% else %}
+          <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per">
+          {% endif %}
+          <label class="form-check-label" for="per"> рассылка на почту </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
+        Сохраненный фильтр:
+
+      </div>
+      <div class="col-md-6">
+        <nbsp class="text fs-5 fw-semibold font-family-Inter"> {{filterstr}}</nbsp>
+      </div>
+      <div class="col-2">
+        <input type="button" class="btn btn-dark btn-sm" value="изменить фильтр"
+          onclick="window.location.href='/filter/set?id={{r.id}}';">
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-1">
+        <div class="form-text">Роли:</div>
+      </div>
+      <div class="col-6">
+        {% for rs in roles %}
+        <div class="form-check form-check-inline">
+          {% if r.roles!=None and r.roles.count(rs)>0 %}
+          <input class="form-check-input" type="checkbox" name={{"rs_"+rs.name}} id={{"rs_"+rs.name}} value={{rs.name}}
+            checked>
+          {% else %}
+          <input class="form-check-input" type="checkbox" name={{"rs_"+rs.name}} id={{"rs_"+rs.name}} value={{rs.name}}>
+          {% endif %}
+          <label class="form-check-label" for={{rs}}> {{rs.name}} </label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <input type="button" class="btn btn-primary rounded-2" value="Выйти"
+          onclick="window.location.href='/users/byname';">
+      </div>
+      <div class="col-md-2">
+        <input type="submit" class="btn btn-primary rounded-2" value="Сохранить">
+      </div>
+    </div>
+  </form>
+
+</div>
+<div class="row px-6 py-10 mt-5 bg-secondary-subtle">
+  <div class="col-md-1">
+    <nbsp class="text-dark fs-1 fw-semibold font-family-Inter">{{ render_icon('info-circle', 32) }}</nbsp>
+    <span class="navbar-toggler-icon"></span>
+  </div>
+  <div class="col-md-8 align-items-center">
+    <nbsp class="text-dark fs-6 fw-semibold font-family-Inter px-3 py-2">
+      Администратор! Не совершай необратимых поступков! </nbsp>
+  </div>
+</div>
+
+{% endblock %}

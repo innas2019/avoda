@@ -18,6 +18,9 @@
 </head>
 
 <body>
+    
+    {% from 'bootstrap5/utils.html' import render_icon %}
+    {% from 'bootstrap5/utils.html' import render_messages %}
     <div class="container-md">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary">
             <div class="container-fluid">
@@ -51,7 +54,8 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="/refs/0">Справочники</a>
-                                <a class="dropdown-item" href="/users/0">Пользователи</a>
+                                <a class="dropdown-item" href="/users/byname">Пользователи по имени</a>
+                                <a class="dropdown-item" href="/users/bydate">Пользователи по регистрации</a>
 
                             </div>
                         </li>
@@ -61,9 +65,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.cabinet') }}"> Кабинет</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ url_for('auth.info') }}"> Справка</a>
-                        </li>
+                       
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a>
                         </li>
@@ -79,10 +81,14 @@
                 {% if session['name'] %}
                 <span class="navbar-text align-items-right"> Ваш логин {{ session['name'] }} </span>
                 {% endif %}
+                <ui class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('auth.info') }}"> {{ render_icon('info-circle', 32) }}</a>
+                </li>
+                </ui>
             </div>
         </nav>
-        {% from 'bootstrap5/utils.html' import render_icon %}
-        {% from 'bootstrap5/utils.html' import render_messages %}
+       
         {{ render_messages() }}
         <div class="container-md" style="min-height: 800px;">
             {% block content %} {% endblock %}

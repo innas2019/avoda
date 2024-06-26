@@ -2,7 +2,7 @@ from flask_paginate import Pagination, get_page_parameter
 from flask_login import login_required
 from flask import Blueprint, flash, redirect, render_template, request, url_for, session
 from avoda import db
-from avoda.models import Posts
+from avoda.models import Posts, Users
 from avoda import managing as m
 from avoda import auth as a
 from datetime import datetime, timezone, timedelta
@@ -269,13 +269,17 @@ def create_query(filter, days):
 def filters(flt):
     n_post = Post("", "", "", "")
     res = {}
+    
     res["occupations"] = n_post.get_id_from_value(flt["oc"])
     res["place"] = n_post.get_id_from_value(flt["place"])
+   
     res["days"] = flt["days"]
+    id = session["_user_id"]  # user-login set parameter
+   
     if "permanent" in flt.keys():
-        a.update_settings(res)
-    if "clean" in flt.keys():
-        a.update_settings("")
+        a.update_settings(id,res)
+    """ if "clean" in flt.keys():
+        a.update_settings("") """
     return res
 
 
@@ -405,9 +409,20 @@ def list():
 @bp.route("/filter/<string:p>")
 @login_required
 # all/set  устанавливает или сбрасывает фильтр
-#set_userID исполььзуется для редактирования профиля администратором
+#set + параметр id исполььзуется для редактирования профиля администратором
+#параметр all+name сбрасывает постоянный фильтр
 def filter(p):
-    if p == "set":
+  url_params = request.args 
+  id=""
+  if 'id' in url_params: 
+    id=url_params['id']
+  
+  if p == "set":
+      if id=="":
+        user = db.session.execute(
+            db.select(Users).where(Users.name == session["name"])
+        ).scalar()
+        fstr=a.get_user_settings(user)
         return render_template(
             "posts/filters.html",
             towns=towns,
@@ -415,23 +430,34 @@ def filter(p):
             occupations=o_list,
             o_kind=o_kind,
             title="Настройки фильтра",
-            id=0
+            id=0,
+            filterstr=fstr
         )
-    elif p == "all":
-        session["filter"] = ""
-        return redirect(url_for("posts.list"))
-
-    else:
-        id=p.split("_")[1]
+      
+      else:
+        user = db.session.execute(
+            db.select(Users).where(Users.id == str(id))
+        ).scalar()
+        fstr=a.get_user_settings(user)
         return render_template(
             "posts/filters.html",
             towns=towns,
             languages=leng,
             occupations=o_list,
             o_kind=o_kind,
-            title="Настройки фильтра",
-            id=id
-            )
+            title="Настройки фильтра для "+user.name,
+            id=id,
+            filterstr=fstr)
+
+  if p == "all":
+    if id=="":
+        session["filter"] = ""
+    else:
+        a.update_settings(id,"")
+    return redirect(url_for("posts.list"))
+    
+        #return redirect("/user/"+id)
+    
 
 @bp.route("/create", methods=["POST", "GET"])
 @login_required
