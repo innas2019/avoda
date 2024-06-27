@@ -452,11 +452,12 @@ def filter(p):
   if p == "all":
     if id=="":
         session["filter"] = ""
+        return redirect(url_for("posts.list"))
     else:
+        session["filter"] = ""
         a.update_settings(id,"")
-    return redirect(url_for("posts.list"))
+        return redirect("/filter/set?id="+id)
     
-        #return redirect("/user/"+id)
     
 
 @bp.route("/create", methods=["POST", "GET"])
