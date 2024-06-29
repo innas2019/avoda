@@ -56,9 +56,13 @@ class Post:
             return new_val
 
     # функция возвращает список языков для показа во вью
+   
     def get_len(self):
         conv = str(self.len).replace("{", " ").replace("}", " ")
-        return conv.replace("'", " ")
+        conv = conv.replace("'", " ")
+        conv = conv.replace(" :", ":")
+        return conv.replace(" ,", ",")
+        
 
     # функция возвращает значение атрибута по его имени
     def get_atr_by_name(self, source):
