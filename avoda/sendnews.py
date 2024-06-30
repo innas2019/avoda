@@ -49,10 +49,8 @@ def send_news(manualy):
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
         except Exception as ex:
-            if hasattr(ex, 'message'): 
-                l.error(ex.message)
-            else:
-                l.error(ex.__str__)
+            l.error("SMTP error no " + ex.errno)
+            l.error("SMTP error no " + ex.strerror)
             l.info("problem with send mail for " + user.name)
             if manualy:         
                 flash("проблема с рассылкой для "+user.name)
