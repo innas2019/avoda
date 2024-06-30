@@ -5,14 +5,14 @@
       {{ render_icon('arrow-left', 18) }}к объявлениям</a>
    </div>
 <div class="row mt-5">
-      <div class="col-md-2 text fs-5 fw-semibold font-family-Inter">
+      <div class="col-md-2 text fs-4 fw-semibold font-family-Inter">
             {{ title }}
       </div>
       <div class="col-md-2">
             {{render_icon("funnel",20)}}
       </div>
 </div>
-<div class="col-md-5 text fs-6 fw-semibold font-family-Inter"> фильтр для поиска </div>
+<div class="col-md-5 text fs-5 fw-semibold font-family-Inter"> фильтр для поиска </div>
 <div class="row">
       {% if id==0 %}
       <form action="/list" method="post">
