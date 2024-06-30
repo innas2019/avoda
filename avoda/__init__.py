@@ -66,7 +66,7 @@ def create_app():
 
     app.register_blueprint(posts.bp)
 
-    from avoda import email
+    from avoda import sendnews
 
-    app.register_blueprint(email.bp)
+    app.register_blueprint(sendnews.bp)
     return app
