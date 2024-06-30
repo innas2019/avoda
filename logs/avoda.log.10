@@ -1,0 +1,143 @@
+2024-06-23 14:12:44,586 ERROR: Exception on /list [GET] [in C:\Python310\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\Python310\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "C:\testProj\aprog\avoda\posts.py", line 396, in list
+    return render_template(
+  File "C:\Python310\lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+  File "C:\Python310\lib\site-packages\flask\templating.py", line 133, in _render
+    rv = template.render(context)
+  File "C:\Python310\lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Python310\lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\testProj\aprog\avoda\templates\posts\list.html", line 1, in top-level template code
+    {% extends 'base.html' %}
+  File "C:\testProj\aprog\avoda\templates\base.html", line 82, in top-level template code
+    <a class="nav-link active" href="{{ url_for('auth.info') }}"> {{ render_icon('info-circle', 32) }}</a>
+  File "C:\Python310\lib\site-packages\jinja2\utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+jinja2.exceptions.UndefinedError: 'render_icon' is undefined
+2024-06-23 14:12:44,720 ERROR: Exception on /favicon.ico [GET] [in C:\Python310\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 841, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 450, in raise_routing_exception
+    raise request.routing_exception  # type: ignore
+  File "C:\Python310\lib\site-packages\flask\ctx.py", line 353, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "C:\Python310\lib\site-packages\werkzeug\routing\map.py", line 624, in match
+    raise NotFound() from None
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 752, in handle_user_exception
+    return self.handle_http_exception(e)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 727, in handle_http_exception
+    return self.ensure_sync(handler)(e)
+  File "C:\testProj\aprog\avoda\error.py", line 6, in not_found_error
+    return render_template('404.html', title="Страница не найдена"), 404
+  File "C:\Python310\lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+  File "C:\Python310\lib\site-packages\flask\templating.py", line 133, in _render
+    rv = template.render(context)
+  File "C:\Python310\lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Python310\lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\testProj\aprog\avoda\templates\404.html", line 1, in top-level template code
+    {% extends 'base.html' %}
+  File "C:\testProj\aprog\avoda\templates\base.html", line 82, in top-level template code
+    <a class="nav-link active" href="{{ url_for('auth.info') }}"> {{ render_icon('info-circle', 32) }}</a>
+  File "C:\Python310\lib\site-packages\jinja2\utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+jinja2.exceptions.UndefinedError: 'render_icon' is undefined
+2024-06-23 14:14:18,178 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 15:52:30,679 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 15:59:53,870 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 16:02:13,418 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 16:03:54,330 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 16:55:24,765 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 16:57:53,486 ERROR: Exception on /cabinet [GET] [in C:\Python310\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\Python310\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "C:\testProj\aprog\avoda\auth.py", line 190, in cabinet
+    "auth/cabinet.html", title="Личный кабинет для ", user=user, filterstr=filterstr
+UnboundLocalError: local variable 'user' referenced before assignment
+2024-06-23 16:57:59,328 INFO: admin login [in C:\testProj\aprog\avoda\auth.py:152]
+2024-06-23 16:58:02,436 ERROR: Exception on /cabinet [GET] [in C:\Python310\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\Python310\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "C:\testProj\aprog\avoda\auth.py", line 190, in cabinet
+    "auth/cabinet.html", title="Личный кабинет для ", user=user, filterstr=filterstr
+UnboundLocalError: local variable 'user' referenced before assignment
+2024-06-23 17:00:12,366 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 17:12:41,863 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-23 17:15:54,334 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-25 15:16:39,846 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-25 15:17:19,879 INFO: admin login [in C:\testProj\aprog\avoda\auth.py:150]
+2024-06-25 15:17:32,171 ERROR: Exception on /users/9 [GET] [in C:\Python310\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\Python310\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+TypeError: list_users() missing 1 required positional argument: 'directions'
+2024-06-25 15:18:38,893 ERROR: Exception on /users/0 [GET] [in C:\Python310\lib\site-packages\flask\app.py:825]
+Traceback (most recent call last):
+  File "C:\Python310\lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Python310\lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Python310\lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "C:\Python310\lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+TypeError: list_users() missing 1 required positional argument: 'directions'
+2024-06-25 15:44:19,576 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-25 15:47:35,994 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-25 15:52:06,483 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]
+2024-06-26 10:36:47,210 INFO: Avoda start [in C:\testProj\aprog\avoda\__init__.py:54]

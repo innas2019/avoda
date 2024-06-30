@@ -4,3 +4,7 @@ avoda/__pycache__
 migrations/versions/__pycache__
 __pycache__
 
+logs/avoda.log
+logs/avoda.log.1
+logs/avoda.log.2
+logs/avoda.log.3

@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS refs (
                     NOT NULL
                     UNIQUE,
     name  TEXT (20) NOT NULL,
-    value           NOT NULL
+    value  TEXT (40)         NOT NULL
 );
 
 

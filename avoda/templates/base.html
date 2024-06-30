@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    
+
     {% from 'bootstrap5/utils.html' import render_icon %}
     {% from 'bootstrap5/utils.html' import render_messages %}
     <div class="container-md">
@@ -65,7 +65,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.cabinet') }}"> Кабинет</a>
                         </li>
-                       
+
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a>
                         </li>
@@ -82,23 +82,42 @@
                 <span class="navbar-text align-items-right"> Ваш логин {{ session['name'] }} </span>
                 {% endif %}
                 <ui class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('auth.info') }}"> {{ render_icon('info-circle', 32) }}</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('auth.info') }}"> {{ render_icon('info-circle', 32)
+                            }}</a>
+                    </li>
                 </ui>
             </div>
         </nav>
-       
         {{ render_messages() }}
         <div class="container-md" style="min-height: 800px;">
             {% block content %} {% endblock %}
         </div>
+
         <footer class="container-md">
             {% block footer %}
+            <div class="row justify-content-end py-1 mb-2">
+                <div class="col-md-2">
+                    <table class="table-bordered">
+                        <tbody>
+                            <tr>
+                                <th scope="col" class="text-primary font-family-Inter" style="font-size: 0.75rem;">
+                                    <span class="px-1 py-1">Сейчас на сайте</span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="text-primary font-family-Inter" style="font-size: 0.75rem;">
+                                    <span class="px-1 py-1">25 пользователей</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="bg-primary row ">
                 <div class="col-md-3 px-1 py-1  justify-content-left">
                     <span class="text-white  font-family-Inter m-0 px-3 py-2" style="font-size: 0.75rem;">
-                        ver 1.2 27.06 Hatul Madan
+                        ver 1.2 30.06 Hatul Madan
                     </span>
                 </div>
                 <div class="col-md-3 px-1 py-1  justify-content-right">
@@ -112,7 +131,6 @@
                     </span>
                 </div>
             </div>
-
             {% endblock %}
         </footer>
         {% block scripts %}

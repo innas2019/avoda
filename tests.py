@@ -146,6 +146,7 @@ class PostCase(unittest.TestCase):
         if res.roles.count("adminisrators")==0:
            add_roles(name, "adminisrators")
         self.assertTrue(True, "ошибка добавления роли")
-
+    
+    
 if __name__ == "__main__":
     unittest.main(verbosity=2)
