@@ -48,7 +48,8 @@ def send_news(manualy):
                 send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
-        except:
+        except Exception as ex:
+            l.error(ex)
             l.info("problem with send mail for " + user.name)
             if manualy:         
                 flash("проблема с рассылкой для "+user.name)
