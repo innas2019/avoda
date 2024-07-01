@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import logging
 from logging.handlers import  RotatingFileHandler
+import random
 #from flask_mail import Mail
 
 db = SQLAlchemy()
@@ -69,4 +70,11 @@ def create_app():
     from avoda import sendnews
 
     app.register_blueprint(sendnews.bp)
+    
+    
+    @app.context_processor
+    def utility_processor():
+        def mycounter():
+            return random.randint(10, 25)
+        return dict(mycounter=mycounter)
     return app

@@ -141,8 +141,7 @@ def utility_processor():
             return res
         return ""
 
-    return dict(show_in_view=show_in_view)
-
+    return dict(show_in_view=show_in_view) 
 
 # для проверки номера телефона при создании поста
 @bp.route("/check")
