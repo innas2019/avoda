@@ -101,7 +101,7 @@
                                     <form action="{{ url_for('auth.register') }}" method="post">
                                           <div class="row mt-2">
                                                 <div class="col"><input type="text" class="form-control" name="name"
-                                                            placeholder="логин" required> </div>
+                                                            placeholder="логин" pattern="[^' ']+" title="пробелы не допускаются" required> </div>
                                           </div>
                                           <div class="row">
                                                 <div class="col"><input type="password" placeholder="пароль"
