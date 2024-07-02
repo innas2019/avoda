@@ -190,11 +190,14 @@ def cabinet():
         return render_template(
             "auth/cabinet.html", title="Личный кабинет для ", user=user, filterstr=filterstr
         )
-#params: ?id=12&directions=bydate”
+
 
 @bp.route("/users/<directions>")
 @login_required
+
 def list_users(directions):
+    if session['roles'].count("adminisrators")==0:
+      return redirect("/list")  
     
     if directions=="bydate":
         query = db.select(Users).order_by(Users.id.desc())
@@ -227,8 +230,11 @@ def list_users(directions):
  
 
 @login_required
+
 @bp.route("/users/d/<int:id>")
 def delete(id):
+    if session['roles'].count("adminisrators")==0:
+      return redirect("/list")  
     u = db.one_or_404(db.select(Users).where(Users.id == id))
     value=u.name
     db.session.delete(u)
@@ -237,6 +243,7 @@ def delete(id):
     return redirect("/users/0") 
 
 @login_required
+
 #для сохранения фильтра администратором
 @bp.route("/users/f/<int:id>", methods=["POST", "GET"])
 def save_filter(id):
@@ -261,6 +268,9 @@ def info():
 @login_required
 
 def edit_user(id):
+    if session['roles'].count("adminisrators")==0:
+      return redirect("/list")  
+    
     roles=db.session.execute(
             db.select(Role)
         ).scalars()

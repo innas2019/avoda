@@ -12,18 +12,19 @@
             {{render_icon("funnel",20)}}
       </div>
 </div>
-<div class="col-md-5 text fs-5 fw-semibold font-family-Inter"> фильтр для поиска </div>
+<div class="col-md-5 text fs-5 fw-semibold font-family-Inter"> Фильтр для поиска </div>
 <div class="row">
-      {% if id==0 %}
-      <form action="/list" method="post">
-            {% else %}
-            <form action="/users/f/{{id}}" method="post">
-                  {% endif %}
+{% if session['roles'].count("adminisrators")>0 and id!=session["_user_id"]%}
+    <form action="/users/f/{{id}}" method="post">
+{% else %}
+     <form action="/list" method="post">    
+{% endif %}           
                   <div class="row">
                         <div class="col-md-4 form-text">За сколько дней показывать объявления: 
                         </div>
                        <div class="col-md-2">
-                             <input type="text" class="form-control" name="days" value=30 required>
+                             <input type="text" class="form-control" name="days" value=30 
+                             pattern="[0-9]" title=" допускаются только цифры" required>
                         </div>
                   </div>
                   <div class="row">

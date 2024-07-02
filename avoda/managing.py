@@ -58,7 +58,10 @@ docs = []
 # функция для показа всех записей справочника
 @bp.route("/refs/<int:id>", methods=["POST", "GET"])
 @login_required
+
 def refs(id):
+  if session['roles'].count("adminisrators")==0:
+      return redirect("/list")  
   ref = None
   if request.method == "GET":
     refs_name = []
@@ -120,7 +123,11 @@ def refs(id):
         return redirect("/refs/0")  
 
 @bp.route("/refs/del/<int:id>")
+@login_required
+
 def delete(id):
+    if session['roles'].count("adminisrators")==0:
+      return redirect("/list")  
     ref = db.one_or_404(db.select(Refs).where(Refs.id == id))
     value=ref.value
     db.session.delete(ref)
