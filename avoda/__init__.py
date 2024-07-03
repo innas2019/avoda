@@ -7,6 +7,8 @@ from flask_migrate import Migrate
 import logging
 from logging.handlers import  RotatingFileHandler
 import random
+import time  
+  
 #from flask_mail import Mail
 
 db = SQLAlchemy()
@@ -75,6 +77,15 @@ def create_app():
     @app.context_processor
     def utility_processor():
         def mycounter():
-            return random.randint(10, 25)
+            curr_time = time.localtime()
+            hour=curr_time.tm_hour
+            if hour<4:
+                return random.randint(1, 5)
+            elif hour<6:
+                return random.randint(5, 15)
+            elif hour<16:
+                return random.randint(15, 25)
+            else:
+                return random.randint(1, 5)
         return dict(mycounter=mycounter)
     return app

@@ -71,6 +71,7 @@ def register():
         username = request.form["name"]
         password = request.form["password"]
         password2 = request.form["password2"]
+        email=request.form["email"]
         error = None
         if password != password2:
             error = "ошибка при вводе пароля"
@@ -92,6 +93,7 @@ def register():
 
         if error is None:
             user = Users(name=username, password=generate_password_hash(password))
+            user.email=email
             db.session.add(user)
             db.session.commit()
             l = current_app.logger
