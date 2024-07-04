@@ -272,17 +272,25 @@ def create_query(filter, days):
 def filters(flt):
     n_post = Post("", "", "", "")
     res = {}
-    
+    int_days=0
     res["occupations"] = n_post.get_id_from_value(flt["oc"])
     res["place"] = n_post.get_id_from_value(flt["place"])
-   
     res["days"] = flt["days"]
-    id = session["_user_id"]  # user-login set parameter
-   
+    try:
+      int_days=int(res["days"])
+     
+    except: 
+        error = "задано недопустимое количество дней, установено 30"
+        flash(error)
+        res["days"] ="30"
+    
+    if int_days<1 or int_days>100:
+        error = "задано недопустимое количество дней, установено 30"
+        flash(error)
+        res["days"] = "30"
+    
     if "permanent" in flt.keys():
         a.update_settings(id,res)
-    """ if "clean" in flt.keys():
-        a.update_settings("") """
     return res
 
 

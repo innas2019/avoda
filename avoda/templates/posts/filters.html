@@ -14,7 +14,7 @@
 </div>
 <div class="col-md-5 text fs-5 fw-semibold font-family-Inter"> Фильтр для поиска </div>
 <div class="row">
-{% if session['roles'].count("adminisrators")>0 and id!=session["_user_id"]%}
+{% if session['roles'].count("adminisrators")>0 and id!=0%}
     <form action="/users/f/{{id}}" method="post">
 {% else %}
      <form action="/list" method="post">    
