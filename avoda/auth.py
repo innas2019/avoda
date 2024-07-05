@@ -35,6 +35,8 @@ def add_roles(username, rolename):
 
 
 def update_settings(id,s):
+    if id==0:
+        id=session["_user_id"]
     user = db.session.get(Users, int(id))
     if s=="":
         user.settings=s

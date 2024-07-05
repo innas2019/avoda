@@ -8,6 +8,7 @@ from avoda import auth as a
 from datetime import datetime, timezone, timedelta
 import json
 from flask import jsonify
+from sqlalchemy import and_
 
 bp = Blueprint("posts", __name__)
 s_posts = []
@@ -230,6 +231,23 @@ def validation(post):
     
     return True
 
+def query_all(filter, days):    
+    
+    query = session.query(Posts)
+    filter_conditions = []
+
+    if 'name' in filters:
+        filter_conditions.append(Posts.name == filters['name'])
+    if 'min_age' in filters:
+        filter_conditions.append(Posts.age >= filters['min_age'])
+    if 'max_age' in filters:
+        filter_conditions.append(Posts.age <= filters['max_age'])
+    
+
+    if filter_conditions:
+        query = query.filter(and_(*filter_conditions))
+
+    return query.all()
 
 # формирует запрос для списка постов и для рассылки. количество дней не берем из фильтра специально
 def create_query(filter, days):
@@ -280,17 +298,17 @@ def filters(flt):
       int_days=int(res["days"])
      
     except: 
-        error = "задано недопустимое количество дней, установено 30"
+        error = "задано недопустимое количество дней, установлено 30"
         flash(error)
         res["days"] ="30"
     
     if int_days<1 or int_days>100:
-        error = "задано недопустимое количество дней, установено 30"
+        error = "задано недопустимое количество дней, установлено 30"
         flash(error)
         res["days"] = "30"
     
     if "permanent" in flt.keys():
-        a.update_settings(id,res)
+        a.update_settings(0,res)
     return res
 
 
