@@ -255,7 +255,8 @@ def create_query(filter, days):
       #hierarchy for place
       if hierarchy.get(place) != None:
         places.extend(hierarchy[place])
-        filter_conditions.append(Posts.place.in_(places))
+        
+      filter_conditions.append(Posts.place.in_(places))
     
     #get occupations value
     if filter["occupations"]!=None:
