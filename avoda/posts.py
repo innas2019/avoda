@@ -8,7 +8,7 @@ from avoda import auth as a
 from datetime import datetime, timezone, timedelta
 import json
 from flask import jsonify
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 
 bp = Blueprint("posts", __name__)
 s_posts = []
@@ -212,10 +212,20 @@ def update_post(n_post):
     flash(n_post.name + " изменено")
     return "ok"
 
+#create title str from map
+def show_title(flt):
+    s = "Выбранные за "  + flt["days"]  + " дней, "
+    if flt["place"] != None:
+        s = s + allrefs[flt["place"]]+" "
+    
+    if flt["occupations"] != None:
+        for oc in flt["occupations"]:
+            s = s + allrefs[oc]+" "
+    
+    return s  
 
 def validation(post):
-    if post.place == "":
-        return False
+    
     if post.id != 0:
         return True
 
@@ -231,26 +241,36 @@ def validation(post):
     
     return True
 
-def query_all(filter, days):    
-    
-    query = session.query(Posts)
+# формирует запрос из фильтра для списка постов и для рассылки.
+def create_query(filter, days):    
+    global hierarchy
+    current_time = datetime.now()
+    delta = current_time - timedelta(days=days)
+    query = db.session.query(Posts)
     filter_conditions = []
-
-    if 'name' in filters:
-        filter_conditions.append(Posts.name == filters['name'])
-    if 'min_age' in filters:
-        filter_conditions.append(Posts.age >= filters['min_age'])
-    if 'max_age' in filters:
-        filter_conditions.append(Posts.age <= filters['max_age'])
+    oc_conditions = []
+    if filter["place"]!=None:
+      places=[filter["place"]]
+      place=int(filter["place"])
+      #hierarchy for place
+      if hierarchy.get(place) != None:
+        places.extend(hierarchy[place])
+        filter_conditions.append(Posts.place.in_(places))
     
-
-    if filter_conditions:
-        query = query.filter(and_(*filter_conditions))
-
-    return query.all()
+    #get occupations value
+    if filter["occupations"]!=None:
+        for o in filter["occupations"]:
+            s = '%"' + o + '"%' 
+            oc_conditions.append(Posts.occupations.like(s))
+    
+        filter_conditions.append(or_(*oc_conditions))
+    
+    filter_conditions.append(Posts.updated > delta)
+    query = query.filter(and_(*filter_conditions)).order_by(Posts.updated.desc())
+    return query
 
 # формирует запрос для списка постов и для рассылки. количество дней не берем из фильтра специально
-def create_query(filter, days):
+def create_query_old(filter, days):
     global hierarchy
     current_time = datetime.now()
     delta = current_time - timedelta(days=days)
@@ -262,11 +282,6 @@ def create_query(filter, days):
         places.extend(hierarchy[place])
     
     if filter["occupations"] != None:
-        """ occupation_list=[filter["occupations"]]
-        h=hierarchy.get(int(filter["occupations"]))
-        if h!= None:
-          occupation_list.extend(h)
-          s = '%"' + filter["occupations"] + '"%' """
         s = '%"' + filter["occupations"] + '"%'  
         return (
             db.select(Posts)
@@ -288,11 +303,14 @@ def create_query(filter, days):
 
 # формирует фильтр из формы
 def filters(flt):
-    n_post = Post("", "", "", "")
+    n_post = Post("", flt["place"], "", "")
+    n_post.get_from_form(flt)
     res = {}
     int_days=0
-    res["occupations"] = n_post.get_id_from_value(flt["oc"])
-    res["place"] = n_post.get_id_from_value(flt["place"])
+    res["occupations"] = []
+    for oc in n_post.occupations:
+      res["occupations"].append(n_post.get_id_from_value(oc))
+    res["place"] = n_post.get_id_from_value(n_post.place)
     res["days"] = flt["days"]
     try:
       int_days=int(res["days"])
@@ -372,9 +390,9 @@ def load_ref():
 @bp.route("/list", methods=["POST", "GET"])
 @login_required
 def list():
-    title = "Все объявления"
+    title_str = "Все объявления"
     if session.get("filter") != "":
-        title = "Выбранные "
+        title_str = "Выбранные "
     # в случае если задан фильтр для заявок то метод POST
     if request.method == "POST":
         session["filter"] = filters(request.form)
@@ -383,15 +401,8 @@ def list():
     limit = 10
     if session.get("filter") != "":
         query = create_query(session.get("filter"), int(session.get("filter")["days"]))
-        title = (
-            title
-            + " за "
-            + session.get("filter")["days"]
-            + " дней, "
-            + allrefs[session.get("filter")["place"]]
-        )
-        if session.get("filter")["occupations"] != None:
-            title = title + ", " + allrefs[session.get("filter")["occupations"]]
+        title_str = show_title(session.get("filter"))
+        
     else:
         query = db.select(Posts).order_by(Posts.updated.desc())
     #search
@@ -402,8 +413,7 @@ def list():
             .where(Posts.phone.like("%" + phone+"%"))
             .order_by(Posts.updated.desc())
         )
-        title = "Поиск по номеру "+phone      
-
+        title_str = "Поиск по номеру "+phone      
 
     # читаем по страницам
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
@@ -429,7 +439,7 @@ def list():
     return render_template(
         "posts/list.html",
         pagination=pagination,
-        title=title,
+        title=title_str,
         posts=ps.items,
         refs=allrefs,
     )
@@ -494,6 +504,9 @@ def filter(p):
 @login_required
 def create():
     global sex
+    if session['roles'].count("adminisrators")==0:
+      return redirect("/list")  
+    
     if request.method == "POST":
         form = request.form
         print(form["place"])

@@ -8,7 +8,7 @@ from avoda.models import Users, Role
 import logging
 import json
 from avoda import managing as m
-from avoda.posts import Post
+from avoda.posts import Post, show_title
 
 def get_roles(user):
     session["roles"] = []
@@ -49,10 +49,7 @@ def get_user_settings(user):
         filterstr=""
         if  user.settings!=None and user.settings!="":
             filter = json.loads(user.settings)
-            allrefs = m.get_refs()
-            filterstr = filter["days"] + " дней, " + allrefs[filter["place"]]
-            if filter["occupations"] != None:
-                filterstr = filterstr + ", " + allrefs[filter["occupations"]]
+            filterstr= show_title(filter)
         
         return filterstr    
 
@@ -116,9 +113,6 @@ def register():
 
 @bp.route("/login", methods=["GET", "POST"])
 def login():
-    #if current_user.is_authenticated:
-    #    return redirect(url_for("posts.list"))
-
     if request.method == "POST":
 
         username = request.form["name"]
@@ -192,7 +186,8 @@ def cabinet():
         ).scalar()
         filterstr=get_user_settings(user)
         return render_template(
-            "auth/cabinet.html", title="Личный кабинет для ", user=user, filterstr=filterstr
+            "auth/cabinet.html", title="Личный кабинет для ", user=user, 
+            filterstr=filterstr
         )
 
 
