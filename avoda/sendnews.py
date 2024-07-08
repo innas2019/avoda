@@ -19,7 +19,6 @@ def send_emailSMTP(subject, sender, recipients, text_body, html_body):
     msg = MIMEText(text_body+" https://avoda.site","plain",'utf-8')
     msg['Subject'] = subject
     msg['From'] = sender
-    #msg['To'] = ', '.join(recipients)
     msg['To'] = recipients
     psw=current_app.config["MAIL_PASSWORD"]
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
@@ -37,10 +36,13 @@ def send_news(manualy):
     l.info(m_str)
     count_mail=0
     for user in allUsers:
-      if user.settings != None and user.settings !="":
         try: 
-            filter = json.loads(user.settings)
-            query = create_query(filter, 1)
+            if user.settings != None and user.settings !="":
+                filter = json.loads(user.settings)
+                query = create_query(filter, 1)
+            else:
+                query = create_query("", 1)  
+            
             news = db.session.execute(query).scalars()
             count = len(news.all())
             if count > 0:
@@ -48,6 +50,7 @@ def send_news(manualy):
                 send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
+        
         except Exception as ex:
             l.error("SMTP error no " + ex.smtp_code)
             l.error("SMTP error no " + ex.smtp_error)

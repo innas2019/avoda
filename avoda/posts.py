@@ -214,16 +214,17 @@ def update_post(n_post):
 
 #create title str from map
 def show_title(flt):
-    s = "Выбранные за "  + flt["days"]  + " дней, "
+    s = "Выбранные за "  + flt["days"]  + " дней: "
     if flt["place"] != None:
-        s = s + allrefs[flt["place"]]+" "
+        s = s + allrefs[flt["place"]]+", "
     
-    if flt["occupations"] != None:
+    if len(flt["occupations"])>0:
+        s=s+"профессии: "
         for oc in flt["occupations"]:
-            s = s + allrefs[oc]+" "
+            s = s + allrefs[oc]+", "
     
-    return s  
-
+    return s[:len(s)-2]  
+    
 def validation(post):
     
     if post.id != 0:
@@ -249,58 +250,27 @@ def create_query(filter, days):
     query = db.session.query(Posts)
     filter_conditions = []
     oc_conditions = []
-    if filter["place"]!=None:
-      places=[filter["place"]]
-      place=int(filter["place"])
-      #hierarchy for place
-      if hierarchy.get(place) != None:
-        places.extend(hierarchy[place])
+    if filter != "":
+        if filter["place"]!= None:
+            places=[filter["place"]]
+            place=int(filter["place"])
+            #hierarchy for place
+            if hierarchy.get(place) != None:
+                places.extend(hierarchy[place])
+
+            filter_conditions.append(Posts.place.in_(places))
+    
+        #get occupations value
+        if filter["occupations"]!= None:
+            for o in filter["occupations"]:
+                s = '%"' + o + '"%' 
+                oc_conditions.append(Posts.occupations.like(s))
         
-      filter_conditions.append(Posts.place.in_(places))
-    
-    #get occupations value
-    if filter["occupations"]!=None:
-        for o in filter["occupations"]:
-            s = '%"' + o + '"%' 
-            oc_conditions.append(Posts.occupations.like(s))
-    
-        filter_conditions.append(or_(*oc_conditions))
-    
+            filter_conditions.append(or_(*oc_conditions))
+        
     filter_conditions.append(Posts.updated > delta)
     query = query.filter(and_(*filter_conditions)).order_by(Posts.updated.desc())
     return query
-
-# формирует запрос для списка постов и для рассылки. количество дней не берем из фильтра специально
-def create_query_old(filter, days):
-    global hierarchy
-    current_time = datetime.now()
-    delta = current_time - timedelta(days=days)
-    s = ""
-    #hierarchy
-    places=[filter["place"]]
-    place=int(filter["place"])
-    if hierarchy.get(place) != None:
-        places.extend(hierarchy[place])
-    
-    if filter["occupations"] != None:
-        s = '%"' + filter["occupations"] + '"%'  
-        return (
-            db.select(Posts)
-            .where(
-                Posts.place.in_(places),                
-                Posts.occupations.like(s),
-                Posts.updated > delta,
-            )
-            .order_by(Posts.updated.desc())
-        )
-    else:
-        return (
-            db.select(Posts)
-            .where(Posts.place.in_(places), 
-                   Posts.updated > delta)
-            .order_by(Posts.updated.desc())
-        )
-
 
 # формирует фильтр из формы
 def filters(flt):
@@ -329,37 +299,6 @@ def filters(flt):
     if "permanent" in flt.keys():
         a.update_settings(0,res)
     return res
-
-
-def filtersold(flt):
-    conditions = ""
-    len = ""
-    oc = ""
-    global count_days
-    count_days = flt["count_days"]
-    for f in flt.keys():
-        if str(f).find("len_") != -1:
-            if len == "":
-                len = "len like "
-            len_key = str(f).split("_")
-            len = len + "'%" + len_key[1] + "%'"
-            conditions = conditions + " and " + len
-        if str(f).find("oc") != -1:
-            if oc == "":
-                oc = "occupations like "
-            oc = oc + "'%" + flt[f] + "%'"
-            conditions = conditions + " and " + oc
-        if str(f) == "place" and flt[f] != "-":
-            place = "place =" + "'" + flt[f] + "'"
-            conditions = conditions + " and " + place
-        if str(f).find("sex") != -1:
-            sex = "sex= '" + flt[f] + "'"
-            conditions = conditions + " and " + sex
-        if str(f) == "permanent":
-            a.update_settings(session["filter"])
-
-    return conditions
-
 
 @bp.before_app_request
 def load_ref():

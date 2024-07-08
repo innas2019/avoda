@@ -86,6 +86,6 @@ def create_app():
             elif hour<16:
                 return random.randint(15, 25)
             else:
-                return random.randint(1, 5)
+                return random.randint(5, 9)
         return dict(mycounter=mycounter)
     return app
