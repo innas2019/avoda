@@ -121,8 +121,13 @@ def login():
             db.select(Users).where(Users.name == username)
         ).scalar()
 
-        if user is None or not check_password_hash(user.password, password):
+        if user is None:
             error = "пользователь не найден"
+            flash(error)
+            return render_template("title.html")
+        
+        elif not check_password_hash(user.password, password):
+            error = "пароль не подходит"
             flash(error)
             return render_template("title.html")
         else:

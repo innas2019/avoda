@@ -79,7 +79,7 @@
            {% if post.docs!=None %}
             {{render_icon('passport', 16) }}
             {% for os in post.docs %}
-            {{os}}
+            {{os}}&nbsp
             {% endfor %}
             {% endif %}
          </div>
@@ -96,7 +96,8 @@
       </div>
       <i class="bi-search"> </i>
       <div class="col">
-         <input type="button" class="btn btn-dark btn-sm" value="Распечатать" onclick="window.print()" />
+      <div class="col-md-4">
+         <input type="button" class="btn btn-dark btn-sm rounded-2" value="Распечатать" onclick="window.print()" />
 
       </div>
    </div>

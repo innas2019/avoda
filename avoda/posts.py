@@ -214,7 +214,9 @@ def update_post(n_post):
 
 #create title str from map
 def show_title(flt):
+  try:
     s = "Выбранные за "  + flt["days"]  + " дней: "
+    
     if flt["place"] != None:
         s = s + allrefs[flt["place"]]+", "
     
@@ -224,7 +226,8 @@ def show_title(flt):
             s = s + allrefs[oc]+", "
     
     return s[:len(s)-2]  
-    
+  except:
+      return "Выбранные"  
 def validation(post):
     
     if post.id != 0:
