@@ -92,7 +92,9 @@ def register():
 
         if error is None:
             user = Users(name=username, password=generate_password_hash(password))
-            user.email=email
+            if email!="":
+                user.issend=1
+                user.email=email
             db.session.add(user)
             db.session.commit()
             l = current_app.logger
