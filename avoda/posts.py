@@ -395,6 +395,7 @@ def list():
 #параметр all+name сбрасывает постоянный фильтр
 #params: ?id=12&...”
 def filter(p):
+  session["search"]=""
   url_params = request.args 
   id=""
   if 'id' in url_params: 
