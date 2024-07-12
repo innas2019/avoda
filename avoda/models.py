@@ -14,8 +14,11 @@ class Users(UserMixin,db.Model):
     isactive = db.Column(db.Integer())
     settings = db.Column(db.String(256))
     issend = db.Column(db.Integer())
+    mailsend = db.Column(db.DateTime())
+    created = db.Column(db.DateTime())
     roles = db.relationship("Role", secondary="user_role")
     addresses = db.relationship('Posts', lazy=True)
+
 
 
 # Define the Role data-model

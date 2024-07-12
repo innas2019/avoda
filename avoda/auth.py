@@ -1,14 +1,14 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for, session
+from flask import Blueprint, flash, redirect, render_template, request, url_for, session, current_app
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import check_password_hash, generate_password_hash
-from avoda import db
-from flask import current_app
+from avoda import db, managing as m
 from avoda.models import Users, Role
 import logging
 import json
-from avoda import managing as m
 from avoda.posts import Post, show_title
+from datetime import datetime, timezone
+
 
 def get_roles(user):
     session["roles"] = []
@@ -95,6 +95,8 @@ def register():
             if email!="":
                 user.issend=1
                 user.email=email
+            now = datetime.now(timezone.utc)
+            user.created=now
             db.session.add(user)
             db.session.commit()
             l = current_app.logger
