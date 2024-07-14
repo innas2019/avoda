@@ -62,7 +62,7 @@ class Refs(db.Model):
     levels = db.relationship('Refs')
     levelUp = db.Column(db.Integer,db.ForeignKey("refs.id"))
 
-class Mews(db.Model):
+class News(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     head = db.Column(db.String(100), nullable=False)
     text = db.Column(db.String(500))
