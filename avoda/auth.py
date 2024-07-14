@@ -6,7 +6,7 @@ from avoda import db, managing as m
 from avoda.models import Users, Role
 import logging
 import json
-from avoda.posts import Post, show_title
+from avoda.posts import Post, show_title, filters
 from datetime import datetime, timezone
 
 
@@ -257,11 +257,7 @@ def delete(id):
 def save_filter(id):
     if request.method == "POST":
         flt=request.form
-        n_post = Post("", "", "", "")
-        res = {}
-        res["occupations"] = n_post.get_id_from_value(flt["oc"])
-        res["place"] = n_post.get_id_from_value(flt["place"])
-        res["days"] = flt["days"]
+        res=filters(flt)
         user = db.session.get(Users, int(id))
         user.settings = json.dumps(res)
         db.session.commit()

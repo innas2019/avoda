@@ -299,8 +299,6 @@ def filters(flt):
         flash(error)
         res["days"] = "30"
     
-    if "permanent" in flt.keys():
-        a.update_settings(0,res)
     return res
 
 @bp.before_app_request
@@ -339,7 +337,9 @@ def list():
     # в случае если задан фильтр для заявок то метод POST
     if request.method == "POST":
         session["filter"] = filters(request.form)
-
+        if "permanent" in request.form.keys():
+            a.update_settings(0,session["filter"])
+    
     page = request.args.get(get_page_parameter(), type=int, default=1)
     limit = 10
     if session.get("filter") != "":

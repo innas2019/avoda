@@ -62,6 +62,13 @@ class Refs(db.Model):
     levels = db.relationship('Refs')
     levelUp = db.Column(db.Integer,db.ForeignKey("refs.id"))
 
+class Mews(db.Model):
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    head = db.Column(db.String(100), nullable=False)
+    text = db.Column(db.String(500))
+    link = db.Column(db.String(100))
+    created = db.Column(db.DateTime())
+
 @login.user_loader
 def load_user(id):
     return db.session.get(Users, int(id))  
