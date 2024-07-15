@@ -11,6 +11,7 @@ from email.mime.text import MIMEText
 from flask_login import login_required
 bp = Blueprint("mail", __name__)
 from datetime import datetime, timezone, timedelta
+import random
 
 
 def send_emailSMTP(subject, sender, recipients, text_body, html_body):
@@ -58,17 +59,30 @@ def send_news(manualy):
                 user.mailsend=current_time
 
         except Exception as ex:
-            l.error("SMTP error no " + ex.smtp_code)
-            l.error("SMTP error no " + ex.smtp_error)
             l.info("problem with send mail for " + user.name)
             if manualy:         
                 flash("проблема с рассылкой для "+user.name)
-    
+            continue
     db.session.commit()
     l.info("send mails "+ str(count_mail))  
     if manualy: 
         flash("Отправлено сообщений "+ str(count_mail))        
-    
+
+def mix_post():
+    count = db.session.query(Posts.id).count()
+    now = datetime.now(timezone.utc)
+    l = current_app.logger
+    for post in range(5):
+        id=random.randint(1, count)
+        try:
+            newpost = db.one_or_404(db.select(Posts).where(Posts.id==id))
+            newpost.updated=now
+            db.session.add(newpost)
+            l.info("post updated "+str(newpost.id))
+        except:
+            l.info("post id not exist "+str(id))  
+    db.session.commit()    
+
 @bp.route("/mail")
 @login_required
 def mail_from_app():
