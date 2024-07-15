@@ -27,7 +27,7 @@ def send_emailSMTP(subject, sender, recipients, text_body, html_body):
     
 def send_news(manualy):
     current_time = datetime.now()
-    delta = current_time - timedelta(days=1)
+    delta = current_time - timedelta(hours=20)
     res = db.session.execute(db.select(Users).where(Users.issend == 1,Users.email!=None)).scalars()
     l = current_app.logger
     l.setLevel(logging.INFO)
@@ -63,12 +63,13 @@ def send_news(manualy):
             if manualy:         
                 flash("проблема с рассылкой для "+user.name)
             continue
+    
     db.session.commit()
     l.info("send mails "+ str(count_mail))  
     if manualy: 
         flash("Отправлено сообщений "+ str(count_mail))        
 
-def mix_post():
+def mix_post(manualy):
     count = db.session.query(Posts.id).count()
     now = datetime.now(timezone.utc)
     l = current_app.logger
@@ -79,8 +80,12 @@ def mix_post():
             newpost.updated=now
             db.session.add(newpost)
             l.info("post updated "+str(newpost.id))
+            if manualy:
+                flash("post updated "+str(newpost.id))
         except:
-            l.info("post id not exist "+str(id))  
+            l.info("post id not exist "+str(id))
+            if manualy:
+                flash("post id not exist "+str(id))  
     db.session.commit()    
 
 @bp.route("/mail")
@@ -90,4 +95,13 @@ def mail_from_app():
       return redirect("/list")  
     
     send_news(True)
+    return redirect("/users/byname")
+
+@bp.route("/mix")
+@login_required
+def mix_from_app():
+    if session['roles'].count("adminisrators")==0:
+      return redirect("/list")  
+    
+    mix_post(True)
     return redirect("/users/byname")

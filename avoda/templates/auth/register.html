@@ -22,9 +22,12 @@
             {{ render_messages() }}
             <div class="row">
                   {% if session['name'] %}
-                  <a href="{{ url_for('posts.list') }}"> 
+                  <a href="{{ url_for('posts.list') }}">        
                  {{ render_icon('arrow-left', 18) }}к объявлениям</a>
-                  {% endif %}
+                 {% else %} 
+                 <a href="{{ url_for('auth.login') }}">        
+                  {{ render_icon('arrow-left', 18) }}на страницу логина</a>
+                 {% endif %}
               </div>
             <!-- logo+msg -->
             <div class="row mt-5 justify-content-center" style="min-height: 450px;">
