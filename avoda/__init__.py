@@ -55,7 +55,7 @@ def create_app():
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
     app.logger.info("Avoda start")
-
+    
     app.register_blueprint(error.bp)
     from avoda import auth
 
@@ -82,10 +82,11 @@ def create_app():
             if hour<4:
                 return random.randint(1, 5)
             elif hour<6:
-                return random.randint(5, 15)
+                return random.randint(10, 20)
             elif hour<16:
-                return random.randint(15, 35)
+                return random.randint(20, 45)
             else:
                 return random.randint(10, 15)
+        
         return dict(mycounter=mycounter)
     return app

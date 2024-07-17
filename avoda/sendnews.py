@@ -70,14 +70,17 @@ def send_news(manualy):
         flash("Отправлено сообщений "+ str(count_mail))        
 
 def mix_post(manualy):
-    count = db.session.query(Posts.id).count()
-    now = datetime.now(timezone.utc)
+    current_time = datetime.now()
+    delta = current_time - timedelta(days=15)
+    last = db.session.query(Posts.id).where(Posts.updated > delta).count()
+    all  = db.session.query(Posts.id).count()
     l = current_app.logger
+    l.info("mix from "+str(all-last)+" to "+str(all))
     for post in range(5):
-        id=random.randint(1, count)
+        id=random.randint(all-last, all)
         try:
             newpost = db.one_or_404(db.select(Posts).where(Posts.id==id))
-            newpost.updated=now
+            newpost.updated=current_time
             db.session.add(newpost)
             l.info("post updated "+str(newpost.id))
             if manualy:
