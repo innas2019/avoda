@@ -26,7 +26,7 @@
   <div class="col-md-3 mb-3">
     <form class="form-floating" action="/search" method="post">
 
-      <input type="text" class="form-control-sm" name="phone" placeholder="телефон" required/>
+      <input type="text" class="form-control-sm" name="phone" pattern=".{3,30}" title="длина от 3 символов" placeholder="телефон" required/>
          <input type="submit" class="btn btn-dark btn-sm rounded-2" data-bs-toggle="tooltip" data-bs-placement="top"
         title="поиск по номеру телефона" value="Найти"/>
 
