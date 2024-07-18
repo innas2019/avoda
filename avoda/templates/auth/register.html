@@ -122,17 +122,17 @@
                                           </div>
                                           <div class="row">
                                                 <div class="col"><input type="password" placeholder="пароль"
-                                                            class="form-control" name="password" pattern=".{8,}"
-                                                            title="длина не менее 8 символов" required> </div>
+                                                            class="form-control" name="password" pattern=".{8,20}"
+                                                            title="длина от 8 до 20 символов" required> </div>
                                           </div>
                                           <div class="row">
                                                 <div class="col"><input type="password" class="form-control"
-                                                            name="password2" placeholder="подтверждение пароля"
+                                                            name="password2" pattern=".{8,20}" placeholder="подтверждение пароля"
                                                             required> </div>
                                           </div>
                                           <div class="row">
                                                 <div class="col">
-                                                      <input type="email" placeholder="e-mail (опционально)" class="form-control" name="email" pattern="[^@\s]+@[^@\s]+">
+                                                      <input type="email" placeholder="e-mail " class="form-control" name="email" pattern="[^@\s]+@[^@\s]+">
                                                 </div>        
                                           </div>
                                           <div class="row mb-2 mt-2">

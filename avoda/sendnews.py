@@ -28,15 +28,20 @@ def send_emailSMTP(subject, sender, recipients, text_body, html_body):
 def send_news(manualy):
     current_time = datetime.now()
     delta = current_time - timedelta(hours=20)
-    res = db.session.execute(db.select(Users).where(Users.issend == 1,Users.email!=None)).scalars()
     l = current_app.logger
     l.setLevel(logging.INFO)
+    all_count = create_query("", 1).count()
+    count_mail=0
+    if all_count == 0:
+       l.info("no new posts") 
+       return
+    user_updated = []
+    res = db.session.execute(db.select(Users).where(Users.issend == 1,Users.email!=None)).scalars()
     allUsers = res.all()
     m_str = "found users for mail messaging: " + str(len(allUsers))
     if manualy: 
        flash("Найдено пользователей для рассылки "+ str(len(allUsers)))
     l.info(m_str)
-    count_mail=0
     for user in allUsers:
         #повторно за сутки не отправляем
         if user. mailsend != None:
@@ -45,25 +50,24 @@ def send_news(manualy):
         try: 
             if user.settings != None and user.settings !="":
                 filter = json.loads(user.settings)
-                query = create_query(filter, 1)
+                count = create_query(filter, 1).count()
+              
             else:
-                query = create_query("", 1)  
-            
-            news = db.session.execute(query).scalars()
-            count = len(news.all())
+                count = all_count
             if count > 0:
                 send_str = "по условиям Вашего поиска найдено " + str(count)+ " новых соискателей"
                 send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
-                user.mailsend=current_time
+                user_updated.append(user.id)
+                #user.mailsend=current_time
 
         except Exception as ex:
             l.info("problem with send mail for " + user.name)
             if manualy:         
                 flash("проблема с рассылкой для "+user.name)
             continue
-    
+    res = db.session.execute(db.update(Users).where(Users.id.in_(user_updated)).values(mailsend=current_time))
     db.session.commit()
     l.info("send mails "+ str(count_mail))  
     if manualy: 

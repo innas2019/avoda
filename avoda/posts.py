@@ -448,7 +448,7 @@ def filter(p):
 @login_required
 def create():
     global sex
-    if session['roles'].count("adminisrators")==0:
+    if session['roles'].count("create_post")==0:
       return redirect("/list")  
     
     if request.method == "POST":
@@ -489,7 +489,9 @@ def create():
 @bp.route("/post/<int:id>", methods=["GET", "POST"])
 @login_required
 def post(id):
-
+    if session['roles'].count("create_post")==0:
+      return redirect("/list")  
+    
     if request.method == "POST":
         form = request.form
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
@@ -575,6 +577,9 @@ def search():
 @bp.route("/del/<int:id>")
 @login_required
 def delete(id):
+    if session['roles'].count("create_post")==0:
+       return redirect("/list")
+      
     p = db.one_or_404(db.select(Posts).where(Posts.id == id))
     value = p.phone
     db.session.delete(p)
