@@ -68,6 +68,8 @@ class News(db.Model):
     text = db.Column(db.String(500))
     link = db.Column(db.String(100))
     created = db.Column(db.DateTime())
+    mailsend = db.Column(db.DateTime())
+  
 
 @login.user_loader
 def load_user(id):

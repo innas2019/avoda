@@ -24,7 +24,8 @@ def send_emailSMTP(subject, sender, recipients, text_body, html_body):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
        smtp_server.login(sender, psw)
        smtp_server.sendmail(sender, recipients, msg.as_string())
-    
+
+#days -  за сколько дней искать объявления   
 def send_news(manualy,days):
     current_time = datetime.now()
     delta = current_time - timedelta(hours=20)
@@ -50,10 +51,11 @@ def send_news(manualy,days):
         try: 
             if user.settings != None and user.settings !="":
                 filter = json.loads(user.settings)
-                count = create_query(filter, 1).count()
+                count = create_query(filter, days).count()
               
             else:
                 count = all_count
+            
             if count > 0:
                 send_str = "по условиям Вашего поиска найдено " + str(count)+ " новых соискателей"
                 send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
@@ -68,13 +70,12 @@ def send_news(manualy,days):
                 flash("проблема с рассылкой для "+user.name)
             continue
         
-        finally:
-            res = db.session.execute(db.update(Users).where(Users.id.in_(user_updated)).values(mailsend=current_time))
-            db.session.commit()
-            l.info(user_updated)
-            l.info("send mails "+ str(count_mail))  
-            if manualy: 
-                flash("Отправлено сообщений "+ str(count_mail))        
+    res = db.session.execute(db.update(Users).where(Users.id.in_(user_updated)).values(mailsend=current_time))
+    db.session.commit()
+    l.info(user_updated)
+    l.info("send mails "+ str(count_mail))  
+    if manualy: 
+        flash("Отправлено сообщений "+ str(count_mail))        
 
 def mix_post(manualy):
     current_time = datetime.now()
