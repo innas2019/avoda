@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+      <div class="col-md-7 mt-4 bg-secondary-subtle">
+            <div class="row text-dark fs-5 fw-semibold font-family-Inter m-0 px-1 py-1">
+                  <div class="col-md-2"> {{ render_icon('info-circle', 32) }}</div>
+                  <div class="col-md-8 text-dark fs-4 fw-semibold font-family-Inter">
+                        О системе
+                  </div>
+                  <div class="col-md-8 text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                        <a class="link-underline-primary" href="https://youtu.be/mQn1ngD5oMI" target="_blank">
+                              Перед началом работы с системой посмотрите обучающее видео </a> 
+                  </div>
+                  <div class="col-md-10 mt-3 text-dark fs-5 ">
+                        <nbsp class="fw-semibold font-family-Inter">Уважаемый пользователь!
+                              База обновляется каждый день и содержит "холодные" и "теплые" контакты.
+                              Обращайте внимание на дату размещения! </nbsp>
+
+                  </div>
+            </div>
+            <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                  Для просмотра объявлений перейдите на
+                  {% if session['name'] %}
+                  <a class="link-underline-primary fs-6 fw-normal font-family-Inter"
+                        href="{{ url_for('posts.list') }}">поиск
+                        сотрудников</a>
+                  {% else %}
+                  <b>поиск сотрудников</b>
+                  {% endif %}
+            </p>
+            <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                  Для настройки рассылки сообщений о вакансиях перейдите в
+                  {% if session['name'] %}
+                  <a class="link-underline-primary fs-6 fw-normal font-family-Inter"
+                        href="{{ url_for('auth.cabinet') }}">кабинет</a>
+                  {% else %}
+                  <b>кабинет</b>
+                  {% endif %}
+            </p>
+            <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                  Для настройки фильтров для показа и рассылки сообщений перейдите в
+                  {% if session['name'] %}
+                  <a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="/filter/set">фильтр</a>
+                  {% else %}
+                  <b>фильтр</b>
+                  {% endif %}
+            </p>
+            <p class="text-dark fs-5  font-family-Inter m-0 px-3 py-2">
+                  Для того, чтобы найти объявление по телефону, воспользуйтесь кнопкой <b>поиск</b>. Поиск
+                  работает по всем объявлениям, фильтр не учитывается. Нажмите на кнопку <b>выход из поиска</b>
+                  для показа всех объявлений.
+            </p>
+            <div class="row d-flex m-0 px-3 ">
+                  <div class="col-md-6">
+                        <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                              Связаться с нами: тел 053-640-5871 </span>
+                  </div>
+                  <div class="col-md-6">
+                        <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                              e-mail <a href="mailto: avoda.site.il@gmail.com">avoda.site.il@gmail.com</a>
+                        </span>
+                  </div>
+            </div>
+      </div>
+</div>
+{% endblock %}

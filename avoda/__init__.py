@@ -73,6 +73,9 @@ def create_app():
 
     app.register_blueprint(sendnews.bp)
     
+    from avoda import info
+
+    app.register_blueprint(info.bp)
     
     @app.context_processor
     def utility_processor():
@@ -84,9 +87,9 @@ def create_app():
             elif hour<6:
                 return random.randint(10, 20)
             elif hour<16:
-                return random.randint(20, 45)
+                return random.randint(30, 50)
             else:
-                return random.randint(10, 15)
+                return random.randint(15, 30)
         
         return dict(mycounter=mycounter)
     return app
