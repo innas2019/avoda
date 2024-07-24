@@ -212,7 +212,7 @@ def list_users(directions):
     else: 
         query = db.select(Users).order_by(Users.name)
     # читаем по страницам
-    limit = 10
+    limit = 20
     if id == 0:
         u = Users(name="")
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -220,7 +220,7 @@ def list_users(directions):
     all=ps.items
     pagination = Pagination(
         page=page,
-        page_per=limit,
+        per_page=limit,
         total=ps.total,
         display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
         record_name="записей",

@@ -33,9 +33,11 @@ def send_news(manualy,days):
     l.setLevel(logging.INFO)
     all_count = create_query("", days).count()
     count_mail=0
+    m_str="new posts:"+str(all_count)
+    l.info(m_str) 
     if all_count == 0:
-       l.info("no new posts") 
-       return
+        return
+    
     user_updated = []
     res = db.session.execute(db.select(Users).where(Users.issend == 1,Users.email!=None)).scalars()
     allUsers = res.all()
@@ -68,6 +70,8 @@ def send_news(manualy,days):
             l.info("problem with send mail for " + user.name)
             if manualy:         
                 flash("проблема с рассылкой для "+user.name)
+            res = db.session.execute(db.update(Users).where(Users.id.in_(user_updated)).values(mailsend=current_time))
+            db.session.commit()
             continue
         
     res = db.session.execute(db.update(Users).where(Users.id.in_(user_updated)).values(mailsend=current_time))

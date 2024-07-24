@@ -65,7 +65,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.cabinet') }}"> Кабинет</a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('info.show') }}">Справка</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a>
                         </li>
@@ -76,9 +78,7 @@
                         </li>
                         {% endif %}
 
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ url_for('info.show') }}">Справка</a>
-                        </li>
+                        
                     </ui>
 
                 </div>

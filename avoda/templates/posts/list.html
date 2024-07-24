@@ -70,14 +70,16 @@
         <td>
           {{ refs[post["place"]]}}</td>
         <td>
+          <!-- <span class="d-md-none"> </span> -->
+          <span class="text fw-semibold"> 
+          {{ show_in_view(post["occupations"]) }}
+        </span> 
           <span class="d-none d-md-block">{{ post["text"][:200] }}
             {% if post["text"]|length > 200 %}
             ...
             {% endif %}
           </span>
-          <span class="d-md-none">
-            {{ show_in_view(post["occupations"]) }}
-          </span>
+         
         </td>
 
 

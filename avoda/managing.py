@@ -73,7 +73,7 @@ def refs(id):
     
     query = db.select(Refs).order_by(Refs.name)
     # читаем по страницам
-    limit = 10
+    limit = 15
     if id == 0:
         ref = Refs(name="", value="")
     page = request.args.get(get_page_parameter(), type=int, default=1)
@@ -81,12 +81,12 @@ def refs(id):
     all=ps.items
     pagination = Pagination(
         page=page,
-        page_per=limit,
+        per_page=limit,
         total=ps.total,
         display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
         record_name="записей",
-        prev_label="назад",
-        next_label="вперед",
+        prev_label="<<",
+        next_label=">>",
         bs_version=5,
     )
     if id == 0:
