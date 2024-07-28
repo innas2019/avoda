@@ -27,6 +27,7 @@ def send_emailSMTP(subject, sender, recipients, text_body, html_body):
 
 #days -  за сколько дней искать объявления   
 def send_news(manualy,days):
+    
     current_time = datetime.now()
     delta = current_time - timedelta(hours=20)
     l = current_app.logger
@@ -64,8 +65,7 @@ def send_news(manualy,days):
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
                 user_updated.append(user.id)
-                #user.mailsend=current_time
-
+    
         except Exception as ex:
             l.info("problem with send mail for " + user.name)
             if manualy:         
@@ -108,7 +108,6 @@ def mix_post(manualy):
 def mail_from_app():
     if session['roles'].count("adminisrators")==0:
       return redirect("/list")  
-    
     send_news(True,1)
     return redirect("/users/byname")
 

@@ -247,7 +247,12 @@ def validation(post):
 
 # формирует запрос из фильтра для списка постов и для рассылки.
 def create_query(filter, days):    
+    global allrefs
     global hierarchy
+    if len(hierarchy.keys())==0:
+          allrefs = m.get_refs()
+          hierarchy=m.get_hier_for_search()
+        
     current_time = datetime.now()
     delta = current_time - timedelta(days=days)
     query = db.session.query(Posts)
