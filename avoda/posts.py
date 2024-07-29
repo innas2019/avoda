@@ -39,6 +39,7 @@ class Post:
         self.sex = ""
         self.id = 0
         self.docs = []
+        self.expirience = ""
 
     # функция возвращает id справочника по его значению
     def get_id_from_value(self, value):
@@ -88,6 +89,9 @@ class Post:
                 self.docs.append(map[f])
             elif str(f).find("contacts") != -1:
                 self.contacts=map[f]  
+            elif str(f).find("expirience") != -1:
+                self.expirience=map[f]  
+    
 
     def get_name_by_id(self, ids):
         new_val = []
@@ -120,6 +124,8 @@ class Post:
         self.updated = p.updated
         if p.place != None and p.place != "":
             self.place = allrefs[p.place]
+        if p.expirience != None and p.expirience != "":
+            self.expirience = p.expirience  
 
     def transform_len_to_id(self):
         for x in self.len.keys():
@@ -170,7 +176,7 @@ def create_post(n_post):
         phone=n_post.phone,
         text=n_post.text,
         contacts=n_post.contacts,
-        len=json.dumps(n_post.transform_len_to_id()),
+        len=json.dumps(n_post.transform_len_to_id())
     )
     if n_post.occupations != "":
         new_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
@@ -180,6 +186,9 @@ def create_post(n_post):
         new_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
     if n_post.sex != "":
         new_post.sex = sex.index(n_post.sex)
+    if n_post.expirience != "":
+        new_post.expirience = n_post.expirience   
+    
     db.session.add(new_post)
     db.session.commit()
     flash(n_post.name + " добавлено")
@@ -207,7 +216,9 @@ def update_post(n_post):
         db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
     if n_post.sex != "":
         db_post.sex = sex.index(n_post.sex)
-
+    if n_post.expirience != "":
+        db_post.expirience = n_post.expirience   
+    
     db.session.commit()
     flash(n_post.name + " изменено")
     return "ok"

@@ -51,6 +51,7 @@ class Posts(db.Model):
     updated = db.Column(db.DateTime())
     docs = db.Column(db.String(50))
     contacts = db.Column(db.String(100))
+    expirience = db.Column(db.String(40))
     # Relationship
     user = db.relationship('Users')
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))

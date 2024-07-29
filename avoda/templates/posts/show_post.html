@@ -3,13 +3,15 @@
 <div class="container-md">
    <div class="px-6 mt-3">
       {% if session['page'] %}
-      <a class="link-underline-primary font-family-Inter" href="/list?page={{session['page']}}">   {{ render_icon('arrow-left', 18) }} Вернуться к списку</a>
+      <a class="link-underline-primary font-family-Inter" href="/list?page={{session['page']}}"> {{
+         render_icon('arrow-left', 18) }} Вернуться к списку</a>
       {% else %}
-      <a class="link-underline-primary font-family-Inter" href="/list">   {{ render_icon('arrow-left', 18) }}Вернуться на страницу </a>
+      <a class="link-underline-primary font-family-Inter" href="/list"> {{ render_icon('arrow-left', 18) }}Вернуться на
+         страницу </a>
       {% endif %}
    </div>
    <div class="row mt-3">
-      <p class="font-family-Inter  opacity-50" >
+      <p class="font-family-Inter  opacity-50">
          Опубликовано {{days}} дней назад {{post["updated"]}}</p>
    </div>
    <div class="row">
@@ -27,10 +29,10 @@
       <div class="row">
          <div class="col-md-2 opacity-50"> Ссылки: </div>
          <div class="col-md-9">{{render_icon('facebook', 16) }}
-            {% if post["contacts"]!="" %} 
-            <a class="link-underline-primary" href="{{ post["contacts"]}}" target="_blank">  {{ post["contacts"]}} </a>
+            {% if post["contacts"]!="" %}
+            <a class="link-underline-primary" href="{{ post[" contacts"]}}" target="_blank"> {{ post["contacts"]}} </a>
             {% endif %}
-     
+
          </div>
       </div>
       {% endif %}
@@ -39,7 +41,7 @@
             <div class="opacity-50"> Занятость:</div>
          </div>
          <div class="col-md-9">
-         {% if post["o_kind"]!=None %}
+            {% if post["o_kind"]!=None %}
             {{render_icon('clock', 16) }}
             {% for o in post["o_kind"] %}
             {{o}}
@@ -50,10 +52,10 @@
       </div>
       <div class="row">
          <div class="col-md-2">
-           <span class="opacity-50"> Категория:</span>
-         </div> 
+            <span class="opacity-50"> Категория:</span>
+         </div>
          <div class="col-md-9">
-         {% if post.occupations!=None %}
+            {% if post.occupations!=None %}
             {{render_icon('gear-fill', 16) }}
             {% for os in post.occupations %}
             <span class="badge text-bg-secondary">{{os}}</span>
@@ -61,41 +63,48 @@
             {% endif %}
          </div>
       </div>
-      <div class="row">
-         <div class="col-md-2">
-            <span class="opacity-50"> Языки:</span>
-         </div>   
-         <div class="col-md-9">
-          {{render_icon('globe', 16) }}
-           {{ post.get_len()}}
-         </div>
+      {% if post.expirience!="" %}
+      <div class="col-md-2 opacity-50"> Опыт, лет: </div>
+      <div class="col-md-9"> {{post.expirience}} </div>
 
+
+   </div>
+   {% endif %}
+   <div class="row">
+      <div class="col-md-2">
+         <span class="opacity-50"> Языки:</span>
       </div>
-      <div class="row">
-         <div class="col-md-2">
-           <span class="opacity-50"> Документы:</span>
-         </div>
-         <div class="col-md-9">
-           {% if post.docs!=None %}
-            {{render_icon('passport', 16) }}
-            {% for os in post.docs %}
-            {{os}}&nbsp
-            {% endfor %}
-            {% endif %}
-         </div>
+      <div class="col-md-9">
+         {{render_icon('globe', 16) }}
+         {{ post.get_len()}}
       </div>
-      <div class="row">
-         <div class="col">
-            <span class="opacity-50"> Объявление:</span>
-            <div>
-               <div class="col width=70%">
-                  {{ post["text"] }}
-               </div>
+
+   </div>
+   <div class="row">
+      <div class="col-md-2">
+         <span class="opacity-50"> Документы:</span>
+      </div>
+      <div class="col-md-9">
+         {% if post.docs!=None %}
+         {{render_icon('passport', 16) }}
+         {% for os in post.docs %}
+         {{os}}&nbsp
+         {% endfor %}
+         {% endif %}
+      </div>
+   </div>
+   <div class="row">
+      <div class="col">
+         <span class="opacity-50"> Объявление:</span>
+         <div>
+            <div class="col width=70%">
+               {{ post["text"] }}
             </div>
          </div>
       </div>
-      <i class="bi-search"> </i>
-      <div class="col">
+   </div>
+   <i class="bi-search"> </i>
+   <div class="col">
       <div class="col-md-4">
          <input type="button" class="btn btn-dark btn-sm rounded-2" value="Распечатать" onclick="window.print()" />
 
@@ -112,7 +121,7 @@
          <input type="button" class="btn btn-primary rounded-2" value="Назад"
             onclick="window.location.href='/show/{{prev}}';" />
          {% endif %}
-        {% if next!=0 %}
+         {% if next!=0 %}
          <input type="button" class="btn btn-primary rounded-2" value="Вперед"
             onclick="window.location.href='/show/{{next}}';" />
          {% endif %}
