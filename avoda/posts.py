@@ -237,8 +237,8 @@ def show_title(flt):
             s = s + allrefs[oc]+", "
     s = s[:len(s)-2]
 
-    if flt["has_phone"] != None:
-        s = s + " Телефон указан"
+    #if flt["has_phone"] != None:
+        #s = s + " Телефон указан"
     return s 
   
   except:
@@ -291,8 +291,8 @@ def create_query(filter, days):
         
             filter_conditions.append(or_(*oc_conditions))
 
-        if filter["has_phone"]!= None:
-            filter_conditions.append(Posts.phone!="")    
+        #if filter["has_phone"]!= None:
+            #filter_conditions.append(Posts.phone!="")    
         
     filter_conditions.append(Posts.updated > delta)
     query = query.filter(and_(*filter_conditions)).order_by(Posts.updated.desc())
