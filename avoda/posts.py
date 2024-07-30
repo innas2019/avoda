@@ -236,9 +236,9 @@ def show_title(flt):
         for oc in flt["occupations"]:
             s = s + allrefs[oc]+", "
     s = s[:len(s)-2]
-
-    #if flt["has_phone"] != None:
-        #s = s + " Телефон указан"
+    
+    if str(flt.keys()).find("has_phone") != -1:
+        s = s + " Телефон указан"
     return s 
   
   except:
@@ -290,9 +290,9 @@ def create_query(filter, days):
                 oc_conditions.append(Posts.occupations.like(s))
         
             filter_conditions.append(or_(*oc_conditions))
-
-        #if filter["has_phone"]!= None:
-            #filter_conditions.append(Posts.phone!="")    
+     
+        if str(filter.keys()).find("has_phone") != -1:
+            filter_conditions.append(Posts.phone!="")    
         
     filter_conditions.append(Posts.updated > delta)
     query = query.filter(and_(*filter_conditions)).order_by(Posts.updated.desc())
