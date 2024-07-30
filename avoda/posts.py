@@ -235,8 +235,12 @@ def show_title(flt):
         s=s+"профессии: "
         for oc in flt["occupations"]:
             s = s + allrefs[oc]+", "
-    
-    return s[:len(s)-2]  
+    s = s[:len(s)-2]
+
+    if flt["has_phone"] != None:
+        s = s + " Телефон указан"
+    return s 
+  
   except:
       return "Выбранные"  
 def validation(post):
@@ -286,6 +290,9 @@ def create_query(filter, days):
                 oc_conditions.append(Posts.occupations.like(s))
         
             filter_conditions.append(or_(*oc_conditions))
+
+        if filter["has_phone"]!= None:
+            filter_conditions.append(Posts.phone!="")    
         
     filter_conditions.append(Posts.updated > delta)
     query = query.filter(and_(*filter_conditions)).order_by(Posts.updated.desc())
@@ -315,6 +322,9 @@ def filters(flt):
         flash(error)
         res["days"] = "30"
     
+    if str(flt.keys()).find("has_phone") != -1:
+        res["has_phone"]=1
+   
     return res
 
 @bp.before_app_request

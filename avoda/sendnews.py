@@ -15,11 +15,16 @@ import random
 
 
 def send_emailSMTP(subject, sender, recipients, text_body, html_body):
-
-    msg = MIMEText(text_body+" https://avoda.site","plain",'utf-8')
+    head= "<html>  <body> "+text_body+" <p>Для просмотра объявений перейдите на https://avoda.site"
+    end="""<p>Вы получаете эту рассылку потому, что зарегистрировались на нашем сайте. <p>
+    Чтобы отписаться от рассылки перейдите: https://avoda.site/cabinet </p>
+    <p>  For unsubscribe click here: https://avoda.site/cabinet </p>    </body></html>"""
+    #msg = MIMEText(text_body+" https://avoda.site","plain",'utf-8')
+    msg = MIMEText(head+end, "html",'utf-8')
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = recipients
+    
     psw=current_app.config["MAIL_PASSWORD"]
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
        smtp_server.login(sender, psw)
@@ -60,7 +65,7 @@ def send_news(manualy,days):
                 count = all_count
             
             if count > 0:
-                send_str = "по условиям Вашего поиска найдено " + str(count)+ " новых соискателей"
+                send_str = "По условиям Вашего поиска найдено " + str(count)+ " новых соискателей."
                 send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
