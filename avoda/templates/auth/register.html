@@ -30,7 +30,7 @@
                  {% endif %}
               </div>
             <!-- logo+msg -->
-            <div class="row mt-5 justify-content-center" style="min-height: 450px;">
+            <div class="row mt-2 justify-content-center" style="min-height: 430px;">
                   <div class="col-md-3 mt-3 py-3">
                         <div class="row justify-content-end">
                               <div class="col-md-8 justify-content-end d-flex">
@@ -48,7 +48,7 @@
                         </div>
                   </div>
                   {% if info %}
-                  <div class="col-md-7 mt-4 bg-secondary-subtle">
+                  <div class="col-md-8 px-3 mt-4 bg-secondary-subtle">
                         <div class="row text-dark fs-5 fw-semibold font-family-Inter m-0 px-1 py-1">
                               <div class="col-md-2"> {{ render_icon('info-circle', 32) }}</div>
                               <div class="col-md-8 text-dark fs-4 fw-semibold font-family-Inter">
@@ -153,13 +153,32 @@
                   </div>
                   {% endif %}
             </div>
+         <!--counter-->
+         <div class="row mt-1 justify-content-end py-1 mb-2">
+            <div class="col-md-2">
+               <table class="table-bordered">
+                  <tbody>
+                     <tr>
+                        <th scope="col" class="text-primary font-family-Inter" style="font-size: 0.75rem;">
+                           <span class="px-1 py-1">Сейчас на сайте</span>
+                        </th>
+                     </tr>
+                     <tr>
+                        <td class="text-primary font-family-Inter" style="font-size: 0.75rem;">
+                           <span class="px-1 py-1">{{mycounter()}} пользователей</span>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
             <!-- banner -->
             <div class="row mt-5">
                   <img src={{ url_for('static', filename='Banner2X.png' ) }}>
             </div>
             <div class="row">
                   <span class="text-end text-dark  font-family-Inter" style="font-size: 0.75rem;">
-                        ver 1.5 Hatul Madan </span>
+                        ver 1.6 Hatul Madan </span>
             </div>
       </div>
 

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+      <a href="{{ url_for('posts.list') }}"> 
+      {{ render_icon('arrow-left', 18) }}к объявлениям</a>
+   </div>
+<div class="row mt-5">
+      <div class="col-md-3 text fs-4 fw-semibold font-family-Inter">
+            {{ title }}
+      </div>
+      <div class="col-md-2">
+            {{render_icon("funnel-fill",18)}}
+      </div>
+</div>
+<div class="row">
+    <form action="/create-news" method="post">       
+        <div class="row">
+                        <div class="col-md-3 form-text">За сколько дней показывать объявления: 
+                        </div>
+                       <div class="col-md-2">
+                             <input type="number" class="form-control" name="days" value=30 
+                             required>
+                        </div>
+        </div>
+        <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Ok" title="Сохранить" />
+        </div>
+    </form>
+</div>
+
+{% endblock %}

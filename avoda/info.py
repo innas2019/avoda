@@ -11,6 +11,9 @@ bp = Blueprint("info", __name__)
 @bp.route("/showinfo")
 
 def show():
-   
-    return  render_template("info.html")
+    res = db.session.execute(db.select(News).where(News.priority!=None)).scalars()
+    pNews = res.all()
+    res = db.session.execute(db.select(News).where(News.priority==None)).scalars()
+    allNews = res.all()
+    return  render_template("/news/info.html", pNews=pNews,all=allNews)
 

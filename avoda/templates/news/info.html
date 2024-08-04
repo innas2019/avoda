@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div w3-include-html="templates/news/in1.html"></div>
+<div class="row mt-4">
+      <div class="col-md-2"> {{ render_icon('info-circle', 32) }}</div>
+      <div class="col-md-8 text-dark fs-4 fw-semibold font-family-Inter">
+            <a class="link-underline-primary" href="{{ url_for('auth.info') }}">   О системе -></a>
+          
+      </div>
+    
+      <!-- permanent news -->
+      <div class="row mt-4">
+            <div class="col-md-2"> {{ render_icon('question-circle', 32) }}</div>
+            <div class="col-md-8 text-primary fw-semibold fs-4 font-family-Inter">      Вопросы и ответы </div>
+      </div>
+      {% for n in pNews %}
+      <div class="row">
+            <div class="col-md-10 text fs-5 fw-semibold font-family-Inter">
+                 Вопрос:&nbsp {{ n["head"] }}
+            </div>
+            <div class="col-md-10 text font-family-Inter">
+                  Ответ:&nbsp {{ n["text"] }}
+            </div>
+      </div>
+      {% endfor %}
+</div>
+<div class="row mt-4 ">
+      <div class="col-md-2"> {{ render_icon('exclamation-circle', 32) }}</div>
+      <div class="col-md-8 text-primary fw-semibold fs-4 font-family-Inter">      Новости и объявления </div>
+</div>
+{% for n in all %}
+<div class="row">
+      <div class="col-md-10 text fs-5 fw-semibold font-family-Inter">
+            {{ n["head"] }}
+      </div>
+      <div class="col-md-10 text font-family-Inter">
+             {{ n["text"] }}
+      </div>
+</div>
+{% endfor %}
+{% endblock %}

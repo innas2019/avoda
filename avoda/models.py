@@ -70,6 +70,7 @@ class News(db.Model):
     link = db.Column(db.String(100))
     created = db.Column(db.DateTime())
     mailsend = db.Column(db.DateTime())
+    priority = db.Column(db.Integer)
   
 
 @login.user_loader
