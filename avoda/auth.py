@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import check_password_hash, generate_password_hash
-from avoda import db, managing as m
+from avoda import db, managing as m, info as n
 from avoda.models import Users, Role
 import logging
 import json
@@ -60,7 +60,8 @@ user = None
 @bp.route("/")
 @bp.route("/title")
 def title():
-    return render_template("title.html")
+    news=n.show_in_title()
+    return render_template("title.html",n=news)
 
 
 @bp.route("/register", methods=["GET", "POST"])

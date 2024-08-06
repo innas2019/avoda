@@ -20,7 +20,7 @@
 
       {{ render_messages() }}
       <!-- logo+login+about -->
-      <div class="row justify-content-center mt-3 " style="min-height: 430px;">
+      <div class="row justify-content-center mt-3 " style="min-height: 400px;">
          <!-- logo+text -->
          <div class="col-md-3 py-3">
             <div class="row justify-content-end">
@@ -134,8 +134,21 @@
          </div>
 
       </div>
-         <!--counter-->
-         <div class="row mt-3 justify-content-end py-1 mb-2">
+      <div class="row bg-secondary-subtle justify-content-center mt-1 px-3 py-2">
+         <div class="col-md-2 text-center fs-5 fw-semibold font-family-Inter">
+        Наши новости:  </div>
+        <div class="col-md-8 text-center fs-5 fw-semibold font-family-Inter">
+            {{n["head"]}}
+            <p><span class="fs-6">{{n["text"]}}</span>
+
+        </div>
+         <div class="col-md-2">
+               <a class="link-underline-primary text-end" href="{{ url_for('info.show') }}" target="_blank">
+                  больше новостей -></a>
+         </div>
+      </div>
+      <!--counter-->
+      <div class="row mt-3 justify-content-end py-1 mb-2">
             <div class="col-md-2">
                <table class="table-bordered">
                   <tbody>
@@ -152,7 +165,7 @@
                   </tbody>
                </table>
             </div>
-         </div>
+      </div>
       <!-- banner -->
       <div class="row mt-1">
         

@@ -8,12 +8,17 @@ import json
 from flask_login import login_required
 bp = Blueprint("info", __name__)
 
-@bp.route("/showinfo")
+def show_in_title():
+  res= db.session.execute(db.select(News).order_by(News.created.desc())).scalars()
+  allNews = res.all()
 
+  return allNews[0]
+
+@bp.route("/showinfo")
 def show():
     res = db.session.execute(db.select(News).where(News.priority!=None)).scalars()
     pNews = res.all()
-    res = db.session.execute(db.select(News).where(News.priority==None)).scalars()
+    res = db.session.execute(db.select(News).where(News.priority==None).order_by(News.created.desc())).scalars()
     allNews = res.all()
     return  render_template("/news/info.html", pNews=pNews,all=allNews)
 

@@ -21,7 +21,7 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY="fdjlfgjfcafmehtrjq",
         BOOTSTRAP_SERVE_LOCAL=True,
-        SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL") or "sqlite:///avoda.db",
+        #SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL") or "sqlite:///avoda.db",
         # BOOTSTRAP_BOOTSWATCH_THEME="Cosmo"
         POSTS_PER_PAGE=10,
         SESSION_PERMANENT=False,
@@ -32,7 +32,7 @@ def create_app():
         MAIL_USERNAME = os.environ.get("MAIL_USERNAME"),
         MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     )
-
+    app.config.from_pyfile('config.py')
     # initialize the app with the extension
     db.init_app(app)
     migrate = Migrate(app, db)
