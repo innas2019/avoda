@@ -72,7 +72,16 @@ class News(db.Model):
     mailsend = db.Column(db.DateTime())
     priority = db.Column(db.Integer)
   
-
+class Advt(db.Model):
+    __tablename__ = "advt"
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(40), nullable=False)
+    phone = db.Column(db.String(40))
+    contacts = db.Column(db.String(100))
+    text = db.Column(db.String(500))
+    created = db.Column(db.DateTime())
+    priority = db.Column(db.Integer)
+   
 @login.user_loader
 def load_user(id):
     return db.session.get(Users, int(id))  

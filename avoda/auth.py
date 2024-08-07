@@ -158,7 +158,8 @@ def login():
             return redirect(url_for("posts.list"))
 
     else:
-        return render_template("title.html")
+        news=n.show_in_title()
+        return render_template("title.html",n=news)
 
 
 @bp.route("/logout")

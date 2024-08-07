@@ -101,6 +101,11 @@
         <footer class="container-md">
             {% block footer %}
             <div class="row justify-content-end py-1 mb-2">
+                <div class="col-md-8 text-center fs-5 fw-semibold font-family-Inter">
+                  {% if adv!=undefined %}
+                    {{adv}}
+                    {% endif %}
+                </div>
                 <div class="col-md-2">
                     <table class="table-bordered">
                         <tbody>

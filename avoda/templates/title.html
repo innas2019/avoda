@@ -138,9 +138,10 @@
          <div class="col-md-2 text-center fs-5 fw-semibold font-family-Inter">
         Наши новости:  </div>
         <div class="col-md-8 text-center fs-5 fw-semibold font-family-Inter">
-            {{n["head"]}}
+         {% if n!= undefined %}  
+          {{n["head"]}}
             <p><span class="fs-6">{{n["text"]}}</span>
-
+         {% endif %}      
         </div>
          <div class="col-md-2">
                <a class="link-underline-primary text-end" href="{{ url_for('info.show') }}" target="_blank">
