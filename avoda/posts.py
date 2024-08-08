@@ -43,7 +43,6 @@ class Post:
 
     # функция возвращает id справочника по его значению
     def get_id_from_value(self, value):
-        print(value)
         if isinstance(value, str):
             for x in allrefs:
                 if allrefs[x] == value:
@@ -479,7 +478,6 @@ def create():
     
     if request.method == "POST":
         form = request.form
-        print(form["place"])
         n_post = Post(form["name"], form["place"], form["phone"], form["text"])
         n_post.get_from_form(form)
         if validation(n_post):
