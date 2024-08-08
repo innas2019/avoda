@@ -5,6 +5,7 @@ from avoda import db
 from avoda.models import Posts, Users
 from avoda import managing as m
 from avoda import auth as a
+from avoda import info as i
 from datetime import datetime, timezone, timedelta
 import json
 from flask import jsonify
@@ -404,12 +405,13 @@ def list():
         next_label=">>",
         bs_version=5,
     )
+    adv=i.show_adv()
     return render_template(
         "posts/list.html",
         pagination=pagination,
         title=title_str,
         posts=ps.items,
-        refs=allrefs,
+        refs=allrefs,adv=adv
     )
 
 
@@ -574,6 +576,7 @@ def show_post(id):
     next = 0
     if pos < len(s_posts):
         next = id + 1
+    adv=i.show_adv()
     return render_template(
         "posts/show_post.html",
         post=p,
@@ -582,7 +585,7 @@ def show_post(id):
         next=next,
         current=pos,
         last=len(s_posts),
-        sex=sex,
+        sex=sex, adv=adv
     )
 
 
