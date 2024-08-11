@@ -7,6 +7,7 @@ import logging
 import json
 from flask_login import login_required
 from flask_paginate import Pagination, get_page_parameter
+from datetime import datetime, timezone
 
 bp = Blueprint("info", __name__)
 
@@ -30,13 +31,47 @@ def show():
     allNews = res.all()
     return  render_template("/news/info.html", pNews=pNews,all=allNews)
 
-@bp.route("/advert/create")
-def advert_create():
-   return  render_template("/news/advt.html")
+@bp.route("/advert/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def advert_create(id):
+  if session['roles'].count("adminisrators")==0:
+      return redirect("/advert")  
+    
+  if request.method == "POST":
+    form = request.form
+    now = datetime.now(timezone.utc)
+    adv = Advt(name=form["name"], phone=form["phone"],contacts=form["contacts"],text=form["text"], created=now,priority=form["priority"])  
+    if id==0:
+       db.session.add(adv)
+
+    else:
+      adv = db.one_or_404(db.select(Advt).where(Advt.id == id))  
+      adv.name=form["name"]
+      adv.phone=form["phone"]
+      adv.contacts=form["contacts"]
+      adv.text=form["text"]  
+      adv.priority=form["priority"]
+   
+
+    db.session.commit()
+    flash(adv.name + " добавлено")
+    return redirect("/advert")
+  else:
+    if id==0:
+      adv = Advt(name="", phone="",contacts="",text="")
+    else:
+      adv = db.one_or_404(db.select(Advt).where(Advt.id == id)) 
+    
+    return  render_template("/news/editadvt.html", id=id, adv=adv)
 
 @bp.route("/advert")
 def list_advert():
-    query = db.select(Advt).order_by(Advt.created.desc())
+    if session['roles'].count("adminisrators")==0:
+      query = db.select(Advt).where(Advt.priority!=0).order_by(Advt.created.desc())
+    
+    else:
+      query = db.select(Advt).order_by(Advt.created.desc())
+
     # читаем по страницам
     limit = 20
    

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">
   <div class="col-md-4">
-    <span class="text fs-5 fw-semibold">Объявления партнеров</span>
+    <span class="text fs-5 fw-semibold">Биржа</span>
   </div>
   <div class="col-md-8">
     {{ pagination.info }}
@@ -12,10 +12,11 @@
   <div class="col-md-7">
     {{ pagination.links }}
   </div>
+  {% if session['roles'].count("adminisrators")>0 %}
   <div class="col-md-2">
-    <input type="button" class="btn btn-dark btn-sm" value="Создать" onclick="window.location.href='/advert/create';" />
+    <input type="button" class="btn btn-dark btn-sm" value="Создать" onclick="window.location.href='/advert/edit/0';" />
   </div>
-
+  {% endif %}
   
 </div>
 <div class="row">
@@ -36,7 +37,7 @@
       {% for o in list %}
       <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
         <td>
-          <a class="link-underline-primary" href="/advert/{{o["id"] }}">
+          <a class="link-underline-primary" href="/advert/edit/{{o["id"]}}">
             {{ o["name"] }}
         </td>
         </a>
@@ -54,14 +55,16 @@
         <td>
           {{ o["text"] }}
         </td>
+        {% if session['roles'].count("adminisrators")>0 %}
         <td>
           {{ o["created"] }}
         </td>
         <td>
-        {% if o["priority"]!="" %}
-        +
+        {% if o["priority"]!=0 %}
+        {{o["priority"]}}
         {% endif %}
       </td>
+      {% endif %}
       </tr>
       {% endfor %}
     </tbody>

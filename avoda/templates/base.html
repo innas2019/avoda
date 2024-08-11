@@ -69,7 +69,7 @@
                             <a class="nav-link active" href="{{ url_for('info.show') }}">Новости и объявления</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ url_for('info.list_advert') }}">Реклама партнеров</a>
+                            <a class="nav-link active" href="{{ url_for('info.list_advert') }}">Биржа</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url_for('auth.logout') }}"> Выйти</a>
@@ -107,9 +107,11 @@
                 <div class="col-md-10 text-start fs-6 text-primary font-family-Inter">
                   {% if adv!=undefined %}
                   <div class="row">
-                    <div class="col-md-3 fw-semibold">Реклама от партнеров:</div> 
-                    <div class="col-md-1">{{adv["name"]}}</div>  
-                  <div class="col-md-1">{{adv["phone"]}}</div>  
+                    <div class="col-md-1 fw-semibold">
+                        <a class="nav-link active" href="{{ url_for('info.list_advert') }}">Биржа:</a>
+                       </div> 
+                    <div class="col-md-2">{{adv["name"]}}</div>  
+                  <div class="col-md-2">{{adv["phone"]}}</div>  
                   <div class="col-md-7">{{adv["text"]}}</div>  
                  </div>
                 {% endif %}
@@ -134,7 +136,7 @@
             <div class="bg-primary row ">
                 <div class="col-md-3 px-1 py-1  justify-content-left">
                     <span class="text-white  font-family-Inter m-0 px-3 py-2" style="font-size: 0.75rem;">
-                        ver 1.6 от 6.08 Hatul Madan
+                        ver 1.7 от 11.08 Hatul Madan
                     </span>
                 </div>
                 <div class="col-md-6 px-1 py-1  justify-content-right">
