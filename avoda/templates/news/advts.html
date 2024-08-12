@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row">
-  <div class="col-md-4">
-    <span class="text fs-5 fw-semibold">Биржа</span>
+<div class="row mt-3">
+  <div class="col-md-2 ">
+    <span class="text fs-4 fw-semibold">Биржа</span>
   </div>
+  <div class="col-md-9 text fs-6 fw-semibold text-danger">
+    По вопросу размещения срочных заявок и объявлений (есть кандидат/требуется сотрудник), 
+    обращайтесь к администратору Проекта по тел/вотсапп 0536405871
+    </div>
   <div class="col-md-8">
     {{ pagination.info }}
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-7">
     {{ pagination.links }}
@@ -26,36 +31,44 @@
         
         <th class="col-md-1">Название</th>
         <th class="col-md-1">Телефон</th>
-        <th class="col-md-1">Контакт</th>
+       
         <th class="col-md-7">Объявление</th>
+        {% if session['roles'].count("adminisrators")>0 %}
+     
+        <th class="col-md-1">Контакт</th>
         <th class="col-md-1">Дата</th>
         <th class="col-md-1"></th>
-        
+       {% endif %} 
       </tr>
     </thead>
     <tbody>
       {% for o in list %}
       <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
         <td>
+          {% if session['roles'].count("adminisrators")>0 %}
           <a class="link-underline-primary" href="/advert/edit/{{o["id"]}}">
-            {{ o["name"] }}
+            {{ o["name"] }}   </a>
+            {% else %}
+            {{ o["name"] }} 
+            {% endif %}
         </td>
-        </a>
+      
 
         <td>
           {% if o["phone"]!=None %}
           {{ o["phone"] }}
           {% endif %}
         </td>
+       
+        <td>
+          {{ o["text"] }}
+        </td>
+        {% if session['roles'].count("adminisrators")>0 %}
         <td>
           {% if o["contacts"]!=None %}
           {{ o["contacts"] }}
           {% endif %}
         </td>
-        <td>
-          {{ o["text"] }}
-        </td>
-        {% if session['roles'].count("adminisrators")>0 %}
         <td>
           {{ o["created"] }}
         </td>
