@@ -16,6 +16,8 @@ class Users(UserMixin,db.Model):
     issend = db.Column(db.Integer())
     mailsend = db.Column(db.DateTime())
     created = db.Column(db.DateTime())
+    lastnews = db.Column(db.Integer)
+  
     roles = db.relationship("Role", secondary="user_role")
     addresses = db.relationship('Posts', lazy=True)
 
@@ -71,7 +73,7 @@ class News(db.Model):
     created = db.Column(db.DateTime())
     mailsend = db.Column(db.DateTime())
     priority = db.Column(db.Integer)
-  
+    
 class Advt(db.Model):
     __tablename__ = "advt"
     id = db.Column(db.Integer, primary_key=True, nullable=False)

@@ -29,7 +29,10 @@
         <input type="text" class="form-control" name="email" id="v">
         {% endif %}
       </div>
-      <div class="col-6">
+    </div>
+    <div class="row">
+
+      <div class="col-3">
         <div class="form-check ">
           {% if r.issend!=None and r.issend==1%}
           <input class="form-check-input" type="checkbox" value="Да" name="newsletter" id="per" checked>
@@ -39,6 +42,21 @@
           <label class="form-check-label" for="per"> рассылка на почту </label>
         </div>
       </div>
+     
+      <div class="col-3">
+        <label for="m" class="form-text">Последняя рассылка:</label>
+      </div>
+     
+      <div class="col-3">
+     <!--  {% if r.mailsend!=None %}
+        <input type="datetime-local" class="form-control" name="mails" id="m" value={{r.mailsend}}>
+        {% else %}
+        <input type="datetime-local" class="form-control" name="mails" id="m">
+        {% endif %}-->
+        <input class="form-check-input" type="checkbox" value="Да" name="mails" id="m">
+        <label class="form-check-label" for="m"> стереть дату</label>
+      </div> 
+
     </div>
     <div class="row">
       <div class="col-8">
@@ -52,7 +70,7 @@
         <input type="button" class="btn btn-dark btn-sm" value="изменить фильтр"
           onclick="window.location.href='/filter/set?id={{r.id}}';">
       </div>
-      
+
     </div>
     <div class="row">
       <div class="col-1">
@@ -91,7 +109,7 @@
   </div>
   <div class="col-md-8 align-items-center">
     <nbsp class="text-dark fs-6 fw-semibold font-family-Inter px-3 py-2">
-      Администратор! Не совершай необратимых поступков! </nbsp>
+      Администратор! Не совершай необратимых поступков! Справочники НЕ удалять! </nbsp>
   </div>
 </div>
 

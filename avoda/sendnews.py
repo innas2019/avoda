@@ -4,6 +4,7 @@ from avoda import db
 from flask import current_app, session
 from avoda.models import Users, Posts
 from avoda.posts import create_query
+from avoda.info import show_in_title
 import logging
 import json
 import smtplib
@@ -14,13 +15,17 @@ from datetime import datetime, timezone, timedelta
 import random
 
 
-def send_emailSMTP(subject, sender, recipients, text_body, html_body):
-    head= "<html>  <body> "+text_body+" <p>Для просмотра объявений перейдите на https://avoda.site"
-    end="""<p>Вы получаете эту рассылку потому, что зарегистрировались на нашем сайте. <p>
+def send_emailSMTP(subject, sender, recipients, text_body, html_body, send_news):
+    head= "<html>  <body> "+text_body+" <p>Для просмотра объявлений перейдите на https://avoda.site"
+    end="""<p>-----------------------------------<p>Вы получаете эту рассылку потому, что зарегистрировались на нашем сайте. <p>
     Чтобы отписаться от рассылки перейдите: https://avoda.site/cabinet </p>
     <p>  For unsubscribe click here: https://avoda.site/cabinet </p>    </body></html>"""
     #msg = MIMEText(text_body+" https://avoda.site","plain",'utf-8')
-    msg = MIMEText(head+end, "html",'utf-8')
+    if send_news==None:
+        msg = MIMEText(head+end, "html",'utf-8')
+    else:
+        md="<p>-----------------------------------<p>Наши новости:<p>"+send_news.head+". "+send_news.text+"<p>"
+        msg = MIMEText(head+md+end, "html",'utf-8')
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = recipients
@@ -31,6 +36,7 @@ def send_emailSMTP(subject, sender, recipients, text_body, html_body):
        smtp_server.sendmail(sender, recipients, msg.as_string())
 
 #days -  за сколько дней искать объявления   
+#добавить в таблицу юзер номер послнднего отправленного поста
 def send_news(manualy,days):
     
     current_time = datetime.now()
@@ -43,7 +49,7 @@ def send_news(manualy,days):
     l.info(m_str) 
     if all_count == 0:
         return
-    
+    news=show_in_title()
     user_updated = []
     res = db.session.execute(db.select(Users).where(Users.issend == 1,Users.email!=None)).scalars()
     allUsers = res.all()
@@ -66,7 +72,10 @@ def send_news(manualy,days):
             
             if count > 0:
                 send_str = "По условиям Вашего поиска найдено " + str(count)+ " новых соискателей."
-                send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html")
+                new_news=None
+                if user.lastnews!=news.id:
+                    new_news=news
+                send_emailSMTP("from avoda site", current_app.config["MAIL_USERNAME"], user.email, send_str, "email/letter.html", new_news)
                 l.info(send_str + "send mail for " + user.name)
                 count_mail=count_mail+1
                 user_updated.append(user.id)
@@ -79,7 +88,7 @@ def send_news(manualy,days):
             db.session.commit()
             continue
         
-    res = db.session.execute(db.update(Users).where(Users.id.in_(user_updated)).values(mailsend=current_time))
+    res = db.session.execute(db.update(Users).where(Users.id.in_(user_updated)).values(mailsend=current_time,lastnews=news.id))
     db.session.commit()
     l.info(user_updated)
     l.info("send mails "+ str(count_mail))  

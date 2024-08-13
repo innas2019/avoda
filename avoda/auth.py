@@ -305,7 +305,9 @@ def edit_user(id):
             issend=1
         else:
             issend=0  
-            
+
+        
+
         #проверка на роли. если их состав изменился, то перезаписываем
         uroles=[]
         if "rs_adminisrators" in request.form.keys():
@@ -316,6 +318,9 @@ def edit_user(id):
         u.email=email
         u.issend =issend   
         u.roles=uroles
+        if "mails" in request.form.keys():    
+           u.mailsend=None
+        
         db.session.commit()    
         flash(u.name + " изменено")
         

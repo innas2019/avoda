@@ -65,6 +65,7 @@ def advert_create(id):
     return  render_template("/news/editadvt.html", id=id, adv=adv)
 
 @bp.route("/advert")
+@login_required
 def list_advert():
     if session['roles'].count("adminisrators")==0:
       query = db.select(Advt).where(Advt.priority!=0).order_by(Advt.created.desc())
