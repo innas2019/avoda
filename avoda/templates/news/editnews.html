@@ -8,20 +8,37 @@
       <div class="col-md-3 text fs-4 fw-semibold font-family-Inter">
             {{ title }}
       </div>
-      <div class="col-md-2">
-            {{render_icon("funnel-fill",18)}}
-      </div>
+    
 </div>
 <div class="row">
-    <form action="/create-news" method="post">       
-        <div class="row">
-                        <div class="col-md-3 form-text">За сколько дней показывать объявления: 
-                        </div>
-                       <div class="col-md-2">
-                             <input type="number" class="form-control" name="days" value=30 
-                             required>
-                        </div>
-        </div>
+    <form action="/info/edit/{{id}}" method="post">       
+      <div class="row">
+            <div class="col-md-3 form-text">Название
+            </div>
+            <div class="col-md-8">
+                  <input type="text" class="form-control" name="head" required value={{n["head"]}} d>
+            </div>
+      </div>
+      <div class="row">
+            <div class="col-md-3 form-text">Текст
+            </div>
+            <div class="col-md-10">
+                  <textarea class="form-control" name="text" , id="note" rows="3"
+                  required>{{ n["text"] }}</textarea>
+            </div>
+      </div>
+      <div class="row">
+            <div class="col-md-3 form-text">Приоритет
+            </div>
+            <div class="col-md-2">
+               {% if n["priority"]!=None  %}
+                  <input type="number" class="form-control" name="priority" value={{n["priority"]}}>
+                {% else %}
+                  <input type="number" class="form-control" name="priority" value=0>
+                {% endif %}
+                 
+            </div>
+      </div>
         <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Ok" title="Сохранить" />
         </div>
     </form>

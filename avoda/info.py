@@ -25,11 +25,15 @@ def show_adv():
 
 @bp.route("/showinfo")
 def show():
-    res = db.session.execute(db.select(News).where(News.priority!=None)).scalars()
+    res = db.session.execute(db.select(News).where(News.priority>0)).scalars()
     pNews = res.all()
-    res = db.session.execute(db.select(News).where(News.priority==None).order_by(News.created.desc())).scalars()
+    res = db.session.execute(db.select(News).where(News.priority==0).order_by(News.created.desc())).scalars()
     allNews = res.all()
-    return  render_template("/news/info.html", pNews=pNews,all=allNews)
+    is_admin=False
+    if "roles" in session.keys():
+      is_admin= session['roles'].count("adminisrators")!=0
+
+    return  render_template("/news/info.html", pNews=pNews,all=allNews,is_admin=is_admin)
 
 @bp.route("/advert/edit/<int:id>", methods=["GET", "POST"])
 @login_required
@@ -96,3 +100,38 @@ def list_advert():
         title="пользователи",
         list=all        
     )
+
+@bp.route("/info/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def info_edit(id):
+  
+  if session['roles'].count("adminisrators")==0:
+      return redirect("/showinfo")  
+    
+  if request.method == "POST":
+    form = request.form
+    now = datetime.now(timezone.utc)
+    pr=None
+    if "priority" in form.keys():
+      pr=form["priority"]
+    new_n = News(head=form["head"], text=form["text"], created=now,priority=pr)  
+    if id==0:
+       db.session.add(new_n)
+
+    else:
+      new_n = db.one_or_404(db.select(News).where(News.id == id))  
+      new_n.head=form["head"]
+      new_n.text=form["text"]  
+      new_n.priority=pr
+   
+
+    db.session.commit()
+    flash(new_n.head + " добавлено")
+    return redirect("/showinfo")
+  else:
+    if id==0:
+      new_n = News(head="", text="")
+    else:
+      new_n = db.one_or_404(db.select(News).where(News.id == id)) 
+    
+    return  render_template("/news/editnews.html", id=id, n=new_n)
