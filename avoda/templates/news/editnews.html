@@ -28,6 +28,17 @@
             </div>
       </div>
       <div class="row">
+            <div class="col-md-3 form-text">ссылка
+            </div>
+            <div class="col-md-8">
+                  {% if n["link"]!=None  %}
+                  <input type="text" class="form-control" name="link"  value={{n["link"]}} >
+                  {% else %}
+                  <input type="text" class="form-control" name="link"  >
+                  {% endif %}
+            </div>
+      </div>
+      <div class="row">
             <div class="col-md-3 form-text">Приоритет
             </div>
             <div class="col-md-2">

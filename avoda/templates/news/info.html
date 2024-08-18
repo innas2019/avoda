@@ -23,7 +23,7 @@
       <div class="row">
             {% if is_admin==True %}
             <div class="col-md-1 text fs-5">
-                  <a class="link-underline-primary" href="/info/edit/{{n["id"]}}">{{n["id"]}}</a>
+                  <a class="link-underline-primary" href="/info/edit/{{n[" id"]}}">{{n["id"]}}</a>
             </div>
             {% endif%}
             <div class="col-md-10 text fs-5 fw-semibold font-family-Inter">
@@ -31,6 +31,12 @@
             </div>
             <div class="col-md-10 text font-family-Inter">
                   Ответ:&nbsp {{ n["text"] }}
+            </div>
+            <div class="col-md-2">
+          {% if n["link"]!=None %} 
+                 <a class="link-underline-primary" href="{{n["link"]}}" target="_blank">
+                  посмотреть -></a>
+            {% endif %} 
             </div>
       </div>
       {% endfor %}
@@ -43,15 +49,21 @@
 <div class="row">
       {% if is_admin==True %}
       <div class="col-md-1 text fs-5">
-      <a class="link-underline-primary" href="/info/edit/{{n["id"]}}">{{n["id"]}}</a>
-      {% endif%}
+            <a class="link-underline-primary" href="/info/edit/{{n[" id"]}}">{{n["id"]}}</a>
+            {% endif%}
       </div>
       <div class="col-md-10 text fs-5 fw-semibold font-family-Inter">
             {{ n["head"] }}
       </div>
       <div class="col-md-10 text font-family-Inter">
-      {{ n["text"] }}
+            {{ n["text"] }}
       </div>
+      <div class="col-md-2">
+            {% if n["link"]!=None %} 
+                   <a class="link-underline-primary" href="{{n["link"]}}" target="_blank">
+                    посмотреть -></a>
+              {% endif %} 
+              </div>
 </div>
 {% endfor %}
 {% endblock %}

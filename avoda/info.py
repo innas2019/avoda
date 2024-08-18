@@ -114,7 +114,10 @@ def info_edit(id):
     pr=None
     if "priority" in form.keys():
       pr=form["priority"]
-    new_n = News(head=form["head"], text=form["text"], created=now,priority=pr)  
+    lk=None
+    if "link" in form.keys():
+      lk=form["link"]
+    new_n = News(head=form["head"], text=form["text"], link=lk,created=now,priority=pr)  
     if id==0:
        db.session.add(new_n)
 
@@ -123,7 +126,7 @@ def info_edit(id):
       new_n.head=form["head"]
       new_n.text=form["text"]  
       new_n.priority=pr
-   
+      new_n.link=lk
 
     db.session.commit()
     flash(new_n.head + " добавлено")
