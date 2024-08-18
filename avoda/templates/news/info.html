@@ -30,14 +30,13 @@
                   Вопрос:&nbsp {{ n["head"] }}
             </div>
             <div class="col-md-10 text font-family-Inter">
-                  Ответ:&nbsp {{ n["text"] }}
-            </div>
-            <div class="col-md-2">
-          {% if n["link"]!=None %} 
+                  Ответ:&nbsp {{ n["text"] }}&nbsp;
+                  {% if n["link"]!=None %} 
                  <a class="link-underline-primary" href="{{n["link"]}}" target="_blank">
-                  посмотреть -></a>
+                  перейти -></a>
             {% endif %} 
             </div>
+          
       </div>
       {% endfor %}
 </div>
@@ -57,13 +56,13 @@
       </div>
       <div class="col-md-10 text font-family-Inter">
             {{ n["text"] }}
-      </div>
-      <div class="col-md-2">
+            &nbsp;
             {% if n["link"]!=None %} 
                    <a class="link-underline-primary" href="{{n["link"]}}" target="_blank">
-                    посмотреть -></a>
+                    перейти -></a>
               {% endif %} 
-              </div>
+      </div>
+     
 </div>
 {% endfor %}
 {% endblock %}
