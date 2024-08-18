@@ -116,7 +116,8 @@ def info_edit(id):
       pr=form["priority"]
     lk=None
     if "link" in form.keys():
-      lk=form["link"]
+      if form["link"]!="":
+        lk=form["link"]
     new_n = News(head=form["head"], text=form["text"], link=lk,created=now,priority=pr)  
     if id==0:
        db.session.add(new_n)
