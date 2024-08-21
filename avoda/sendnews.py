@@ -18,14 +18,16 @@ import random
 def send_emailSMTP(subject, sender, recipients, text_body, html_body, send_news):
     head= "<html>  <body> "+text_body+" <p>Для просмотра объявлений перейдите на https://avoda.site"
     end="""<p>-----------------------------------<p>Вы получаете эту рассылку потому, что зарегистрировались на нашем сайте. <p>
-    Чтобы отписаться от рассылки перейдите: https://avoda.site/cabinet </p>
+    </p>
     <p>  For unsubscribe click here: https://avoda.site/cabinet </p>    </body></html>"""
-    #msg = MIMEText(text_body+" https://avoda.site","plain",'utf-8')
+    #msg = MIMEText(text_body+" https://avoda.site","plain",'utf-8')  Чтобы отписаться от рассылки перейдите: https://avoda.site/cabinet 
     if send_news==None:
         msg = MIMEText(head+end, "html",'utf-8')
     else:
-        md="<p>-----------------------------------<p>Наши новости:<p>"+send_news.head+". "+send_news.text+"<p>"
-        msg = MIMEText(head+md+end, "html",'utf-8')
+        md="<p>-----------------------------------<p>Наши новости:<p>"+send_news.head+". "+send_news.text
+        if send_news.link!=None:
+            md=md+ " <a href="+send_news.link+" target=\"_blank\">  перейти -></a> "
+        msg = MIMEText(head+md+"<p>"+end, "html",'utf-8')
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = recipients
