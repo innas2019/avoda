@@ -97,6 +97,23 @@
             </div>
         </nav>
         {{ render_messages() }}
+        <div class="row px-2">
+            <div class="col-md-12 text-primary font-family-Inter">
+            {% if adv!=undefined %}
+            <div class="row">
+              <div class="col-md-1 fw-semibold">
+                  <a class="link-underline-primary" href="{{ url_for('info.list_advert') }}">Биржа:</a>
+                 </div> 
+             
+            <div class="col-md-11">{{ adv["text"][:150] }}
+                {% if adv["text"]|length > 200 %}
+                ...
+                {% endif %}
+              </span></div>  
+           </div>
+          {% endif %}
+        </div>
+          </div>
         <div class="container-md" style="min-height: 750px;">
             {% block content %} {% endblock %}
         </div>
@@ -105,7 +122,7 @@
             {% block footer %}
             <div class="row justify-content-end py-1 mb-2">
                 <div class="col-md-10 text-start fs-6 text-primary font-family-Inter">
-                  {% if adv!=undefined %}
+                <!--   {% if adv!=undefined %}
                   <div class="row">
                     <div class="col-md-1 fw-semibold">
                         <a class="link-underline-primary" href="{{ url_for('info.list_advert') }}">Биржа:</a>
@@ -115,7 +132,7 @@
                   <div class="col-md-7">{{adv["text"]}}</div>  
                  </div>
                 {% endif %}
-                </div>
+                --> </div>
                 <div class="col-md-2">
                     <table class="table-bordered">
                         <tbody>
@@ -136,7 +153,7 @@
             <div class="bg-primary row ">
                 <div class="col-md-3 px-1 py-1  justify-content-left">
                     <span class="text-white  font-family-Inter m-0 px-3 py-2" style="font-size: 0.75rem;">
-                        ver 1.7 от 21.08 Hatul Madan
+                        ver 1.7 от 24.08 Hatul Madan
                     </span>
                 </div>
                 <div class="col-md-6 px-1 py-1  justify-content-right">

@@ -134,13 +134,13 @@
          </div>
 
       </div>
-      <div class="row bg-secondary-subtle justify-content-center mt-1 px-3 py-2">
-         <div class="col-md-2 text-center fs-5 fw-semibold font-family-Inter">
+      <div class="row  justify-content-center mt-1 px-3 py-2">
+         <div class="col-md-2 text-center text-primary fw-semibold font-family-Inter">
         Наши новости:  </div>
-        <div class="col-md-8 text-center fs-5 fw-semibold font-family-Inter">
+        <div class="col-md-8 font-family-Inter">
          {% if n!= undefined %}  
-          {{n["head"]}}
-            <p><span class="fs-6">{{n["text"]}}
+          <b>{{n["head"]}}</b>&nbsp
+            <span class="fs-6">{{n["text"]}}
                 {% if n["link"]!=None %} 
                          <a class="link-underline-primary" href="{{n["link"]}}" target="_blank">
                           посмотреть -></a>
