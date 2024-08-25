@@ -392,7 +392,7 @@ def list():
         s_posts.append(p.id)
 
     session["items"] = s_posts
-    msg = "показано {record_name} с <b>{start} по {end}</b> "
+    msg = "{record_name} с <b>{start} по {end}</b> "
     if session["roles"].count("adminisrators") > 0:
         msg = msg + " из <b>{total}</b>"
     pagination = Pagination(
@@ -400,7 +400,7 @@ def list():
         page_per=limit,
         total=ps.total,
         display_msg=msg,
-        record_name="объявлений",
+        record_name="объявления",
         prev_label="<<",
         next_label=">>",
         bs_version=5,
