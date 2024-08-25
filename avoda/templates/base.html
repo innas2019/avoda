@@ -98,14 +98,16 @@
         </nav>
         {{ render_messages() }}
         <div class="row px-2">
-            <div class="col-md-12 text-primary font-family-Inter">
+            <div class="col-md-12 fw-semibold font-family-Inter">
             {% if adv!=undefined %}
             <div class="row">
-              <div class="col-md-1 fw-semibold">
-                  <a class="link-underline-primary" href="{{ url_for('info.list_advert') }}">Биржа:</a>
+              <div class="col-md-1 fs-5 ">
+                  Биржа:
                  </div> 
              
-            <div class="col-md-11">{{ adv["text"][:150] }}
+            <div class="col-md-11">
+                <a class="link-underline-primary" href="{{ url_for('info.list_advert') }}">
+                {{ adv["text"][:120] }}</a>
                 {% if adv["text"]|length > 200 %}
                 ...
                 {% endif %}
