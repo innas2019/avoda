@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for message in get_flashed_messages() %}
+<div class="flash">{{ message }}</div>
+{% endfor %}
+<div class="px-6">
+      <form action="/prepost/{{post.id }}" method="post">
+            <div class="row">
+                  <div class="col-md-2">
+                        <p class="form-text">Телефон </p>
+
+                  </div>
+                  <div class="col-md-4"><input type="text" class="form-control" name="phone" pattern="[0-9+]{8,}"
+                              title=" допускаются только цифры, длина не менее 8" value={{post.phone}}>
+                        {% if post.id==0 %}
+                        <a href=# id=check_input>проверка</a>
+                        <nbsp class="text-danger" id=result></nbsp>
+                        {% endif %}
+                  </div>
+
+            </div>
+            <div class="row">
+                  <div class="col-md-2">
+                        <span class="form-text"> Регион *</span>
+                  </div>
+                  <div class="col-md-4">
+                        <select class="form-select" name="place" id="place" required>
+                              <option selected>{{place}}</option>
+                              {% for town in towns %}
+                              <option value={{town}}>{{town}}</option>
+                              {% endfor %}
+                        </select>
+                  </div>
+
+                  <div class="row">
+                        <div class="col-md-8">
+                              <label for="note" class="form-text">Текст объявления *</label>
+                              <textarea class="form-control" name="text" , id="note" rows="3"
+                                    required>{{post.text}}</textarea>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-2">
+                              <p class="form-text">e-mail </p>
+
+                        </div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="contact"
+                                    title=" e-mail или другой контакт" value={{post.phone}}>
+
+                        </div>
+
+                  </div>
+
+                  <div class="row">
+                        <div class="col-md-2 form-text">
+                               дата объявления 
+                        </div>
+                        <div class="col-md-4">
+                          {{post.created}} 
+                       </div>
+                  </div>
+                  {% if 'roles' in session.keys() and session['roles'].count("create_post")>0 %}
+                  <div class="row">
+                        <div class="col-md-2"> Результат проверки: </div>
+                        {% for i in [0,1,2] %}
+                      <div class="col-md-1">
+                        <div class="form-check">
+                              {%if post.result!=None and post.result==i %}
+                              <input class="form-check-input" type="radio" name="res" id={{i}} value={{i}}
+                              checked>
+                               {% else %}
+                              <input class="form-check-input" type="radio" name="res" id={{i}} value={{i}}>
+                              {% endif %} 
+                         <label class="form-check-label" for={{i}}> {{results[i]}} </label>
+                        </div>
+                      </div>
+                  {%endfor%}
+                  </div>
+                 {%endif%}
+                  <div class="row">
+
+                        <div class="col-md-3"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2"
+                                    value="Выйти" onclick="window.location.href='/list';" /> </div>
+
+                        <div class="col-md-3">
+
+                              <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить" />
+                        </div>
+
+                  </div>
+      </form>
+</div>
+{% endblock %}

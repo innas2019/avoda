@@ -55,7 +55,7 @@ def advert_create(id):
       adv.contacts=form["contacts"]
       adv.text=form["text"]  
       adv.priority=form["priority"]
-   
+      adv.created=now
 
     db.session.commit()
     flash(adv.name + " добавлено")
@@ -128,10 +128,11 @@ def info_edit(id):
       new_n.text=form["text"]  
       new_n.priority=pr
       new_n.link=lk
-
+      new_n.created=now
     db.session.commit()
     flash(new_n.head + " добавлено")
     return redirect("/showinfo")
+  #method GET
   else:
     if id==0:
       new_n = News(head="", text="")

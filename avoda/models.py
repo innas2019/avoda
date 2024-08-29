@@ -83,6 +83,16 @@ class Advt(db.Model):
     text = db.Column(db.String(500))
     created = db.Column(db.DateTime())
     priority = db.Column(db.Integer)
+
+class Preposts(db.Model):
+    __tablename__ = "preposts"
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    phone = db.Column(db.String(40))
+    text = db.Column(db.String(500))
+    place = db.Column(db.String(40), nullable=False)
+    created = db.Column(db.DateTime())
+    contacts = db.Column(db.String(100))
+    result = db.Column(db.Integer)    
    
 @login.user_loader
 def load_user(id):

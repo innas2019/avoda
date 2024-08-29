@@ -76,6 +76,10 @@ def create_app():
     from avoda import info
 
     app.register_blueprint(info.bp)
+
+    from avoda import uposts
+
+    app.register_blueprint(uposts.bp)
     
     @app.context_processor
     def utility_processor():
