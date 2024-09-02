@@ -4,12 +4,10 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 from avoda import db
 from avoda.models import Posts, Preposts
 from avoda import managing as m
-#from avoda import auth as a
-#from avoda import info as i
 from datetime import datetime, timezone, timedelta
 #import json
 #from flask import jsonify
-#from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_
 from avoda.posts import Post
 bp = Blueprint("uposts", __name__)
 
@@ -31,14 +29,16 @@ def create_post(post, res):
         name=post.name  
       )
       db.session.add(new_post)
+      msg="Спасибо за заполнение анкеты. После проверки она появится на нашем сайте "  
+   
     else:
       new_post = db.one_or_404(db.select(Preposts).where(Preposts.id == post.id))
       if res!=None:
           new_post.result=res
           new_post.created=now
-      msg="Спасибо за заполнение анкеты. После проверки она появится на нашем сайте "  
+    
     db.session.commit()
-    flash(post.phone + " "+msg)
+    flash(post.name + " "+msg)
     
     return True
 
@@ -60,7 +60,7 @@ def list_prepost():
     if session['roles'].count("create_post")==0:
       return redirect("/list")  
     
-    query = db.select(Preposts).order_by(Preposts.result)
+    query = db.select(Preposts).where((Preposts.result==None)|(Preposts.result != 0)).order_by(Preposts.result)
 
     # читаем по страницам
     limit = 20
@@ -151,6 +151,7 @@ def post(id):
         n_post.id = id
         n_post.get_from_form(form)
         result=None
+        n_post.name=form["name"]
         if "res" in form.keys():
            result=form["res"]
         create_post(n_post,result)
