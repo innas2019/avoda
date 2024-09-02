@@ -17,7 +17,16 @@
 <body>
    <div id="component" class="container-md">
       {% from 'bootstrap5/utils.html' import render_messages %}
-
+      {% from 'bootstrap5/utils.html' import render_icon %}
+      <ul class="nav nav-pills">
+         <li class="nav-item">
+           <a class="nav-link active" aria-current="page" href="/title">Работодателям</a>
+         </li>
+         <li class="nav-item">
+           <a class="nav-link" href="/prepost/0">Соискателям</a>
+         </li>
+        
+       </ul>
       {{ render_messages() }}
       <!-- logo+login+about -->
       <div class="row justify-content-center mt-3 " style="min-height: 400px;">
@@ -64,29 +73,30 @@
                      </div>
                      <div class="row">
                         <div class="col">
-                           Забыли пароль?<a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="">
-                              <a href="/err"> восстановить </a>
+                           Забыли пароль?<input type="button" 
+                           class="btn btn-secondary-subtle fw-semibold text-primary" onclick="window.location.href='/err';" 
+                           value="восстановить">
                         </div>
                      </div>
                      <div class="row">
-                        <div class="col-md-4"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                        <div class="col-md-4"><input type="submit" class="btn btn-primary  rounded-2"
                               value="Войти">
                         </div>
                         <div class="col-md-4"><input type="button"
-                              class="btn btn-secondary-subtle mt-3 mb-2 rounded-2 text-primary" value="Регистрация"
+                              class="btn btn-secondary-subtle fw-semibold text-primary" value="Регистрация"
                               onclick="window.location.href='/register';"> </div>
                      </div>
                   </form>
                </div>
             </div>
-            <div class="row ">
-               <div class="col-md-8">
-                  <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
-                     Связаться с нами: тел 053-640-5871, </span>
+            <div class="row text-end ">
+               <div class="col-md-10">
+                  <span class="text-primary font-family-Inter" style="font-size: 0.75rem;">
+                     Связаться с нами: {{render_icon('phone-fill', 16) }} 053-640-5871 </span>
                </div>
-               <div class="col-md-8">
-                  <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
-                     e-mail <a href="mailto:avoda.site.il@gmail.com">avoda.site.il@gmail.com</a>
+               <div class="col-md-10">
+                  <span class="text-primary font-family-Inter" style="font-size: 0.75rem;">
+                     {{render_icon('envelope-fill', 16) }} <a href="mailto:avoda.site.il@gmail.com">avoda.site.il@gmail.com</a>
                   </span>
                </div>
             </div>
@@ -136,7 +146,8 @@
       </div>
       <div class="row  justify-content-center mt-1 px-3 py-2">
          <div class="col-md-2 text-center text-primary fw-semibold font-family-Inter">
-        Наши новости:  </div>
+        Наши новости:  <p> <a class="link-underline-primary fw-normal" href="{{ url_for('info.show') }}" target="_blank">
+         больше новостей -></a> </div>
         <div class="col-md-8 font-family-Inter">
          {% if n!= undefined %}  
           <b>{{n["head"]}}</b>&nbsp
@@ -148,14 +159,9 @@
                   </span>     
          {% endif %}      
         </div>
-         <div class="col-md-2">
-               <a class="link-underline-primary text-end" href="{{ url_for('info.show') }}" target="_blank">
-                  больше новостей -></a>
-         </div>
-      </div>
+    
       <!--counter-->
-      <div class="row mt-3 justify-content-end py-1 mb-2">
-            <div class="col-md-2">
+            <div class="col-md-2 justify-content-end py-1 mb-2">
                <table class="table-bordered">
                   <tbody>
                      <tr>
@@ -180,13 +186,13 @@
 
       <div class="row">
          <span class="text-end text-dark  font-family-Inter" style="font-size: 0.75rem;">
-            ver 1.8 Hatul Madan </span>
+            версия {{ver()}} Hatul Madan </span>
       </div>
    </div>
 
    {% block scripts %}
-   <!-- Optional JavaScript 
-   {{ bootstrap.load_js() }}-->
+   <!-- Optional JavaScript -->
+   {{ bootstrap.load_js() }}
    {% endblock %}
 </body>
 

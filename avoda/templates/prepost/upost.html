@@ -1,93 +1,221 @@
-{% extends 'base.html' %}
-{% block content %}
-{% for message in get_flashed_messages() %}
-<div class="flash">{{ message }}</div>
-{% endfor %}
-<div class="px-6">
-      <form action="/prepost/{{post.id }}" method="post">
-            <div class="row">
-                  <div class="col-md-2">
-                        <p class="form-text">Телефон </p>
+<!doctype html>
+<html lang="en">
 
-                  </div>
-                  <div class="col-md-4"><input type="text" class="form-control" name="phone" pattern="[0-9+]{8,}"
-                              title=" допускаются только цифры, длина не менее 8" value={{post.phone}}>
-                        {% if post.id==0 %}
-                        <a href=# id=check_input>проверка</a>
-                        <nbsp class="text-danger" id=result></nbsp>
-                        {% endif %}
+<head>
+      {% block head %}
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="icon" href="{{ url_for('static', filename='hatul.png') }}">
+      {% block styles %}
+      <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
+      {% endblock %}
+      <title>עבודה</title>
+      {% endblock %}
+</head>
+
+<body>
+      <div id="component" class="container-md">
+            {% from 'bootstrap5/utils.html' import render_messages %}
+            {% from 'bootstrap5/utils.html' import render_icon %}
+            {% if 'roles' in session.keys() and
+            session['roles'].count("create_post")>0 %}
+            <p><a href="{{ url_for('uposts.list_prepost') }}"> {{ render_icon('arrow-left', 18) }} к анкетам</a>
+                  {%else%}
+            <ul class="nav nav-pills">
+                  <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/title">Работодателям</a>
+                  </li>
+                  <li class="nav-item">
+                        <a class="nav-link active" href="/prepost/0">Соискателям</a>
+                  </li>
+
+            </ul>
+            {%endif%}
+            {{ render_messages() }}
+            <div class="row justify-content-center mt-3 " style="min-height: 450px;">
+                  <!-- logo+text -->
+                  <div class="col-md-5 py-3">
+                        <div class="row justify-content-end">
+                              <div class="col-md-8 justify-content-end d-flex">
+                                    <img src={{ url_for('static', filename='LogoStartScreen_224X62.png' ) }}>
+
+                              </div>
+                              <div class="col-md-8 justify-content-end d-flex">
+                                    <p class="text-end text-dark fs-4 fw-semibold font-family-Inter ">
+                                          В системе более 200 работодателей и кадровых агенств.
+                                    </p>
+                              </div>
+                              <div class="col-md-8 justify-content-end d-flex ">
+                                    <div class="text-primary fs-5 text-end font-family-Inter">
+                                          Заполните анкету, чтобы о Вас узнали. Укажите пожелания по профессии (можно
+                                          несколько), вид
+                                          занятости (полная,частичная, смены), какими языками владеете. </div>
+                              </div>
+
+                        </div>
+                        <div class="row justify-content-end mt-3">
+                              <div class="col-md-8 justify-content-end d-flex">
+                                    <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                                          Связаться с нами: {{render_icon('phone-fill', 16) }} 053-640-5871 </span>
+                              </div>
+                              <div class="col-md-8 justify-content-end d-flex">
+                                    <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                                          {{render_icon('envelope-fill', 16) }} <a
+                                                href="mailto:avoda.site.il@gmail.com">avoda.site.il@gmail.com</a>
+                                    </span>
+                              </div>
+                        </div>
                   </div>
 
+                  <!-- form -->
+                  <div class="col-md-7 px-6 justify-content-center mt-3">
+                        <div class="row px-6 justify-content-end ">
+
+                              <form action="/prepost/{{post.id }}" method="post">
+                                    <div
+                                          class="row  mt-3 justify-content-center fs-4 fw-semibold font-family-Inter bg-secondary-subtle">
+                                          Анкета соискателя </div>
+                                    <div class="row mt-3 justify-content-end">
+                                          <div class="col-md-2">
+                                                <p class="form-text fw-semibold">Имя *</p>
+
+                                          </div>
+                                          <div class="col-md-4"><input type="text" class="form-control" name="name"
+                                                      required value={{post.name}}>
+
+                                          </div>
+                                          <div class="col-md-4">
+
+                                          </div>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                          <div class="col-md-2">
+                                                <p class="form-text fw-semibold">Телефон *</p>
+
+                                          </div>
+                                          <div class="col-md-4"><input type="text" class="form-control" name="phone"
+                                                      pattern="[0-9+]{10,}" maxlength="10"
+                                                      title=" допускаются только цифры" required
+                                                      value={{post.phone}}>
+                                                {% if post.id!=0 %}
+                                                <a href=# id=check_input>проверка</a>
+                                                <nbsp class="text-danger" id=result></nbsp>
+                                                {% endif %}
+                                          </div>
+                                          <div class="col-md-4 form-text fw-semibold"">
+                                                в местном формате (10 цифр)
+                                          </div>
+
+                                    </div>
+                                    <div class="row justify-content-end">
+                                          <div class="col-md-2">
+                                                <span class="form-text fw-semibold"> Регион *</span>
+                                          </div>
+                                          <div class="col-md-4">
+                                                <select class="form-select" name="place" id="place" required>
+                                                      <option selected>{{place}}</option>
+                                                      {% for town in towns %}
+                                                      <option value={{town}}>{{town}}</option>
+                                                      {% endfor %}
+                                                </select>
+                                          </div>
+                                          <div class="col-md-4 form-text fw-semibold">
+                                                регион для поиска работы
+                                          </div>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                          <div class="col-md-2">
+                                                <label for="note" class="form-text fw-semibold">Текст объявления
+                                                      *</label>
+                                          </div>
+                                          <div class="col-md-8">
+                                                <textarea class="form-control" name="text" , id="note" rows="3"
+                                                      required>{{post.text}}</textarea>
+                                          </div>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                          <div class="col-md-2">
+                                                <p class="form-text form-text fw-semibold">e-mail </p>
+
+                                          </div>
+                                          <div class="col-md-4"><input type="text" class="form-control" name="contacts"
+                                                      title=" e-mail или другой контакт" value={{post.contacts}}>
+
+                                          </div>
+                                          <div class="col-md-4">
+
+                                          </div>
+                                    </div>
+                                    {% if post.id!=0 %}
+                                    <div class="row justify-content-end">
+                                          <div class="col-md-2 form-text fw-semibold">
+                                                дата 
+                                          </div>
+                                          <div class="col-md-4">
+                                                {{post.created}}
+                                          </div>
+                                          <div class="col-md-4">
+
+                                          </div>
+                                    </div>
+                                    {%endif%}
+                                    {% if 'roles' in session.keys() and
+                                    session['roles'].count("create_post")>0 %}
+                                    <div class="row justify-content-end">
+                                          <div class="col-md-2 form-text fw-semibold"> Статус: </div>
+                                          {% for i in [0,1,2] %}
+                                          <div class="col-md-8">
+                                                <div class="form-check">
+                                                      {%if post.result!=None and post.result==i %}
+                                                      <input class="form-check-input" type="radio" name="res" id={{i}}
+                                                            value={{i}} checked>
+                                                      {% else %}
+                                                      <input class="form-check-input" type="radio" name="res" id={{i}}
+                                                            value={{i}}>
+                                                      {% endif %}
+                                                      <label class="form-check-label" for={{i}}>
+                                                            {{results[i]}} </label>
+                                                </div>
+                                          </div>
+                                          {%endfor%}
+                                    </div>
+                                    {%endif%}
+                                    <div class="row justify-content-center">
+
+                                          <div class="col-md-3"><input type="button"
+                                                      class="btn btn-primary mt-3 mb-2 rounded-2" value="Очистить"
+                                                      onclick="window.location.href='';" />
+                                          </div>
+
+                                          <div class="col-md-3">
+
+                                                <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                                                      value="Сохранить" />
+                                          </div>
+
+                                    </div>
+                              </form>
+
+                        </div>
+                  </div>
             </div>
+
+            <div class="row mt-1">
+
+                  <img src={{ url_for('static', filename='Banner2X.png' ) }}>
+            </div>
+
             <div class="row">
-                  <div class="col-md-2">
-                        <span class="form-text"> Регион *</span>
-                  </div>
-                  <div class="col-md-4">
-                        <select class="form-select" name="place" id="place" required>
-                              <option selected>{{place}}</option>
-                              {% for town in towns %}
-                              <option value={{town}}>{{town}}</option>
-                              {% endfor %}
-                        </select>
-                  </div>
+                  <span class="text-end text-dark  font-family-Inter" style="font-size: 0.75rem;">
+                        версия {{ver()}} Hatul Madan </span>
+            </div>
+      </div>
 
-                  <div class="row">
-                        <div class="col-md-8">
-                              <label for="note" class="form-text">Текст объявления *</label>
-                              <textarea class="form-control" name="text" , id="note" rows="3"
-                                    required>{{post.text}}</textarea>
-                        </div>
-                  </div>
-                  <div class="row">
-                        <div class="col-md-2">
-                              <p class="form-text">e-mail </p>
+      {% block scripts %}
+      <!-- Optional JavaScript -->
+      {{ bootstrap.load_js() }}
+      {% endblock %}
+</body>
 
-                        </div>
-                        <div class="col-md-4"><input type="text" class="form-control" name="contact"
-                                    title=" e-mail или другой контакт" value={{post.phone}}>
-
-                        </div>
-
-                  </div>
-
-                  <div class="row">
-                        <div class="col-md-2 form-text">
-                               дата объявления 
-                        </div>
-                        <div class="col-md-4">
-                          {{post.created}} 
-                       </div>
-                  </div>
-                  {% if 'roles' in session.keys() and session['roles'].count("create_post")>0 %}
-                  <div class="row">
-                        <div class="col-md-2"> Результат проверки: </div>
-                        {% for i in [0,1,2] %}
-                      <div class="col-md-1">
-                        <div class="form-check">
-                              {%if post.result!=None and post.result==i %}
-                              <input class="form-check-input" type="radio" name="res" id={{i}} value={{i}}
-                              checked>
-                               {% else %}
-                              <input class="form-check-input" type="radio" name="res" id={{i}} value={{i}}>
-                              {% endif %} 
-                         <label class="form-check-label" for={{i}}> {{results[i]}} </label>
-                        </div>
-                      </div>
-                  {%endfor%}
-                  </div>
-                 {%endif%}
-                  <div class="row">
-
-                        <div class="col-md-3"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2"
-                                    value="Выйти" onclick="window.location.href='/list';" /> </div>
-
-                        <div class="col-md-3">
-
-                              <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить" />
-                        </div>
-
-                  </div>
-      </form>
-</div>
-{% endblock %}
+</html>

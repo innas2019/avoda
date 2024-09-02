@@ -17,16 +17,18 @@ user = ""
 towns = []
 hierarchy={}
 allrefs = {}
-
+results=["отклонить","в объявления","в биржу" ]
 def create_post(post, res):
     now = datetime.now(timezone.utc)
+    msg="сохранено"
     if post.id==0:
       new_post = Preposts(
         created=now,
         place=post.get_id_from_value(post.place),
         phone=post.phone,
         text=post.text,
-        contacts=post.contacts,    
+        contacts=post.contacts,  
+        name=post.name  
       )
       db.session.add(new_post)
     else:
@@ -34,9 +36,9 @@ def create_post(post, res):
       if res!=None:
           new_post.result=res
           new_post.created=now
-        
+      msg="Спасибо за заполнение анкеты. После проверки она появится на нашем сайте "  
     db.session.commit()
-    flash(post.phone + " записано")
+    flash(post.phone + " "+msg)
     
     return True
 
@@ -58,7 +60,7 @@ def list_prepost():
     if session['roles'].count("create_post")==0:
       return redirect("/list")  
     
-    query = db.select(Preposts).order_by(Preposts.created.desc())
+    query = db.select(Preposts).order_by(Preposts.result)
 
     # читаем по страницам
     limit = 20
@@ -80,9 +82,10 @@ def list_prepost():
     return render_template(
         "prepost/ulist.html",
         pagination=pagination,
-        title="заявления",
+        title="Анкеты соискателей",
         list=all, 
-        refs=allrefs        
+        refs=allrefs,
+        results=results        
     )
 
 @bp.route("/filter/<string:p>")
@@ -159,7 +162,7 @@ def post(id):
     else:
         #method get
         if id==0:
-          ps=Post("","","","")  
+          ps=Post("","","","Ищу работу в сфере ....  Полная занятость ... Языки: русский - родной, иврит - разговорный. Гражданин. Есть права на... ")  
           place=""
         else:
           ps = db.one_or_404(db.select(Preposts).where(Preposts.id == id))
@@ -170,7 +173,7 @@ def post(id):
             towns=towns,
             post=ps,
             place=place,
-            results=["-","+","биржа" ]
+            results=results
         )
 
 
@@ -185,4 +188,4 @@ def delete(id):
     db.session.delete(p)
     db.session.commit()
     flash(value + " удалено")
-    return redirect("/list")
+    return redirect("/prelist")

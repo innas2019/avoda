@@ -91,9 +91,16 @@ def create_app():
             elif hour<6:
                 return random.randint(10, 20)
             elif hour<16:
-                return random.randint(40, 55)
+                return random.randint(40, 62)
             else:
                 return random.randint(20, 40)
         
         return dict(mycounter=mycounter)
+    
+    @app.context_processor
+    def utility_processor():
+        def ver():
+            return "1.8"
+        return dict(ver=ver)
+    
     return app

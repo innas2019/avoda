@@ -87,6 +87,7 @@ class Advt(db.Model):
 class Preposts(db.Model):
     __tablename__ = "preposts"
     id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(40))
     phone = db.Column(db.String(40))
     text = db.Column(db.String(500))
     place = db.Column(db.String(40), nullable=False)
