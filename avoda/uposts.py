@@ -29,16 +29,16 @@ def create_post(post, res):
         name=post.name  
       )
       db.session.add(new_post)
-      msg="Спасибо за заполнение анкеты. После проверки она появится на нашем сайте "  
+      msg=post.name + ", спасибо за заполнение анкеты. После проверки она появится на нашем сайте. "  
    
     else:
       new_post = db.one_or_404(db.select(Preposts).where(Preposts.id == post.id))
       if res!=None:
           new_post.result=res
           new_post.created=now
-    
+      msg=post.phone + " "+msg
     db.session.commit()
-    flash(post.name + " "+msg)
+    flash(msg)
     
     return True
 
@@ -177,6 +177,9 @@ def post(id):
             results=results
         )
 
+@bp.route("/appage")
+def appage():
+   return redirect("/prepost/0")
 
 @bp.route("/del/<int:id>")
 @login_required

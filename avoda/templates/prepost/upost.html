@@ -43,7 +43,7 @@
                               </div>
                               <div class="col-md-8 justify-content-end d-flex">
                                     <p class="text-end text-dark fs-4 fw-semibold font-family-Inter ">
-                                          В системе более 200 работодателей и кадровых агенств.
+                                          В системе около 300 работодателей и кадровых агенств.
                                     </p>
                               </div>
                               <div class="col-md-8 justify-content-end d-flex ">
@@ -81,8 +81,8 @@
                                                 <p class="form-text fw-semibold">Имя *</p>
 
                                           </div>
-                                          <div class="col-md-4"><input type="text" class="form-control" name="name"
-                                                      required value={{post.name}}>
+                                          <div class="col-md-4"><input type="text" class="form-control" name="name" minlength="4"
+                                                title=" минимум 4 символа"       required value={{post.name}}>
 
                                           </div>
                                           <div class="col-md-4">
@@ -96,7 +96,7 @@
                                           </div>
                                           <div class="col-md-4"><input type="text" class="form-control" name="phone"
                                                       pattern="[0-9+]{10,}" maxlength="10"
-                                                      title=" допускаются только цифры" required
+                                                      title=" допускаются только цифры, 10 символов" required
                                                       value={{post.phone}}>
                                                 {% if post.id!=0 %}
                                                 <a href=# id=check_input>проверка</a>
