@@ -20,6 +20,9 @@ def create_post(post, res):
     now = datetime.now(timezone.utc)
     msg="сохранено"
     if post.id==0:
+      if "!ОБРАЗЕЦ!" in post.text:
+         flash("внесите свои данные в текст анкеты")
+         return False
       new_post = Preposts(
         created=now,
         place=post.get_id_from_value(post.place),
@@ -154,16 +157,23 @@ def post(id):
         n_post.name=form["name"]
         if "res" in form.keys():
            result=form["res"]
-        create_post(n_post,result)
+        if not create_post(n_post,result):
+            return render_template(
+            "prepost/upost.html",
+            towns=towns,
+            post=n_post,
+            place=n_post.place)
+    
         if id==0:
-           return redirect("/title")
+            return redirect("/appage")
         else:  
-           return redirect("/prelist")
+            return redirect("/prelist")
+          
         
     else:
         #method get
         if id==0:
-          ps=Post("","","","Ищу работу в сфере ....  Полная занятость ... Языки: русский - родной, иврит - разговорный. Гражданин. Есть права на... ")  
+          ps=Post("","","","!ОБРАЗЕЦ!  Ищу работу в сфере ....  Полная занятость ... Языки: русский - родной, иврит - разговорный. Гражданин. Есть права на... ")  
           place=""
         else:
           ps = db.one_or_404(db.select(Preposts).where(Preposts.id == id))
