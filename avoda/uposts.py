@@ -5,45 +5,64 @@ from avoda import db
 from avoda.models import Posts, Preposts
 from avoda import managing as m
 from datetime import datetime, timezone, timedelta
-#import json
-#from flask import jsonify
-from sqlalchemy import and_, or_
+
+# import json
+# from flask import jsonify
+from sqlalchemy import and_, or_, desc
 from avoda.posts import Post
+
 bp = Blueprint("uposts", __name__)
 
 user = ""
 towns = []
-hierarchy={}
+hierarchy = {}
 allrefs = {}
-results=["отклонить","в объявления","в биржу" ]
+pattern = "Ищу работу в сфере ....  Полная занятость ... Языки: русский - родной, иврит - разговорный. Гражданин. Есть права на... "
+results = ["отклонить", "в объявления", "в биржу"]
+
+
 def create_post(post, res):
     now = datetime.now(timezone.utc)
-    msg="сохранено"
-    if post.id==0:
-      if "!ОБРАЗЕЦ!" in post.text:
-         flash("внесите свои данные в текст анкеты")
-         return False
-      new_post = Preposts(
-        created=now,
-        place=post.get_id_from_value(post.place),
-        phone=post.phone,
-        text=post.text,
-        contacts=post.contacts,  
-        name=post.name  
-      )
-      db.session.add(new_post)
-      msg=post.name + ", спасибо за заполнение анкеты. После проверки она появится на нашем сайте. "  
-   
+    msg = "сохранено"
+    check=True
+    if post.id == 0:
+        if pattern == post.text:
+            msg="внесите свои данные в текст анкеты"
+            check = False
+
+        if "..."  in post.text:
+            msg="замените точки на информацию о себе"
+            check = False
+
+        if  not check:
+            flash(msg)
+            return False
+
+        new_post = Preposts(
+            created=now,
+            place=post.get_id_from_value(post.place),
+            phone=post.phone,
+            text=post.text,
+            contacts=post.contacts,
+            name=post.name,
+        )
+        db.session.add(new_post)
+        msg = (
+            post.name
+            + ", спасибо за заполнение анкеты. После проверки она появится на нашем сайте. "
+        )
+
     else:
-      new_post = db.one_or_404(db.select(Preposts).where(Preposts.id == post.id))
-      if res!=None:
-          new_post.result=res
-          new_post.created=now
-      msg=post.phone + " "+msg
+        new_post = db.one_or_404(db.select(Preposts).where(Preposts.id == post.id))
+        if res != None:
+            new_post.result = res
+            new_post.created = now
+        msg = post.phone + " " + msg
     db.session.commit()
     flash(msg)
-    
+
     return True
+
 
 @bp.before_app_request
 def load_ref():
@@ -54,23 +73,28 @@ def load_ref():
     allrefs = m.get_refs()
     towns = m.get_ref("places")
     towns.sort()
-    
-    hierarchy=m.get_hier_for_search()
+
+    hierarchy = m.get_hier_for_search()
+
 
 @bp.route("/prelist")
 @login_required
 def list_prepost():
-    if session['roles'].count("create_post")==0:
-      return redirect("/list")  
-    
-    query = db.select(Preposts).where((Preposts.result==None)|(Preposts.result != 0)).order_by(Preposts.result)
+    if session["roles"].count("create_post") == 0:
+        return redirect("/list")
+
+    query = (
+        db.select(Preposts)
+        .where((Preposts.result == None) | (Preposts.result != 0))
+        .order_by(Preposts.result,desc(Preposts.id))
+    )
 
     # читаем по страницам
     limit = 20
-   
+
     page = request.args.get(get_page_parameter(), type=int, default=1)
     ps = db.paginate(query, page=page, per_page=limit, error_out=True)
-    all=ps.items
+    all = ps.items
     pagination = Pagination(
         page=page,
         per_page=limit,
@@ -81,122 +105,124 @@ def list_prepost():
         next_label=">>",
         bs_version=4,
     )
-    
+
     return render_template(
         "prepost/ulist.html",
         pagination=pagination,
         title="Анкеты соискателей",
-        list=all, 
+        list=all,
         refs=allrefs,
-        results=results        
+        results=results,
     )
+
 
 @bp.route("/filter/<string:p>")
 @login_required
 # all/set  устанавливает или сбрасывает фильтр
-#set + параметр id исполььзуется для редактирования профиля администратором
-#параметр all+name сбрасывает постоянный фильтр
-#params: ?id=12&...”
+# set + параметр id исполььзуется для редактирования профиля администратором
+# параметр all+name сбрасывает постоянный фильтр
+# params: ?id=12&...”
 def filter(p):
-  session["search"]=""
-  url_params = request.args 
-  id=""
-  if 'id' in url_params: 
-    id=url_params['id']
-  
-  if p == "set":
-      if id=="":
-        user = db.session.execute(
-            db.select(Users).where(Users.name == session["name"])
-        ).scalar()
-        fstr=a.get_user_settings(user)
-        return render_template(
-            "posts/filters.html",
-            towns=towns,
-            languages=leng,
-            occupations=o_list,
-            o_kind=o_kind,
-            title="Настройки фильтра",
-            id=0,
-            filterstr=fstr
-        )
-      
-      else:
-        user = db.session.execute(
-            db.select(Users).where(Users.id == str(id))
-        ).scalar()
-        fstr=a.get_user_settings(user)
-        return render_template(
-            "posts/filters.html",
-            towns=towns,
-            languages=leng,
-            occupations=o_list,
-            o_kind=o_kind,
-            title="Настройки фильтра для "+user.name,
-            id=id,
-            filterstr=fstr)
+    session["search"] = ""
+    url_params = request.args
+    id = ""
+    if "id" in url_params:
+        id = url_params["id"]
 
-  if p == "all":
-    if id=="":
-        session["filter"] = ""
-        return redirect(url_for("posts.list"))
-    else:
-        session["filter"] = ""
-        a.update_settings(id,"")
-        return redirect("/filter/set?id="+id)
-    
+    if p == "set":
+        if id == "":
+            user = db.session.execute(
+                db.select(Users).where(Users.name == session["name"])
+            ).scalar()
+            fstr = a.get_user_settings(user)
+            return render_template(
+                "posts/filters.html",
+                towns=towns,
+                languages=leng,
+                occupations=o_list,
+                o_kind=o_kind,
+                title="Настройки фильтра",
+                id=0,
+                filterstr=fstr,
+            )
+
+        else:
+            user = db.session.execute(
+                db.select(Users).where(Users.id == str(id))
+            ).scalar()
+            fstr = a.get_user_settings(user)
+            return render_template(
+                "posts/filters.html",
+                towns=towns,
+                languages=leng,
+                occupations=o_list,
+                o_kind=o_kind,
+                title="Настройки фильтра для " + user.name,
+                id=id,
+                filterstr=fstr,
+            )
+
+    if p == "all":
+        if id == "":
+            session["filter"] = ""
+            return redirect(url_for("posts.list"))
+        else:
+            session["filter"] = ""
+            a.update_settings(id, "")
+            return redirect("/filter/set?id=" + id)
+
+
 @bp.route("/prepost/<int:id>", methods=["GET", "POST"])
-
 def post(id):
     if request.method == "POST":
         form = request.form
         n_post = Post("", form["place"], form["phone"], form["text"])
         n_post.id = id
         n_post.get_from_form(form)
-        result=None
-        n_post.name=form["name"]
+        result = None
+        n_post.name = form["name"]
         if "res" in form.keys():
-           result=form["res"]
-        if not create_post(n_post,result):
+            result = form["res"]
+        if not create_post(n_post, result):
             return render_template(
-            "prepost/upost.html",
-            towns=towns,
-            post=n_post,
-            place=n_post.place)
-    
-        if id==0:
+                "prepost/upost.html", towns=towns, post=n_post, place=n_post.place
+            )
+
+        if id == 0:
             return redirect("/appage")
-        else:  
-            return redirect("/prelist")
-          
-        
-    else:
-        #method get
-        if id==0:
-          ps=Post("","","","!ОБРАЗЕЦ!  Ищу работу в сфере ....  Полная занятость ... Языки: русский - родной, иврит - разговорный. Гражданин. Есть права на... ")  
-          place=""
         else:
-          ps = db.one_or_404(db.select(Preposts).where(Preposts.id == id))
-          place = allrefs[ps.place]
-                 
+            return redirect("/prelist")
+
+    else:
+        # method get
+        if id == 0:
+            ps = Post(
+                "",
+                "",
+                "",
+                pattern,
+            )
+            place = ""
+        else:
+            ps = db.one_or_404(db.select(Preposts).where(Preposts.id == id))
+            place = allrefs[ps.place]
+
         return render_template(
-            "prepost/upost.html",
-            towns=towns,
-            post=ps,
-            place=place,
-            results=results
+            "prepost/upost.html", towns=towns, post=ps, place=place, results=results, pattern=pattern
         )
+
 
 @bp.route("/appage")
 def appage():
-   return redirect("/prepost/0")
+    return redirect("/prepost/0")
+
 
 @bp.route("/del/<int:id>")
 @login_required
 def delete(id):
-    if session['roles'].count("create_post")==0:
-       return redirect("/list")
-      
+    if session["roles"].count("create_post") == 0:
+        return redirect("/list")
+
     p = db.one_or_404(db.select(Posts).where(Posts.id == id))
     value = p.phone
     db.session.delete(p)

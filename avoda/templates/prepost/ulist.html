@@ -46,6 +46,7 @@
     <thead>
       <tr class="table-secondary border-start border-end border-light text-left">
         <th scope="col">№</th>
+        <th scope="col">Имя</th>
         <th scope="col">Контакт</th>
         <th scope="col">Город</th>
         <th scope="col-md-6">Описание</th>
@@ -60,6 +61,9 @@
             {{post["id"]}}
           </a>
         </th>
+        <td>
+          {{ post["name"]}}</td>
+        </td>
         <td>
           <a class="link-underline-primary" href="/prepost/{{post["id"]}}"> {{ post["phone"] }} </a>
         </td>

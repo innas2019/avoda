@@ -75,7 +75,7 @@
                               <form action="/prepost/{{post.id }}" method="post">
                                     <div
                                           class="row  mt-3 justify-content-center fs-4 fw-semibold font-family-Inter bg-secondary-subtle">
-                                          Анкета соискателя </div>
+                                          Анкета соискателя (рабочие профессии)</div>
                                     <div class="row mt-3 justify-content-end">
                                           <div class="col-md-2">
                                                 <p class="form-text fw-semibold">Имя *</p>
@@ -94,8 +94,11 @@
                                                 <p class="form-text fw-semibold">Телефон *</p>
 
                                           </div>
-                                          <div class="col-md-4"><input type="text" class="form-control" name="phone"
-                                                      pattern="[0-9+]{10,}" maxlength="10"
+                                          <div class="col-md-8 form-text fw-semibold opacity-50">
+                                                в местном формате (10 цифр)
+                                          </div>
+                                          <div class="col-md-8"><input type="text" class="form-control" name="phone"
+                                                      pattern="[0-9]{10,}" maxlength="12"
                                                       title=" допускаются только цифры, 10 символов" required
                                                       value={{post.phone}}>
                                                 {% if post.id!=0 %}
@@ -103,16 +106,17 @@
                                                 <nbsp class="text-danger" id=result></nbsp>
                                                 {% endif %}
                                           </div>
-                                          <div class="col-md-4 form-text fw-semibold"">
-                                                в местном формате (10 цифр)
-                                          </div>
+                                         
 
                                     </div>
                                     <div class="row justify-content-end">
                                           <div class="col-md-2">
                                                 <span class="form-text fw-semibold"> Регион *</span>
                                           </div>
-                                          <div class="col-md-4">
+                                          <div class="col-md-8 form-text fw-semibold opacity-50">
+                                                регион для поиска работы
+                                          </div>
+                                          <div class="col-md-8">
                                                 <select class="form-select" name="place" id="place" required>
                                                       <option selected>{{place}}</option>
                                                       {% for town in towns %}
@@ -120,21 +124,24 @@
                                                       {% endfor %}
                                                 </select>
                                           </div>
-                                          <div class="col-md-4 form-text fw-semibold">
-                                                регион для поиска работы
-                                          </div>
+                                          
                                     </div>
                                     <div class="row justify-content-end">
                                           <div class="col-md-2">
-                                                <label for="note" class="form-text fw-semibold" pattern=!"^(!ОБРАЗЕЦ!)">Текст объявления 
+                                                <label for="note" class="form-text fw-semibold" >Текст объявления 
                                                       *</label>
                                           </div>
+                                          <div class="col-md-8 form-text fw-semibold opacity-50">
+                                                Заполните объявление по образцу ниже. Сотрите точки и добавьте информацию о себе. Лишнее уберите
+                                          </div>      
+                                    
+                                          
                                           <div class="col-md-8">
                                                 <textarea class="form-control" name="text" , id="note" rows="3"
-                                                minlength="15"  maxlength="450"    required>{{post.text}}</textarea>
+                                                minlength="15"  maxlength="450"  pattern="– ({{pattern}} )"  required>{{post.text}}</textarea>
                                           </div>
                                     </div>
-                                    <div class="row justify-content-end">
+                                    <div class="row justify-content-end mt-3">
                                           <div class="col-md-2">
                                                 <p class="form-text form-text fw-semibold">e-mail </p>
 
@@ -183,14 +190,11 @@
                                     {%endif%}
                                     <div class="row justify-content-center">
 
-                                          <div class="col-md-3"><input type="button"
+                                          <div class="col-sm-4"><input type="button"
                                                       class="btn btn-primary mt-3 mb-2 rounded-2" value="Очистить"
                                                       onclick="window.location.href='';" />
-                                          </div>
-
-                                          <div class="col-md-3">
-
-                                                <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
+                                                &nbsp;
+                                                      <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2"
                                                       value="Сохранить" />
                                           </div>
 
