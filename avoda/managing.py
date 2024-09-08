@@ -71,7 +71,7 @@ def refs(id):
     for name in results:
         refs_name.append(name[0])
     
-    query = db.select(Refs).order_by(Refs.name)
+    query = db.select(Refs).order_by(Refs.name,Refs.value)
     # читаем по страницам
     limit = 15
     if id == 0:
