@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- form -->
+<div class="row px-6 justify-content-center mt-3">
+
+      <form action="/vacs/{{post.id }}" method="post">
+            <div class="row  mt-3 fs-5 fw-semibold font-family-Inter ">
+                  <div class="col-md-4">
+                  Вакансия</div>
+                 {%if post["created"]%}
+                  <div class="col-md-4">
+                       опубликована:  {{post["created"].strftime("%d/%m/%Y")}}
+                    </div>
+                  {%endif%}
+            </div>        
+            <div class="row mt-3">
+                  <div class="col-md-2">
+                        <p class="form-text fw-semibold">Название компании или имя представителя*</p>
+
+                  </div>
+                  <div class="col-md-4"><input type="text" class="form-control" name="name" minlength="4"
+                              title=" минимум 4 символа" maxlength="30" required value={{post.name}}>
+
+                  </div>
+              
+            </div>
+            <div class="row ">
+                  <div class="col-md-2">
+                        <p class="form-text fw-semibold">Телефон *</p>
+
+                  </div>
+                  <div class="col-md-8 form-text fw-semibold opacity-50">
+                        в местном формате (до 12 цифр)
+                  </div>
+                  <div class="col-md-8"><input type="text" class="form-control" name="phone" pattern="[0-9]{12,}"
+                              maxlength="12" title=" допускаются только цифры, 12  символов" required
+                              value={{post.phone}}>
+                     <!--    {% if post.id!=0 %}
+                        <a href=# id=check_input>проверка</a>
+                        <nbsp class="text-danger" id=result></nbsp>
+                        {% endif %} -->
+                  </div>
+
+
+            </div>
+            <div class="row ">
+                  <div class="col-md-2">
+                        <span class="form-text fw-semibold"> Регион *</span>
+                  </div>
+                  <div class="col-md-8 form-text fw-semibold opacity-50">
+                        выберите регион или город
+                  </div>
+                  <div class="col-md-8">
+                        <select class="form-select" name="place" id="place" required>
+                              <option selected>{{place}}</option>
+                              {% for town in towns %}
+                              <option value={{town}}>{{town}}</option>
+                              {% endfor %}
+                        </select>
+                  </div>
+
+            </div>
+            <div class="row mt-3 ">
+                  <div class="col-md-2 form-text fw-semibold">
+                        Работы: </div>
+                  <div class="col-md-8 form-text fw-semibold opacity-50">
+                              выберите одну категорию
+                  </div>      
+                  <div class="col-md-8">
+                  {% for oc in occupations %}
+                        <div class="form-check form-check-inline">
+                              {% if post.occupations!=None and post.occupations.count(oc)>0 %}
+                              <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}}
+                                    id={{"oc_"+oc}} checked>
+
+                              {% else %}
+                              <input class="form-check-input" type="checkbox" value="{{oc}}" name={{"oc_"+oc}}
+                                    id={{"oc_"+oc}}>
+                              {% endif %}
+                              <label class="form-check-label" for={{"oc_"+oc}}> {{oc}} </label>
+                        </div>
+                   {% endfor %}
+                  </div>
+            </div>
+            <div class="row mt-3 ">
+                  <div class="col-md-2">
+                        <label for="note" class="form-text fw-semibold">Текст объявления
+                              *</label>
+                  </div>
+                  <div class="col-md-6 form-text fw-semibold opacity-50">
+                        Заполните объявление по образцу ниже. Сотрите точки и добавьте информацию о вакансии. Лишнее
+                        уберите.
+                  </div>
+
+
+                  <div class="col-md-8">
+                        <textarea class="form-control" name="text" , id="note" rows="3" minlength="15" maxlength="450"
+                              pattern="– ({{pattern}} )" required>{{post.text}}</textarea>
+                  </div>
+            </div>
+            <div class="row mt-3 ">
+                  <div class="col-md-2">
+                        <p class="form-text fw-semibold">Зарплата, шек в час, от*</p>
+
+                  </div>
+                  <div class="col-md-4"><input type="number" class="form-control" name="name" minlength="4"
+                               maxlength="30" required value={{post.salary}}>
+
+                  </div>
+                  <div class="col-md-4">
+
+                  </div>
+            </div>
+            <div class="row  mt-3">
+                  <div class="col-md-2">
+                        <p class="form-text form-text fw-semibold">e-mail </p>
+
+                  </div>
+                  <div class="col-md-4"><input type="text" class="form-control" name="contacts"
+                              title=" e-mail или другой контакт" maxlength="50" value={{post.contacts}}>
+
+                  </div>
+                  <div class="col-md-4">
+
+                  </div>
+            </div>
+           
+            {% if 'roles' in session.keys() and
+            session['roles'].count("create_post")>0 %}
+            <div class="row ">
+                  <div class="col-md-10 form-text fw-semibold"> Статус: </div>
+                  {% for i in [0,1,2] %}
+                  <div class="col-md-10">
+                        <div class="form-check form-check-inline">
+                              {%if post.result!=None and post.result==i %}
+                              <input class="form-check-input" type="radio" name="res" id={{i}} value={{i}} checked>
+                              {% else %}
+                              <input class="form-check-input" type="radio" name="res" id={{i}} value={{i}}>
+                              {% endif %}
+                              <label class="form-check-label" for={{i}}>
+                                    {{results[i]}} </label>
+                        </div>
+                  </div>
+                  {%endfor%}
+            </div>
+            {%endif%}
+            <div class="row justify-content-center">
+
+                  <div class="col-sm-4"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2"
+                              value="Выйти" onclick="window.location.href='/vacs';" />
+                        &nbsp;
+                        {% if 'roles' in session.keys() and
+            session['roles'].count("create_post")>0 %}
+                        <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить" />
+                        {%endif%}
+                  </div>
+
+            </div>
+      </form>
+
+</div>
+
+{% endblock %}

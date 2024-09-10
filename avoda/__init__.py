@@ -80,6 +80,10 @@ def create_app():
     from avoda import uposts
 
     app.register_blueprint(uposts.bp)
+
+    from avoda import vacancies
+
+    app.register_blueprint(vacancies.bp)
     
     @app.context_processor
     def utility_processor():
@@ -100,7 +104,7 @@ def create_app():
     @app.context_processor
     def utility_processor():
         def ver():
-            return "1.8"
+            return "2.0"
         return dict(ver=ver)
     
     return app

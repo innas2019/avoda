@@ -65,7 +65,12 @@
         </td>
        
         <td>
-          {{ o["text"] }}
+          {{ o["text"][:200] }}
+            {% if o["text"]|length > 200 %}
+            ...
+            {% endif %}
+         
+       
         </td>
         {% if session['roles'].count("adminisrators")>0 %}
         <td>

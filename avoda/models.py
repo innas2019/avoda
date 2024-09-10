@@ -93,8 +93,24 @@ class Preposts(db.Model):
     place = db.Column(db.String(40), nullable=False)
     created = db.Column(db.DateTime())
     contacts = db.Column(db.String(100))
-    result = db.Column(db.Integer)    
-   
+    result = db.Column(db.Integer)   
+    
+class Vacancies(db.Model):
+    __tablename__ = "vacancies"
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(40))
+    phone = db.Column(db.String(40))
+    text = db.Column(db.String(500))
+    place = db.Column(db.String(40), nullable=False)
+    created = db.Column(db.DateTime())
+    contacts = db.Column(db.String(100))
+    result = db.Column(db.Integer)
+    salary = db.Column(db.Numeric(5,2))  
+    occupations = db.Column(db.String(100))
+    # Relationship
+    user = db.relationship('Users')
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))   
+
 @login.user_loader
 def load_user(id):
     return db.session.get(Users, int(id))  

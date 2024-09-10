@@ -134,12 +134,7 @@ class Post:
                 self.len[x] = self.get_id_from_value(self.len[x])
         return self.len
 
-
-# для показа рода занятий  из списка постов
-@bp.context_processor
-def utility_processor():
-
-    def show_in_view(s):
+def show_in_view(s):
         if s != None:
             res = ""
             ids = json.loads(s)
@@ -147,6 +142,10 @@ def utility_processor():
                 res = res + " " + allrefs[i]
             return res
         return ""
+
+# для показа рода занятий  из списка постов
+@bp.context_processor
+def utility_processor():
 
     return dict(show_in_view=show_in_view) 
 
