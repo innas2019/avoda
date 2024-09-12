@@ -27,7 +27,17 @@ class Vacancy(Post):
      Post.__init__(self, _name, _place, _phone, _text)
      self.salary=_salary
      self.result=_result
+   
+    def get_vacs_from_db(self, p):
+        self.id = p.id
+        if p.contacts!=None:
+            self.contacts=p.contacts
+        if p.occupations != None:
+            self.occupations = self.get_name_by_id(json.loads(p.occupations))
+        if p.place != None and p.place != "":
+            self.place = allrefs[p.place]
 
+    
 @bp.before_app_request
 def load_ref():
     global towns
@@ -41,7 +51,7 @@ def load_ref():
     o_list = m.get_ref("occupations")
     hierarchy = m.get_hier_for_search()
 
-def create_post(post, res):
+def create_post(post):
     now = datetime.now(timezone.utc)
     msg = "сохранено"
     check=True
@@ -65,7 +75,11 @@ def create_post(post, res):
             text=post.text,
             contacts=post.contacts,
             name=post.name,
-        )
+            salary=post.salary,
+            result=post.result)
+        if post.occupations != "":
+                new_post.occupations = json.dumps(post.get_id_from_value(post.occupations))       
+                            
         db.session.add(new_post)
         msg = (
             post.name
@@ -73,10 +87,16 @@ def create_post(post, res):
         )
 
     else:
-        new_post = db.one_or_404(db.select(Vacancies).where(Vacancies.id == post.id))
-        if res != None:
-            new_post.result = res
-            new_post.created = now
+        ps = db.one_or_404(db.select(Vacancies).where(Vacancies.id == post.id))
+        ps.place=post.get_id_from_value(post.place)
+        ps.phone=post.phone
+        ps.text=post.text
+        ps.contacts=post.contacts
+        ps.name=post.name
+        ps.salary=post.salary
+        ps.result=post.result
+        if post.occupations != "":
+                ps.occupations = json.dumps(post.get_id_from_value(post.occupations))       
         msg = post.phone + " " + msg
     db.session.commit()
     flash(msg)
@@ -86,10 +106,10 @@ def create_post(post, res):
 @bp.route("/vacs")
 def list_vacs():
     query=None
-    if ("roles" in session) and (session["roles"].count("create_roles")) > 0:
+    if ("roles" in session) and (session["roles"].count("create_post")) > 0:
      query = (
         db.select(Vacancies)
-        .where(Vacancies.result != 0)
+        .where((Vacancies.result == None) | (Vacancies.result != 0))
         .order_by(Vacancies.result,desc(Vacancies.id))
       )
     else:
@@ -133,20 +153,25 @@ def utility_processor():
 def post(id):
     if request.method == "POST":
         form = request.form
-        n_post = Vacancy("", form["place"], form["phone"], form["text"],form["salary"],None)
+        n_post = Vacancy(form["name"], form["place"], form["phone"], form["text"],form["salary"],None)
         n_post.id = id
         n_post.get_from_form(form)
         if "res" in form.keys():
             n_post.result = form["res"]
+        n_post.salary=form["salary"]
+        if "res" in form.keys():
+          n_post.result=form["res"]
+        
         if not create_post(n_post):
             return render_template(
-                "vacs/vac.html", towns=towns, post=n_post, place=n_post.place,occupations=o_list
+                "vacs/vac.html", towns=towns, post=n_post, place=n_post.place,occupations=o_list, editmode=True
             )
 
         return redirect("/vacs")
 
     else:
         # method get
+        editmode=False
         if id == 0:
             ps = Vacancy(
                 "",
@@ -155,10 +180,16 @@ def post(id):
                 pattern,0,None
             )
             place = ""
+            editmode=True
         else:
             ps = db.one_or_404(db.select(Vacancies).where(Vacancies.id == id))
-            place = allrefs[ps.place]
-
+            p = Vacancy(ps.name, ps.place, ps.phone, ps.text,ps.salary,ps.result)
+            p.get_vacs_from_db(ps)
+            #            place = allrefs[ps.place]
+            #        if p.occupations != None:
+            #self.occupations = self.get_name_by_id(json.loads(p.occupations))
+            if ("roles" in session) and (session["roles"].count("create_post")) > 0: 
+                editmode=True
         return render_template(
-            "vacs/vac.html", towns=towns, post=ps, place=place, results=results, pattern=pattern,occupations=o_list
+            "vacs/vac.html", towns=towns, post=p, place=p.place, results=results, pattern=pattern,occupations=o_list,editmode=editmode
         )

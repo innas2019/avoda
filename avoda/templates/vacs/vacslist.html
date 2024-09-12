@@ -10,7 +10,7 @@
 </div>
 
 <div class="row justify-content-end">
-  {% if session['name']%}
+  {% if session['name'] and session['roles'].count("create_post")>0%}
   <div class="col-md-2"> 
   <input type="button" class="btn btn-dark btn-sm rounded-2" value="Новое"
       onclick="window.location.href='/vac/0';" />
@@ -46,13 +46,6 @@
 <div class="row">
   {{ pagination.links }}
 </div>
-<!-- name = db.Column(db.String(40))
-phone = db.Column(db.String(40))
-text = db.Column(db.String(500))
-place = db.Column(db.String(40), nullable=False)
-
-result = db.Column(db.Integer)
-salary = db.Column(db.Numeric(5,2))   -->
 <div class="row">
   <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
     <thead>

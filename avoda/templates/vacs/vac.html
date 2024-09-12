@@ -3,7 +3,7 @@
 <!-- form -->
 <div class="row px-6 justify-content-center mt-3">
 
-      <form action="/vacs/{{post.id }}" method="post">
+      <form action="/vac/{{post.id }}" method="post">
             <div class="row  mt-3 fs-5 fw-semibold font-family-Inter ">
                   <div class="col-md-4">
                   Вакансия</div>
@@ -29,11 +29,13 @@
                         <p class="form-text fw-semibold">Телефон *</p>
 
                   </div>
+                  {%if editmode%}
                   <div class="col-md-8 form-text fw-semibold opacity-50">
                         в местном формате (до 12 цифр)
                   </div>
-                  <div class="col-md-8"><input type="text" class="form-control" name="phone" pattern="[0-9]{12,}"
-                              maxlength="12" title=" допускаются только цифры, 12  символов" required
+                  {%endif%}
+                  <div class="col-md-8"><input type="text" class="form-control" name="phone" pattern="[0-9]{10,}"
+                              maxlength="12" title=" допускаются только цифры" required
                               value={{post.phone}}>
                      <!--    {% if post.id!=0 %}
                         <a href=# id=check_input>проверка</a>
@@ -47,9 +49,11 @@
                   <div class="col-md-2">
                         <span class="form-text fw-semibold"> Регион *</span>
                   </div>
+                  {%if editmode%}
                   <div class="col-md-8 form-text fw-semibold opacity-50">
                         выберите регион или город
                   </div>
+                  {%endif%}
                   <div class="col-md-8">
                         <select class="form-select" name="place" id="place" required>
                               <option selected>{{place}}</option>
@@ -63,9 +67,11 @@
             <div class="row mt-3 ">
                   <div class="col-md-2 form-text fw-semibold">
                         Работы: </div>
-                  <div class="col-md-8 form-text fw-semibold opacity-50">
+                        {%if editmode%}
+                        <div class="col-md-8 form-text fw-semibold opacity-50">
                               выберите одну категорию
-                  </div>      
+                        </div>   
+                        {%endif%}   
                   <div class="col-md-8">
                   {% for oc in occupations %}
                         <div class="form-check form-check-inline">
@@ -84,14 +90,15 @@
             </div>
             <div class="row mt-3 ">
                   <div class="col-md-2">
-                        <label for="note" class="form-text fw-semibold">Текст объявления
+                        <label for="note" class="form-text fw-semibold">Описание вакансии
                               *</label>
                   </div>
+                  {%if editmode%}
                   <div class="col-md-6 form-text fw-semibold opacity-50">
-                        Заполните объявление по образцу ниже. Сотрите точки и добавьте информацию о вакансии. Лишнее
+                        Заполните по образцу ниже. Сотрите точки и добавьте информацию о вакансии. Лишнее
                         уберите.
                   </div>
-
+                  {%endif%}
 
                   <div class="col-md-8">
                         <textarea class="form-control" name="text" , id="note" rows="3" minlength="15" maxlength="450"
@@ -103,7 +110,7 @@
                         <p class="form-text fw-semibold">Зарплата, шек в час, от*</p>
 
                   </div>
-                  <div class="col-md-4"><input type="number" class="form-control" name="name" minlength="4"
+                  <div class="col-md-4"><input type="number" class="form-control" name="salary" minlength="4"
                                maxlength="30" required value={{post.salary}}>
 
                   </div>
@@ -149,8 +156,7 @@
                   <div class="col-sm-4"><input type="button" class="btn btn-primary mt-3 mb-2 rounded-2"
                               value="Выйти" onclick="window.location.href='/vacs';" />
                         &nbsp;
-                        {% if 'roles' in session.keys() and
-            session['roles'].count("create_post")>0 %}
+                        {% if editmode %}
                         <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить" />
                         {%endif%}
                   </div>
