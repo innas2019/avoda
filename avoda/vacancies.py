@@ -173,7 +173,7 @@ def post(id):
         # method get
         editmode=False
         if id == 0:
-            ps = Vacancy(
+            p = Vacancy(
                 "",
                 "",
                 "",
