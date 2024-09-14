@@ -18,9 +18,13 @@
                         <p class="form-text fw-semibold">Название компании или имя представителя*</p>
 
                   </div>
-                  <div class="col-md-4"><input type="text" class="form-control" name="name" minlength="4"
+                  <div class="col-md-4">
+                        {%if editmode%}
+                        <input type="text" class="form-control" name="name" minlength="4"
                               title=" минимум 4 символа" maxlength="30" required value={{post.name}}>
-
+                        {%else%}
+                        {{post.name}}
+                        {%endif%}
                   </div>
               
             </div>
@@ -33,7 +37,7 @@
                   <div class="col-md-8 form-text fw-semibold opacity-50">
                         в местном формате (до 12 цифр)
                   </div>
-                  {%endif%}
+                 
                   <div class="col-md-8"><input type="text" class="form-control" name="phone" pattern="[0-9]{10,}"
                               maxlength="12" title=" допускаются только цифры" required
                               value={{post.phone}}>
@@ -42,8 +46,11 @@
                         <nbsp class="text-danger" id=result></nbsp>
                         {% endif %} -->
                   </div>
-
-
+                  {%else%}
+                  <div class="col-md-8">
+                  {{post.phone}}
+                  {%endif%}
+            </div>
             </div>
             <div class="row ">
                   <div class="col-md-2">
@@ -53,7 +60,6 @@
                   <div class="col-md-8 form-text fw-semibold opacity-50">
                         выберите регион или город
                   </div>
-                  {%endif%}
                   <div class="col-md-8">
                         <select class="form-select" name="place" id="place" required>
                               <option selected>{{place}}</option>
@@ -62,7 +68,11 @@
                               {% endfor %}
                         </select>
                   </div>
-
+                  {%else%}
+                  <div class="col-md-8">
+                   {{place}}
+                      </div>
+                  {%endif%}
             </div>
             <div class="row mt-3 ">
                   <div class="col-md-2 form-text fw-semibold">
@@ -98,21 +108,29 @@
                         Заполните по образцу ниже. Сотрите точки и добавьте информацию о вакансии. Лишнее
                         уберите.
                   </div>
-                  {%endif%}
-
                   <div class="col-md-8">
                         <textarea class="form-control" name="text" , id="note" rows="3" minlength="15" maxlength="450"
                               pattern="– ({{pattern}} )" required>{{post.text}}</textarea>
                   </div>
+                  {%else%}
+
+                  <div class="col-md-8">
+                      {{post.text}}
+                  </div>
+                  {%endif%}
             </div>
             <div class="row mt-3 ">
                   <div class="col-md-2">
                         <p class="form-text fw-semibold">Зарплата, шек в час, от*</p>
 
                   </div>
-                  <div class="col-md-4"><input type="number" class="form-control" name="salary" minlength="4"
+                  <div class="col-md-4">
+                        {% if editmode %}
+                        <input type="number" class="form-control" name="salary" minlength="4"
                                maxlength="30" required value={{post.salary}}>
-
+                        {%else%}  
+                        {{post.salary}}
+                        {%endif%}   
                   </div>
                   <div class="col-md-4">
 
@@ -123,13 +141,15 @@
                         <p class="form-text form-text fw-semibold">e-mail </p>
 
                   </div>
-                  <div class="col-md-4"><input type="text" class="form-control" name="contacts"
-                              title=" e-mail или другой контакт" maxlength="50" value={{post.contacts}}>
-
-                  </div>
                   <div class="col-md-4">
-
+                        {% if editmode %}
+                        <input type="text" class="form-control" name="contacts"
+                              title=" e-mail или другой контакт" maxlength="50" value={{post.contacts}}>
+                        {%else%}
+                        {{post.contacts}}
+                        {%endif%}
                   </div>
+                 
             </div>
            
             {% if 'roles' in session.keys() and

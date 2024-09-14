@@ -64,6 +64,10 @@ def create_post(post):
             msg="замените точки на информацию о вакансии"
             check = False
 
+        if int(post.salary)<30:
+            msg="зарплата не менее 30 шек/час"
+            check = False
+
         if  not check:
             flash(msg)
             return False
@@ -164,9 +168,9 @@ def post(id):
         
         if not create_post(n_post):
             return render_template(
-                "vacs/vac.html", towns=towns, post=n_post, place=n_post.place,occupations=o_list, editmode=True
+                "vacs/vac.html", towns=towns, post=n_post, place=n_post.place,results=results, occupations=o_list, editmode=True
             )
-
+    
         return redirect("/vacs")
 
     else:
