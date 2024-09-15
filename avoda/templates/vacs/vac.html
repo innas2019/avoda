@@ -37,8 +37,8 @@
                   <div class="col-md-8 form-text fw-semibold opacity-50">
                         в местном формате (до 12 цифр)
                   </div>
-                 
-                  <div class="col-md-8"><input type="text" class="form-control" name="phone" pattern="[0-9]{10,}"
+                
+                  <div class="col-md-8"><input type="text" class="form-control" name="phone" pattern="[0-9+]{8,}"
                               maxlength="12" title=" допускаются только цифры" required
                               value={{post.phone}}>
                      <!--    {% if post.id!=0 %}
@@ -76,7 +76,7 @@
             </div>
             <div class="row mt-3 ">
                   <div class="col-md-2 form-text fw-semibold">
-                        Работы: </div>
+                        Категория: </div>
                         {%if editmode%}
                         <div class="col-md-8 form-text fw-semibold opacity-50">
                               выберите одну категорию
@@ -109,7 +109,7 @@
                         уберите.
                   </div>
                   <div class="col-md-8">
-                        <textarea class="form-control" name="text" , id="note" rows="3" minlength="15" maxlength="450"
+                        <textarea class="form-control" name="text" , id="note" rows="6" minlength="15" maxlength="450"
                               pattern="– ({{pattern}} )" required>{{post.text}}</textarea>
                   </div>
                   {%else%}

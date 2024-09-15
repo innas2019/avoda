@@ -9,10 +9,10 @@
   </div>
 </div>
 
-<div class="row justify-content-end">
-  {% if session['name'] and session['roles'].count("create_post")>0%}
+<div class="row ">
+  {% if session['name'] %}
   <div class="col-md-2"> 
-  <input type="button" class="btn btn-dark btn-sm rounded-2" value="Новое"
+  <input type="button" class="btn btn-dark btn-sm rounded-2" value="Добавить вакансию"
       onclick="window.location.href='/vac/0';" />
     </div> 
   {% endif %}
@@ -70,7 +70,7 @@
           </a>
         </th>
         <td>
-          {{ post["name"]}}</td>
+          {{ post["name"][:20]}}</td>
         </td>
         <td>
           <a class="link-underline-primary" href="/vac/{{post["id"]}}"> {{ post["phone"] }} </a>

@@ -51,6 +51,21 @@ def load_ref():
     o_list = m.get_ref("occupations")
     hierarchy = m.get_hier_for_search()
 
+def count_post(id):
+    if ("roles" in session) and (session["roles"].count("create_post")) > 0: 
+           return True
+    current_time = datetime.now()
+    delta = current_time - timedelta(days=1)
+    query = (
+        db.select(Vacancies)
+        .where((Vacancies.user_id == id) & (Vacancies.created > delta)))
+    res=db.session.execute(query).scalars()
+    all=[]
+    all=(res.all())
+    print("count"+str(len(all)))
+    return len(all)<3
+        
+
 def create_post(post):
     now = datetime.now(timezone.utc)
     msg = "сохранено"
@@ -64,8 +79,8 @@ def create_post(post):
             msg="замените точки на информацию о вакансии"
             check = False
 
-        if int(post.salary)<30:
-            msg="зарплата не менее 30 шек/час"
+        if int(post.salary)<33:
+            msg="зарплата не менее 33 шек/час"
             check = False
 
         if  not check:
@@ -80,14 +95,15 @@ def create_post(post):
             contacts=post.contacts,
             name=post.name,
             salary=post.salary,
-            result=post.result)
+            result=post.result,
+            user_id=post.user_id)
         if post.occupations != "":
                 new_post.occupations = json.dumps(post.get_id_from_value(post.occupations))       
                             
         db.session.add(new_post)
         msg = (
-            post.name
-            + ", спасибо за заполнение вакансии. После проверки она появится на нашем сайте. "
+            session["name"]
+            + ", спасибо за заполнение вакансии. После проверки модератором она появится на нашем сайте. "
         )
 
     else:
@@ -159,6 +175,8 @@ def post(id):
         form = request.form
         n_post = Vacancy(form["name"], form["place"], form["phone"], form["text"],form["salary"],None)
         n_post.id = id
+        n_post.user_id=session["_user_id"]
+       
         n_post.get_from_form(form)
         if "res" in form.keys():
             n_post.result = form["res"]
@@ -177,6 +195,10 @@ def post(id):
         # method get
         editmode=False
         if id == 0:
+            if count_post(session["_user_id"]) ==False:
+                flash("Допустимо размещение не более 3 вакансий в сутки.")
+                return redirect("/vacs")
+
             p = Vacancy(
                 "",
                 "",
