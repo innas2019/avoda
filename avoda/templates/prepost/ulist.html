@@ -45,7 +45,6 @@
   <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
     <thead>
       <tr class="table-secondary border-start border-end border-light text-left">
-        <th scope="col">№</th>
         <th scope="col">Имя</th>
         <th scope="col">Контакт</th>
         <th scope="col">Город</th>
@@ -58,12 +57,10 @@
       <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
         <th scope="row">
           <a class="link-underline-primary" href="/prepost/{{post["id"]}}">
-            {{post["id"]}}
+            {{ post["name"]}}</td>
           </a>
         </th>
-        <td>
-          {{ post["name"]}}</td>
-        </td>
+       
         <td>
           <a class="link-underline-primary" href="/prepost/{{post["id"]}}"> {{ post["phone"] }} </a>
         </td>

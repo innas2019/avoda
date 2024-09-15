@@ -113,13 +113,13 @@
             </div>
         </nav>
         {{ render_messages() }}
-        <div class="row px-2 align-text-bottom fw-semibold font-family-Inter">
+        <div class="row px-2 align-text-bottom  font-family-Inter">
             {% if adv!=undefined %}
-            <div class="col-md-1 fs-5 ">
-                  Биржа:
+            <div class="col-md-2 fw-semibold fs-5 ">
+                  Биржа
             </div> 
              
-            <div class="col-md-11 text-primary">
+            <div class="col-md-10 text-primary">
                 <a href="{{ url_for('info.list_advert') }}">
                 {{ adv["text"][:120] }}</a>
                 {% if adv["text"]|length > 200 %}

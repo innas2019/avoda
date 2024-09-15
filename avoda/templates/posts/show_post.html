@@ -1,14 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container-md">
-   <div class="px-6 mt-3">
-      {% if session['page'] %}
-      <a class="link-underline-primary font-family-Inter" href="/list?page={{session['page']}}"> {{
-         render_icon('arrow-left', 18) }} Вернуться к списку</a>
-      {% else %}
-      <a class="link-underline-primary font-family-Inter" href="/list"> {{ render_icon('arrow-left', 18) }}Вернуться на
-         страницу </a>
-      {% endif %}
+   <div class="row  mt-3">
+      <div class="col-md-2 fw-semibold fs-5">
+         Поиск сотрудников
+      </div>
+      <div class="col-md-10">
+         {% if session['page'] %}
+         <a class="link-underline-primary font-family-Inter" href="/list?page={{session['page']}}"> {{
+            render_icon('arrow-left', 18) }} Вернуться к списку</a>
+         {% else %}
+         <a class="link-underline-primary font-family-Inter" href="/list"> {{ render_icon('arrow-left', 18) }}Вернуться
+            на
+            страницу </a>
+         {% endif %}
+      </div>
    </div>
    <div class="row mt-3">
       <p class="font-family-Inter  opacity-50">
@@ -30,7 +35,7 @@
          <div class="col-md-2 opacity-50"> Ссылки: </div>
          <div class="col-md-9">{{render_icon('facebook', 16) }}
             {% if post["contacts"]!="" %}
-            <a class="link-underline-primary" href="{{ post["contacts"]}}" target="_blank"> {{ post["contacts"]}} </a>
+            <a class="link-underline-primary" href="{{ post[" contacts"]}}" target="_blank"> {{ post["contacts"]}} </a>
             {% endif %}
 
          </div>
@@ -141,5 +146,5 @@
       </div>
    </div>
 </div>
-</div>
+
 {% endblock %}

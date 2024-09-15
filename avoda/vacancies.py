@@ -62,7 +62,6 @@ def count_post(id):
     res=db.session.execute(query).scalars()
     all=[]
     all=(res.all())
-    print("count"+str(len(all)))
     return len(all)<3
         
 
@@ -82,6 +81,9 @@ def create_post(post):
         if int(post.salary)<33:
             msg="зарплата не менее 33 шек/час"
             check = False
+        if int(post.salary)>150:
+            msg="ошибка в указании зарплаты"
+            check = False    
 
         if  not check:
             flash(msg)
@@ -211,7 +213,7 @@ def post(id):
             ps = db.one_or_404(db.select(Vacancies).where(Vacancies.id == id))
             p = Vacancy(ps.name, ps.place, ps.phone, ps.text,ps.salary,ps.result)
             p.get_vacs_from_db(ps)
-            #            place = allrefs[ps.place]
+            p.created = ps.created
             #        if p.occupations != None:
             #self.occupations = self.get_name_by_id(json.loads(p.occupations))
             if ("roles" in session) and (session["roles"].count("create_post")) > 0: 
