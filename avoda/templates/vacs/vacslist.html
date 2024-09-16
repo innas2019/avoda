@@ -50,8 +50,8 @@
   <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
     <thead>
       <tr class="table-secondary border-start border-end border-light text-left">
-        <th scope="col">Имя</th>
-        <th scope="col">Контакт</th>
+        <th scope="col" class="d-none d-md-block">Имя</th>
+        <th scope="col ">Контакт</th>
         <th scope="col">Город</th>
         <th scope="col-md-6">Описание</th>
         <th scope="col">З/п от</th>
@@ -63,7 +63,7 @@
     <tbody>
       {% for post in list %}
       <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-        <th scope="row">
+        <th scope="row" class="d-none d-md-block">
           <a class="link-underline-primary" href="/vac/{{post["id"]}}">
             {{ post["name"][:20]}}</td>
           </a>

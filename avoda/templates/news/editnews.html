@@ -39,7 +39,7 @@
             </div>
       </div>
       <div class="row">
-            <div class="col-md-3 form-text">Приоритет
+            <div class="col-md-3 form-text">Приоритет, 0 - общий список, 1 - в "вопросы и ответы"
             </div>
             <div class="col-md-2">
                {% if n["priority"]!=None  %}
@@ -50,8 +50,20 @@
                  
             </div>
       </div>
-        <div class="col"><input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Ok" title="Сохранить" />
+      <div class="row">
+        <div class="col-md-2">
+            <input type="submit" class="btn btn-primary mt-3 mb-2 rounded-2" value="Сохранить" 
+            title="Сохранить" />
         </div>
+        <div class="col-md-2">
+            <input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Удалить" 
+            title="Удалить"  onclick="window.location.href='/infoc/{{id}}';"/>
+        </div>
+        <div class="col-md-2">
+            <input type="button" class="btn btn-primary mt-3 mb-2 rounded-2" value="Обновить" 
+            title="Обновить для рассылки"  onclick="window.location.href='/infoe/{{id}}';"/>
+        </div>
+      </div>
     </form>
 </div>
 

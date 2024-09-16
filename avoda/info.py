@@ -140,3 +140,27 @@ def info_edit(id):
       new_n = db.one_or_404(db.select(News).where(News.id == id)) 
     
     return  render_template("/news/editnews.html", id=id, n=new_n)
+  
+#delete news
+@bp.route("/infoc/<int:id>")
+@login_required
+def info_del(id):
+  if session['roles'].count("adminisrators")==0:
+      return redirect("/showinfo")  
+  flash("Пока не работает")
+  return redirect("/showinfo")
+#renew news
+@bp.route("/infoe/<int:id>")
+@login_required
+def info_renew(id):
+  if session['roles'].count("adminisrators")==0:
+      return redirect("/showinfo")  
+  #last number
+  last=db.session.execute(db.select(News).order_by(News.id.desc())).scalar()
+  old_n = db.one_or_404(db.select(News).where(News.id == id))   
+  old_n.id=last.id+1
+  now = datetime.now(timezone.utc)
+  old_n.created=now
+  db.session.commit()
+  flash("Обновлено успешно")
+  return redirect("/showinfo")
