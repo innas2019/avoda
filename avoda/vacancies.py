@@ -118,7 +118,8 @@ def create_post(post):
         ps.salary=post.salary
         ps.result=post.result
         if post.occupations != "":
-                ps.occupations = json.dumps(post.get_id_from_value(post.occupations))       
+                ps.occupations = json.dumps(post.get_id_from_value(post.occupations)) 
+        ps.created=now              
         msg = post.phone + " " + msg
     db.session.commit()
     flash(msg)
@@ -132,13 +133,18 @@ def list_vacs():
      query = (
         db.select(Vacancies)
         .where((Vacancies.result == None) | (Vacancies.result != 0))
-        .order_by(Vacancies.result,desc(Vacancies.id))
+        .order_by(Vacancies.result,desc(Vacancies.created))
+      )
+     if ("vfilter" in session ):
+        if session["vfilter"]!="":
+            query = (db.select(Vacancies) .where(Vacancies.result== session["vfilter"])
+        .order_by(desc(Vacancies.created))
       )
     else:
       query = (
         db.select(Vacancies)
         .where(Vacancies.result == 1)
-        .order_by(Vacancies.result,desc(Vacancies.id))
+        .order_by(Vacancies.result,desc(Vacancies.created))
       )  
     # читаем по страницам
     limit = 20
@@ -221,3 +227,14 @@ def post(id):
         return render_template(
             "vacs/vac.html", towns=towns, post=p, place=p.place, results=results, pattern=pattern,occupations=o_list,editmode=editmode
         )
+
+@bp.route("/vfilter", methods=[ "POST"])
+@login_required
+def filter():
+    session["vfilter"] =""
+    if "showres" in request.form.keys():
+       mode = request.form["showres"]
+       if mode in results:
+           session["vfilter"]=results.index(mode)
+    
+    return redirect("/vacs")   

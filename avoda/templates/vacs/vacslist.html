@@ -11,37 +11,28 @@
 
 <div class="row ">
   {% if session['name'] %}
-  <div class="col-md-2"> 
-  <input type="button" class="btn btn-dark btn-sm rounded-2" value="Добавить вакансию"
+  <div class="col-sm-2">
+    <input type="button" class="btn btn-dark btn-sm rounded-2" value="Добавить вакансию"
       onclick="window.location.href='/vac/0';" />
-    </div> 
-  {% endif %}
-  <!-- <div class="col-md-2 mb-2"><input type="button" class="btn btn-dark btn-sm rounded-2" value="Фильтр"
-      onclick="window.location.href='/filter/set';" />
-    {% if session['filter']!="" %}
-    &nbsp
-    <input type="button" class="btn btn-dark btn-sm rounded-2" value="Показать все"
-      onclick="window.location.href='/filter/all';" />
-
-    {% endif %}
   </div>
-
-  <div class="col-md-3 mb-3">
-    <form class="form-floating" action="/search" method="post">
-
-      <input type="text" class="form-control-sm" name="phone" pattern=".{3,30}" title="длина от 3 символов"
-        placeholder="телефон" required />
-      &nbsp
-      <input type="submit" class="btn btn-dark btn-sm rounded-2" data-bs-toggle="tooltip" data-bs-placement="top"
-        title="поиск по номеру телефона" value="Найти" />
-
+    {% if session['roles'].count("create_post")>0 %}
+   <form  action="/vfilter" method="post">
+      <div class="col-sm-2">  
+        <input type="submit" class="btn btn-dark btn-sm rounded-2" value="Показать" />
+       </div> 
+       <div class="col-sm-3">   
+       <select class="form-select" name="showres" id="showres">
+        <option selected>-</option>
+        {% for r in results %}
+        <option value={{r}}>{{r}}</option>
+        {% endfor %}
+      </select>
+  
+      </div>
     </form>
-  </div>
-  {% if session['search']!="" %}
-  <div class="col-md-2 mb-3"> <input type="button" class="btn btn-dark btn-sm rounded-2" value="выйти из поиска"
-      title="вернуться к списку" onclick="window.location.href='/search';" />
-  </div>
-  {% endif %} -->
+    {% endif %}
+  {% endif %}
+ 
 </div>
 <div class="row">
   {{ pagination.links }}
@@ -68,9 +59,9 @@
             {{ post["name"][:20]}}</td>
           </a>
         </th>
-        
+
         <td>
-          <a class="link-underline-primary" href="/vac/{{post["id"]}}"> 
+          <a class="link-underline-primary" href="/vac/{{post["id"]}}">
             {{ post["phone"] }} </a>
         </td>
         <td>
