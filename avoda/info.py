@@ -23,6 +23,20 @@ def show_adv():
     return all[0]
   return
 
+#delete advert(биржа)
+@bp.route("/advert/<int:id>")
+@login_required
+def advt_del(id):
+  if session['roles'].count("adminisrators")==0:
+      return redirect("/advert")  
+   
+  n = db.one_or_404(db.select(Advt).where(Advt.id == id))
+  value=n.name
+  db.session.delete(n)
+  db.session.commit()
+  flash(value + " удалено")
+  return redirect("/advert")
+
 @bp.route("/showinfo")
 def show():
     res = db.session.execute(db.select(News).where(News.priority>0)).scalars()
@@ -147,8 +161,14 @@ def info_edit(id):
 def info_del(id):
   if session['roles'].count("adminisrators")==0:
       return redirect("/showinfo")  
-  flash("Пока не работает")
+   
+  n = db.one_or_404(db.select(News).where(News.id == id))
+  value=n.head
+  db.session.delete(n)
+  db.session.commit()
+  flash(value + " удалено")
   return redirect("/showinfo")
+
 #renew news
 @bp.route("/infoe/<int:id>")
 @login_required
