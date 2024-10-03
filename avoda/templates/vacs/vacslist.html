@@ -38,12 +38,11 @@
   {{ pagination.links }}
 </div>
 <div class="row">
-  <table id="data" class="table table-striped table-hover border-top border-bottom border-light">
+  <table id="data" class="table table-hover border-top border-bottom border-light">
     <thead>
       <tr class="table-secondary border-start border-end border-light text-left">
        
-        <th scope="col ">Контакт</th>
-        <th scope="col" class="d-none d-md-block">Имя</th>
+        <th scope="col-md-2 ">Контакт</th>
         <th scope="col">Город</th>
         <th scope="col-md-6">Описание</th>
         <th scope="col">З/п от</th>
@@ -58,12 +57,11 @@
         <td>
           <a class="link-underline-primary" href="/vac/{{post["id"]}}">
             {{ post["phone"] }} </a>
-        </td>
-        <td>  <span class="d-none d-md-block">
+        <span class="d-none d-md-block">
           <a class="link-underline-primary" href="/vac/{{post["id"]}}">
             {{ post["name"][:20]}}</td>
           </a>
-          </span>
+        </span> 
         </td>
 
        
