@@ -161,7 +161,9 @@ def login():
             l = current_app.logger
             l.setLevel(logging.INFO)
             l.info(username + " login")
-            return redirect(url_for("posts.list"))
+            if user.isHR==1:
+                return redirect(url_for("posts.list"))
+            return redirect("/appage")
 
     else:
         news=n.show_in_title()
