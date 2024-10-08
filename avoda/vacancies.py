@@ -238,3 +238,37 @@ def filter():
            session["vfilter"]=results.index(mode)
     
     return redirect("/vacs")   
+
+#упрощенный список вакансий для соискателей
+@bp.route("/appage")
+def simple_list_vacs():
+    query = (
+        db.select(Vacancies)
+        .where(Vacancies.result == 1)
+        .order_by(Vacancies.result,desc(Vacancies.created))
+      )  
+    # читаем по страницам
+    limit = 6
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    ps = db.paginate(query, page=page, per_page=limit, error_out=True)
+    all = ps.items
+    pagination = Pagination(
+        page=page,
+        per_page=limit,
+        total=ps.total,
+        display_msg="показано <b>{start} - {end}</b> {record_name} из <b>{total}</b>",
+        record_name="записей",
+        prev_label="<<",
+        next_label=">>",
+        bs_version=4,
+    )
+
+    return render_template(
+        "seekers.html",
+        pagination=pagination,
+        title="Вакансии",
+        list=all,
+        refs=allrefs,
+        results=results,
+    )

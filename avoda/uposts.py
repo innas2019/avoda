@@ -6,8 +6,8 @@ from avoda.models import Posts, Preposts
 from avoda import managing as m
 from datetime import datetime, timezone, timedelta
 
-# import json
-# from flask import jsonify
+# анкеты
+
 from sqlalchemy import and_, or_, desc
 from avoda.posts import Post
 
@@ -210,12 +210,6 @@ def post(id):
         return render_template(
             "prepost/upost.html", towns=towns, post=ps, place=place, results=results, pattern=pattern
         )
-
-
-@bp.route("/appage")
-def appage():
-    return redirect("/prepost/0")
-
 
 @bp.route("/del/<int:id>")
 @login_required

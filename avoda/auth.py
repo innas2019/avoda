@@ -90,12 +90,17 @@ def register():
             error = "такой логин уже есть"
             flash(error)
             return render_template("auth/register.html")
-
+        
+        isHR=request.form["ishr"]
         if error is None:
             user = Users(name=username, password=generate_password_hash(password))
+            user.isHR=isHR
             if email!="":
                 user.issend=1
                 user.email=email
+            #для соискателей отключаем рассылку
+            if isHR!="1":
+                 user.issend=0    
             now = datetime.now(timezone.utc)
             user.created=now
             db.session.add(user)
@@ -109,9 +114,10 @@ def register():
             session["roles"] = []
             session["filter"] = ""  
             session["search"] = "" 
-            #return redirect(url_for("auth.login"))
-            return render_template("auth/register.html", title=" Спасибо за регистрацию на нашем сайте!",info=True)
-
+            #для соискателей сделать переход на их страницу
+            if isHR=="1":
+              return render_template("startinfo.html", title=" Спасибо за регистрацию на нашем сайте!")
+            return redirect("/appage")
     else:
         return render_template("auth/register.html", title="Регистрация",info=False)
 
@@ -267,7 +273,7 @@ def save_filter(id):
 
 @bp.route("/info")
 def info():
-    return render_template("auth/register.html", title=" О системе",info=True)
+    return render_template("startinfo.html", title=" О системе")
 
 
 @bp.route("/user/<int:id>", methods=["POST", "GET"])

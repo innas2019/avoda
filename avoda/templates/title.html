@@ -1,41 +1,13 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-   {% block head %}
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RQ5W5MR1D"></script>
-   <script>
-     window.dataLayer = window.dataLayer || [];
-     function gtag(){dataLayer.push(arguments);}
-     gtag('js', new Date());
-   
-     gtag('config', 'G-7RQ5W5MR1D');
-   </script>
-   <!-- Required meta tags -->
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <link rel="icon" href="{{ url_for('static', filename='hatul.png') }}">
-   {% block styles %}
-   <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">
-   {% endblock %}
-   <title>עבודה</title>
-   {% endblock %}
-</head>
-
-<body>
-   <div id="component" class="container-md">
-      {% from 'bootstrap5/utils.html' import render_messages %}
-      {% from 'bootstrap5/utils.html' import render_icon %}
-      <ul class="nav nav-pills">
+{% extends 'base0.html' %}
+{% block content %}
+   <ul class="nav nav-pills">
          <li class="nav-item">
            <a class="nav-link active" aria-current="page" href="/title">Работодателям</a>
          </li>
          <li class="nav-item">
            <a class="nav-link" href="/appage">Соискателям</a>
          </li>
-         <li class="nav-item">
-            <a class="nav-link" href="/vacs">Вакансии</a>
-          </li>
+         
        </ul>
       {{ render_messages() }}
       <!-- logo+login+about -->
@@ -130,80 +102,24 @@
                   сотрудников.</a>
                {% else %}
                <b>поиск сотрудников.</b>
-               {% endif %}
-            </p>
-
-            <p class="text-dark  font-family-Inter m-0 px-3 py-2">
+               {% endif %}<br>
                Для выбора регионов или профессий перейдите в
                {% if session['name'] %}
                <a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="/filter/set">фильтр.</a>
                {% else %}
                <b>фильтр.</b>
-               {% endif %}
-            </p>
-
-            <p class="text-dark   font-family-Inter m-0 px-3 py-2">
+               {% endif %}<br>
                Для настройки e-mail рассылки перейдите в
                {% if session['name'] %}
                <a class="link-underline-primary fs-6 fw-normal font-family-Inter"
                   href="{{ url_for('auth.cabinet') }}">кабинет.</a>
                {% else %}
                <b>кабинет.</b>
-               {% endif %}
-            </p>
+               {% endif %}<br> Добавляйте свои&nbsp
+            <a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="/vacs">вакансии</a>
+         (необходима регистрация)
          </div>
 
       </div>
-      <div class="row  justify-content-center mt-1 px-3 py-2">
-         <div class="col-md-2 text-center text-primary fw-semibold font-family-Inter">
-        Наши новости:  <p> <a class="link-underline-primary fw-normal" href="{{ url_for('info.show') }}" target="_blank">
-         больше новостей -></a> </div>
-        <div class="col-md-8 font-family-Inter">
-         {% if n!= undefined %}  
-          <b>{{n["head"]}}</b>&nbsp
-            <span class="fs-6">{{n["text"]}}
-                {% if n["link"]!=None %} 
-                         <a class="link-underline-primary" href="{{n["link"]}}" target="_blank">
-                          посмотреть -></a>
-                    {% endif %} 
-                  </span>     
-         {% endif %}      
-        </div>
-    
-      <!--counter-->
-            <div class="col-md-2 justify-content-end py-1 mb-2">
-               <table class="table-bordered">
-                  <tbody>
-                     <tr>
-                        <th scope="col" class="text-primary font-family-Inter" style="font-size: 0.75rem;">
-                           <span class="px-1 py-1">Сейчас на сайте</span>
-                        </th>
-                     </tr>
-                     <tr>
-                        <td class="text-primary font-family-Inter" style="font-size: 0.75rem;">
-                           <span class="px-1 py-1">{{mycounter()}} пользователей</span>
-                        </td>
-                     </tr>
-                  </tbody>
-               </table>
-            </div>
-      </div>
-      <!-- banner -->
-      <div class="row mt-1">
-        
-         <img src={{ url_for('static', filename='Banner2X.png' ) }}>
-      </div>
-
-      <div class="row">
-         <span class="text-end text-dark  font-family-Inter" style="font-size: 0.75rem;">
-            версия {{ver()}} Hatul Madan </span>
-      </div>
-   </div>
-
-   {% block scripts %}
-   <!-- Optional JavaScript -->
-   {{ bootstrap.load_js() }}
-   {% endblock %}
-</body>
-
-</html>
+{% endblock %}
+     

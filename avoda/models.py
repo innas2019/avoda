@@ -11,13 +11,13 @@ class Users(UserMixin,db.Model):
     name = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(40))
     password = db.Column(db.String(256), nullable=False)
-    isactive = db.Column(db.Integer())
+    isactive = db.Column(db.Integer()) 
     settings = db.Column(db.String(256))
     issend = db.Column(db.Integer())
     mailsend = db.Column(db.DateTime())
     created = db.Column(db.DateTime())
     lastnews = db.Column(db.Integer)
-  
+    isHR = db.Column(db.Integer()) 
     roles = db.relationship("Role", secondary="user_role")
     addresses = db.relationship('Posts', lazy=True)
 

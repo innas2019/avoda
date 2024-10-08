@@ -1,0 +1,84 @@
+{% extends 'base0.html' %}
+{% block content %}
+<ul class="nav nav-pills">
+      <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/title">Работодателям</a>
+      </li>
+      <li class="nav-item">
+            <a class="nav-link active" href="/appage">Соискателям</a>
+      </li>
+
+</ul>
+{{ render_messages() }}
+<div class="row justify-content-center mt-3 " style="min-height: 450px;">
+      <!-- logo+text -->
+      <div class="col-md-5 ">
+            <div class="row justify-content-end">
+                  <div class="col-md-8 justify-content-end d-flex">
+                        <img src={{ url_for('static', filename='LogoStartScreen_224X62.png' ) }}>
+
+                  </div>
+                  <div class="col-md-8 justify-content-end d-flex">
+                        <p class="text-end text-dark fs-4 fw-semibold font-family-Inter ">
+                              В системе около 300 работодателей и кадровых агенств.<br> Просмотрите вакансии, которые
+                              они разместили.
+                        </p>
+                  </div>
+                  <div class="col-md-8 justify-content-end d-flex ">
+                        <div class=" text-end text-primary font-family-Inter">
+                              Заполните анкету, <br>чтобы о Вас узнали.
+                              <a class="link-underline-primary fs-6 fw-normal font-family-Inter" href="/prepost/0">
+                                    Перейти к анкете </a>
+                        </div>
+                  </div>
+
+            </div>
+            <div class="row justify-content-end mt-3">
+                  <div class="col-md-8 justify-content-end d-flex">
+                        <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                              Связаться с нами: {{render_icon('phone-fill', 16) }} 053-6405871 </span>
+                  </div>
+                  <div class="col-md-8 justify-content-end d-flex">
+                        <span class="text-end text-primary font-family-Inter" style="font-size: 0.75rem;">
+                              {{render_icon('envelope-fill', 16) }} <a
+                                    href="mailto:avoda.site.il@gmail.com">avoda.site.il@gmail.com</a>
+                        </span>
+                  </div>
+            </div>
+      </div>
+
+      <!-- vaks -->
+      <div class="col-md-7 px-6 justify-content-center py-4">
+            <span class="fs-5 text-primary font-family-Inter">Вакансии:</span>
+            <div class="row px-6 justify-content-end ">
+                  {{ pagination.links }}
+            </div>
+            {% for post in list %}
+            <div class="row">
+                  <div class="col-md-8 ">
+                        <span class="text fw-semibold">
+                              {{ refs[post["place"]]}},&nbsp
+                        </span>
+                        Дата вакансии:&nbsp; {{post["created"].strftime("%d/%m/%Y")}}
+
+                  </div>
+                  <div class="col-md-12">
+                        <span class="text fw-semibold">
+                              {{ show_in_view(post["occupations"]) }}.&nbsp;
+                        </span>
+                        Описание:&nbsp; {{post.text}}
+                  Зарплата <span class="text fw-semibold">от {{ post["salary"]}} </span> в час.
+                  </div>
+
+                  <div class="col-md-6">
+                        Контакты: &nbsp;
+                        {{ post["name"]}} {{ post["phone"] }}.
+
+                  </div>
+
+            </div>
+            {% endfor %}
+      </div>
+</div>
+</div>
+{% endblock %}

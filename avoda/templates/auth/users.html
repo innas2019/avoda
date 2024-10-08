@@ -26,6 +26,7 @@
       <tr class="table-secondary border-start border-end border-light text-left">
         <th class="col-md-1">id</th>
         <th class="col-md-3">логин</th>
+        <th class="col-md-1">работодатель</th>
         <th class="col-md-3">e-mail</th>
         <th class="col-md-1">рассылка</th>
         <th class="col-md-2">дата рассылки</th>
@@ -44,7 +45,11 @@
             {{ o["name"] }}
         </td>
         </a>
-
+        <td>
+           {% if o.isHR!=None  and o.isHR==1 %}
+          Да
+          {% endif %}
+        </td>
         <td>
           {% if o.email!=None %}
           {{ o["email"] }}
