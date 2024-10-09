@@ -1,0 +1,48 @@
+{% extends 'base0.html' %}
+{% block content %}
+<ul class="nav nav-pills">
+      <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/title">Работодателям</a>
+      </li>
+      <li class="nav-item">
+            <a class="nav-link active" href="/appage">Соискателям</a>
+      </li>
+
+</ul>
+{{ render_messages() }}
+<div class="col-md-12 justify-content-center mt-3 " style="min-height: 450px;">
+         <!-- vaks -->
+            <span class="fs-5 text-primary font-family-Inter">Вакансии:</span>
+            <div class="row px-6 justify-content-end ">
+                  {{ pagination.links }}
+            </div>
+            {% for post in list %}
+            <p>
+            <div class="row" style="background-color:rgb(225, 237, 255);">
+                  <div class="col-md-8 ">
+                        <span class="text fw-semibold">
+                              {{ refs[post["place"]]}},&nbsp
+                        </span>
+                        Дата вакансии:&nbsp; {{post["created"].strftime("%d/%m/%Y")}}
+
+                  </div>
+                  <div class="col-md-12">
+                        <span class="text fw-semibold">
+                              {{ show_in_view(post["occupations"]) }}.&nbsp;
+                        </span>
+                        Описание:&nbsp; {{post.text}}
+                  Зарплата <span class="text fw-semibold">от {{ post["salary"]}} </span> в час.
+                  </div>
+
+                  <div class="col-md-6">
+                        Контакты: &nbsp;
+                        {{ post["name"]}} {{ post["phone"] }}.
+
+                  </div>
+
+            </div>
+            {% endfor %}
+      </div>
+</div>
+
+{% endblock %}

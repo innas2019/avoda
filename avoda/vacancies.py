@@ -240,7 +240,7 @@ def filter():
     return redirect("/vacs")   
 
 #упрощенный список вакансий для соискателей
-@bp.route("/appage")
+@bp.route("/svacs")
 def simple_list_vacs():
     query = (
         db.select(Vacancies)
@@ -265,7 +265,7 @@ def simple_list_vacs():
     )
 
     return render_template(
-        "seekers.html",
+        "vacs/vacsshort.html",
         pagination=pagination,
         title="Вакансии",
         list=all,

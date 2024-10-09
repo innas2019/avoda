@@ -277,6 +277,14 @@ def save_filter(id):
 def info():
     return render_template("startinfo.html", title=" О системе")
 
+#вход для соискателей
+@bp.route("/appage")
+def enter_seekers():
+    news=n.show_in_title()
+    return render_template(
+        "seekers.html",n=news)
+
+
 
 @bp.route("/user/<int:id>", methods=["POST", "GET"])
 @login_required
