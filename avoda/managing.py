@@ -5,12 +5,13 @@ from flask import (
     render_template,
     request,
     url_for,
-    session,
+    session, jsonify
 )
 from avoda import db
-from avoda.models import Refs
+from avoda.models import Refs,Users,Vacancies,Preposts
 from flask_login import login_required
 from flask_paginate import Pagination, get_page_parameter
+from datetime import datetime, timedelta
 
 allrefs = {}
 
@@ -135,3 +136,24 @@ def delete(id):
     flash(value + " удалено")
     return redirect("/refs/0")  
 
+@bp.route("/report")
+@login_required
+
+def admin_report():
+    report = []
+    current_time = datetime.now()
+    delta = current_time - timedelta(hours=6)
+   
+    result = db.session.query(Users).where(Users.created>delta).count()
+ 
+    report.append("новые юзеры за последние 6 часов -"+str(result))
+    result = db.session.query(Vacancies).where(Vacancies.result==None).count()
+    report.append(" вакансии для проверки -"+str(result))
+    result = db.session.query(Preposts).where(Preposts.result==None).count()
+    report.append(" анкеты для проверки-"+str(result))
+    return jsonify(result=report)
+
+"""     новые юзеры сегодня
+
+    анкеты
+    вакансии """
