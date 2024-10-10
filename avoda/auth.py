@@ -322,6 +322,10 @@ def edit_user(id):
         else:
             issend=0  
 
+        if "ishr" in request.form.keys():
+            ishr=request.form["ishr"]
+        else:
+            ishr=1 
         
 
         #проверка на роли. если их состав изменился, то перезаписываем
@@ -333,6 +337,7 @@ def edit_user(id):
         u = db.one_or_404(db.select(Users).where(Users.id == id))
         u.email=email
         u.issend =issend   
+        u.isHR=ishr
         u.roles=uroles
         if "mails" in request.form.keys():    
            u.mailsend=None

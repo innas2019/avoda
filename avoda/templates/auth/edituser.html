@@ -12,6 +12,28 @@
       </div>
     </div>
     <div class="row">
+      {% if r.isHR==1 %}
+      <div class="col-md-6 ">
+        <input class="form-check-input" type="radio" name="ishr" id="s1" value=1 checked>
+        <label class="form-check-label" for="s1"> я работодатель</label>
+      </div>
+      <div class="col--md-6 ">
+        <input class="form-check-input" type="radio" name="ishr" id="s2" value=0>
+        <label class="form-check-label" for="s2"> я соискатель</label>
+      </div>
+      {%else%}
+      <div class="col-md-6 ">
+        <input class="form-check-input" type="radio" name="ishr" id="s1" value=1 >
+        <label class="form-check-label" for="s1"> я работодатель</label>
+      </div>
+      <div class="col--md-6 ">
+        <input class="form-check-input" type="radio" name="ishr" id="s2" value=0 checked>
+        <label class="form-check-label" for="s2"> я соискатель</label>
+      </div>
+      {%endif%}
+    </div>
+
+    <div class="row">
       <div class="col-2">
         <input type="button" class="btn btn-dark btn-sm" value="Удалить пользователя"
           onclick="window.location.href='/users/d/{{r.id}}';">
@@ -42,20 +64,20 @@
           <label class="form-check-label" for="per"> рассылка на почту </label>
         </div>
       </div>
-     
+
       <div class="col-3">
         <label for="m" class="form-text">Последняя рассылка:</label>
       </div>
-     
+
       <div class="col-3">
-     <!--  {% if r.mailsend!=None %}
+        <!--  {% if r.mailsend!=None %}
         <input type="datetime-local" class="form-control" name="mails" id="m" value={{r.mailsend}}>
         {% else %}
         <input type="datetime-local" class="form-control" name="mails" id="m">
         {% endif %}-->
         <input class="form-check-input" type="checkbox" value="Да" name="mails" id="m">
         <label class="form-check-label" for="m"> стереть дату</label>
-      </div> 
+      </div>
 
     </div>
     <div class="row">
@@ -109,7 +131,7 @@
   </div>
   <div class="col-md-8 align-items-center">
     <nbsp class="text-dark fs-6 fw-semibold font-family-Inter px-3 py-2">
-      Администратор! Не совершай необратимых поступков! Справочники НЕ удалять! </nbsp>
+      Администратор! Не совершай необратимых поступков! НЕ удалять роли у себя! </nbsp>
   </div>
 </div>
 
