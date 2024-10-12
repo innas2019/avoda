@@ -31,8 +31,8 @@
       {% endblock %}
       <div class="row  justify-content-center mt-1 px-3 py-2">
          <div class="col-md-2 text-center text-primary fw-semibold font-family-Inter">
-        Наши новости:  <p> <a class="link-underline-primary fw-normal" href="{{ url_for('info.show') }}" target="_blank">
-         больше новостей -></a> </div>
+        Наши новости:  <p> <a class="link-underline-primary fw-normal" href="{{ url_for('auth.info') }}" >
+         о системе</a> </div>
         <div class="col-md-8 font-family-Inter">
          {% if n!= undefined %}  
           <b>{{n["head"]}}</b>&nbsp

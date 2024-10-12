@@ -21,15 +21,13 @@
             <div class="row" style="background-color:rgb(225, 237, 255);">
                   <div class="col-md-8 ">
                         <span class="text fw-semibold">
-                              {{ refs[post["place"]]}},&nbsp
+                              {{ refs[post["place"]]}}.&nbsp      {{ show_in_view(post["occupations"]) }}&nbsp;
                         </span>
-                        Дата вакансии:&nbsp; {{post["created"].strftime("%d/%m/%Y")}}
+                        {{post["created"].strftime("%d/%m/%Y")}}
 
                   </div>
                   <div class="col-md-12">
-                        <span class="text fw-semibold">
-                              {{ show_in_view(post["occupations"]) }}.&nbsp;
-                        </span>
+                      
                         Описание:&nbsp; {{post.text}}
                   Зарплата <span class="text fw-semibold">от {{ post["salary"]}} </span> в час.
                   </div>

@@ -57,7 +57,7 @@
                                     в международном или местном формате (до 12 цифр)
                               </div>
                               <div class="col-md-8"><input type="text" class="form-control" name="phone"
-                                          pattern="[0-9]{10,}" maxlength="13"
+                                          pattern="[0-9+]{10,}" maxlength="13"
                                           title=" допускаются + и цифры, до 13 символов" required value={{post.phone}}>
                                     {% if post.id!=0 %}
                                     <a href=# id=check_input>проверка</a>
@@ -106,7 +106,7 @@
 
                               </div>
                               <div class="col-md-4"><input type="text" class="form-control" name="contacts"
-                                          title=" e-mail или другой контакт" maxlength="50" value={{post.contacts}}>
+                                          title=" e-mail " maxlength="25" pattern="[^@\s]+@[^@\s]+" value={{post.contacts}}>
 
                               </div>
                               <div class="col-md-4">

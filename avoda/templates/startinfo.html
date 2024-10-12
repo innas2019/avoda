@@ -1,5 +1,22 @@
+{% if session['name'] %}
 {% extends 'base.html' %}
+{%else%}
+{% extends 'base0.html' %}
+{%endif%}
 {% block content %}
+{% if session['name']  %}
+{%else%}
+<div class="row">
+<ul class="nav nav-pills">
+      <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/title">Работодателям</a>
+      </li>
+      <li class="nav-item">
+            <a class="nav-link active" href="/appage">Соискателям</a>
+      </li
+</ul>
+</div>
+{%endif%}
 <!-- logo+msg -->
 <div class="row mt-2 justify-content-center" style="min-height: 430px;">
       <div class="col-md-3 justify-content-center ">
