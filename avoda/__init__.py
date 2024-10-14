@@ -104,7 +104,7 @@ def create_app():
     @app.context_processor
     def utility_processor():
         def ver():
-            return "2.1"
+            return "2.2"
         return dict(ver=ver)
     
     return app

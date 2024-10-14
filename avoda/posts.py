@@ -41,6 +41,12 @@ class Post:
         self.id = 0
         self.docs = []
         self.expirience = ""
+        self.category = ""
+        self.addinfo = ""
+        self.admininfo = ""
+
+        
+
 
     # функция возвращает id справочника по его значению
     def get_id_from_value(self, value):
@@ -85,13 +91,18 @@ class Post:
                 self.o_kind.append(map[f])
             elif str(f).find("sex") != -1:
                 self.sex = map[f]
-            elif str(f).find("d") != -1:
+            elif str(f).find("d_") != -1:
                 self.docs.append(map[f])
             elif str(f).find("contacts") != -1:
                 self.contacts=map[f]  
             elif str(f).find("expirience") != -1:
                 self.expirience=map[f]  
-    
+            elif str(f).find("category") != -1:
+                self.category=map[f] 
+            elif str(f).find("addinfo") != -1:
+                self.addinfo=map[f]  
+            elif str(f).find("admininfo") != -1:
+                self.admininfo=map[f]            
 
     def get_name_by_id(self, ids):
         new_val = []
@@ -126,6 +137,12 @@ class Post:
             self.place = allrefs[p.place]
         if p.expirience != None and p.expirience != "":
             self.expirience = p.expirience  
+        if p.category != None and p.category != "":
+            self.category = p.category
+        if p.addinfo != None and p.addinfo != "":
+            self.addinfo = p.addinfo  
+        if p.admininfo != None and p.admininfo != "":
+            self.admininfo = p.admininfo            
 
     def transform_len_to_id(self):
         for x in self.len.keys():
@@ -187,7 +204,12 @@ def create_post(n_post):
         new_post.sex = sex.index(n_post.sex)
     if n_post.expirience != "":
         new_post.expirience = n_post.expirience   
-    
+    if n_post.category != "":
+        new_post.category = n_post.category  
+    if n_post.addinfo != "":
+        new_post.addinfo = n_post.addinfo    
+    if n_post.admininfo != "":
+        new_post.admininfo = n_post.admininfo      
     db.session.add(new_post)
     db.session.commit()
     flash(n_post.name + " добавлено")
@@ -217,7 +239,12 @@ def update_post(n_post):
         db_post.sex = sex.index(n_post.sex)
     if n_post.expirience != "":
         db_post.expirience = n_post.expirience   
-    
+    if n_post.category != "":
+        db_post.category = n_post.category  
+    if n_post.addinfo != "":
+        db_post.addinfo = n_post.addinfo    
+    if n_post.admininfo != "":
+        db_post.admininfo = n_post.admininfo   
     db.session.commit()
     flash(n_post.name + " изменено")
     return "ok"

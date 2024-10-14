@@ -174,6 +174,30 @@
                   </div>
 
                   <div class="row">
+                        <div class="col-md-2 form-text"> Категория соискателя: </div>
+                        <div class="col-md-2">
+                              <input type="number" class="form-control" name="category" 
+                                    title=" допускаются только цифры " value={{post.category}}>
+
+                        </div>
+                  </div>
+                  
+                  <div class="row">
+                        <div class="col-md-8">
+                              <label for="addi" class="form-text">Допонительная информация: </label>
+                              <textarea class="form-control" name="addinfo" id="addi" rows="3"
+                                    >{{post.addinfo}}</textarea>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-md-8">
+                              <label for="admini" class="form-text">Служебная информация: </label>
+                              <textarea class="form-control" name="admininfo" id="admini" rows="3"
+                                    >{{post.admininfo}}</textarea>
+                        </div>
+                  </div>
+ 
+                  <div class="row">
                         <div class="col-md-6">
                               <p class="form-text"> дата объявления {{post.updated}} </p>
                         </div>
