@@ -2,45 +2,46 @@
 {% block content %}
 <div class="row">
   <div class="col-md-2 fw-semibold fs-5">
-Поиск сотрудников
+    Поиск сотрудников
   </div>
   <div class="col-md-10 fw-semibold ">
     <span class="text  ">{{title}}</span>
-  </div> 
+  </div>
 </div>
 <div class="row mb-3">
   <div class="col-sm-4">
-  {{ pagination.links }}
+    {{ pagination.links }}
   </div>
-   <div class="col-sm-2">
+  <div class="col-sm-2">
     {{ pagination.info }}
-   </div>
+  </div>
   {% if session['roles'].count("create_post")>0 %}
-   <div class="col-sm-2 "><input type="button" class="btn btn-dark btn-sm rounded-2" value="Новое объявление"
-        onclick="window.location.href='/create';" /></div>
-    {% endif %}
-    <div class="col-sm-2"><input type="button" class="btn btn-dark btn-sm rounded-2" value="Фильтр"
-        onclick="window.location.href='/filter/set';" />
+  <div class="col-sm-2 "><input type="button" class="btn btn-dark btn-sm rounded-2" value="Новое объявление"
+      onclick="window.location.href='/create';" /></div>
+  {% endif %}
+  <div class="col-sm-2"><input type="button" class="btn btn-dark btn-sm rounded-2" value="Фильтр"
+      onclick="window.location.href='/filter/set';" />
     {% if session['filter']!="" %}
-    &nbsp 
+    &nbsp
     <input type="button" class="btn btn-dark btn-sm rounded-2" value="Показать все"
-        onclick="window.location.href='/filter/all';" />
-    
+      onclick="window.location.href='/filter/all';" />
+
     {% endif %}
-    </div>
+  </div>
   <div class="col-sm-2 ">
     <form class="form-floating" action="/search" method="post">
 
-      <input type="text" class="form-control-sm" name="phone" pattern=".{3,30}" title="длина от 3 символов" placeholder="телефон" size="10" required/>
-      &nbsp   
+      <input type="text" class="form-control-sm" name="phone" pattern=".{3,30}" title="длина от 3 символов"
+        placeholder="телефон" size="10" required />
+      &nbsp
       <input type="submit" class="btn btn-dark btn-sm rounded-2" data-bs-toggle="tooltip" data-bs-placement="top"
-        title="поиск по номеру телефона" value="Найти"/>
+        title="поиск по номеру телефона" value="Найти" />
 
     </form>
   </div>
   {% if session['search']!="" %}
   <div class="col-sm-2 "> <input type="button" class="btn btn-dark btn-sm rounded-2" value="выйти из поиска"
-    title="вернуться к списку" onclick="window.location.href='/search';" />
+      title="вернуться к списку" onclick="window.location.href='/search';" />
   </div>
   {% endif %}
 </div>
@@ -58,7 +59,9 @@
     </thead>
     <tbody>
       {% for post in posts %}
+
       <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
+
         <th scope="row">
           <a class="link-underline-primary" href="/show/{{loop.index}}">
             {{loop.index + pagination.skip}}
@@ -66,6 +69,7 @@
         </th>
         <td> {{ post["name"] }}</td>
         <td>
+
           <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
           {%if post["contacts"]!=None and post["contacts"]!=""%}
           <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ render_icon('facebook', 16) }} </a>
@@ -73,17 +77,21 @@
         </td>
         <td>
           {{ refs[post["place"]]}}</td>
+        {%if post["category"]==1 or post["category"]==2%}
+        <td class="table-primary">
+          {%else%}
         <td>
+          {%endif%}
           <!-- <span class="d-md-none"> </span> -->
-          <span class="text fw-semibold"> 
-          {{ show_in_view(post["occupations"]) }}
-        </span> 
+          <span class="text fw-semibold">
+            {{ show_in_view(post["occupations"]) }}
+          </span>
           <span class="d-none d-md-block">{{ post["text"][:200] }}
             {% if post["text"]|length > 200 %}
             ...
             {% endif %}
           </span>
-         
+
         </td>
 
 
