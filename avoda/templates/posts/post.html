@@ -87,7 +87,7 @@
                   <div class="row">
                         <div class="col-md-2 form-text"> Опыт, лет: </div>
                         <div class="col-md-4">
-                              <input type="text" class="form-control" name="expirience" 
+                              <input type="text" class="form-control" name="expirience"
                                     title=" допускаются только цифры и значок +" value={{post.expirience}}>
 
                         </div>
@@ -174,29 +174,35 @@
                   </div>
 
                   <div class="row">
-                        <div class="col-md-2 form-text"> Категория соискателя: </div>
-                        <div class="col-md-2">
-                              <input type="number" class="form-control" name="category" 
+                        <div class="col-md-4 form-text"> востребованный кандидат 
+                        <!--       <input type="number" class="form-control" name="category" 
                                     title=" допускаются только цифры " value={{post.category}}>
-
-                        </div>
+ -->
+                        <span class="form-check ">
+                              {% if post.category!="" %}
+                              <input class="form-check-input" type="checkbox" value="1" name="category" checked>
+                              {%else%}
+                              <input class="form-check-input" type="checkbox" value="1" name="category">
+                              {%endif%}
+                        </span>
                   </div>
-                  
+                  </div>
+
                   <div class="row">
                         <div class="col-md-8">
                               <label for="addi" class="form-text">Дополнительная информация: </label>
-                              <textarea class="form-control" name="addinfo" id="addi" rows="3"
-                                    >{{post.addinfo}}</textarea>
+                              <textarea class="form-control" name="addinfo" id="addi"
+                                    rows="3">{{post.addinfo}}</textarea>
                         </div>
                   </div>
                   <div class="row">
                         <div class="col-md-8">
                               <label for="admini" class="form-text">Служебная информация: </label>
-                              <textarea class="form-control" name="admininfo" id="admini" rows="3"
-                                    >{{post.admininfo}}</textarea>
+                              <textarea class="form-control" name="admininfo" id="admini"
+                                    rows="3">{{post.admininfo}}</textarea>
                         </div>
                   </div>
- 
+
                   <div class="row">
                         <div class="col-md-6">
                               <p class="form-text"> дата объявления {{post.updated}} </p>

@@ -18,6 +18,9 @@
   {% if session['roles'].count("create_post")>0 %}
   <div class="col-sm-2 "><input type="button" class="btn btn-dark btn-sm rounded-2" value="Новое объявление"
       onclick="window.location.href='/create';" /></div>
+  <div class="fs-5"><a href=# id=report_admin>Сводка:</a>
+    <nbsp id=result></nbsp>
+  </div>
   {% endif %}
   <div class="col-sm-2"><input type="button" class="btn btn-dark btn-sm rounded-2" value="Фильтр"
       onclick="window.location.href='/filter/set';" />
@@ -53,31 +56,48 @@
         <th scope="col">№</th>
         <th scope="col">Имя</th>
         <th scope="col">Контакт</th>
-        <th scope="col">Город</th>
-        <th scope="col">Описание</th>
+          <th scope="col">Город</th>
+          <th scope="col">Описание</th>
       </tr>
     </thead>
     <tbody>
       {% for post in posts %}
 
       <tr class="{{ loop.cycle('table-default', 'table-light') }}  border-start border-end border-light">
-
+      {%if post["category"]==1 %}
+        <th scope="row" class="table-primary">
+          {%else%}
         <th scope="row">
+      {%endif%} 
+        
           <a class="link-underline-primary" href="/show/{{loop.index}}">
             {{loop.index + pagination.skip}}
           </a>
         </th>
-        <td> {{ post["name"] }}</td>
+        {%if post["category"]==1 %}
+        <td class="table-primary">
+          {%else%}
         <td>
+          {%endif%}
+         {{ post["name"] }}</td>
+        {%if post["category"]==1 %}
+        <td class="table-primary">
+          {%else%}
+        <td>
+          {%endif%}
 
           <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ post["phone"] }} </a>
           {%if post["contacts"]!=None and post["contacts"]!=""%}
           <a class="link-underline-primary" href="/show/{{loop.index}}"> {{ render_icon('facebook', 16) }} </a>
           {% endif %}
         </td>
+        {%if post["category"]==1 %}
+        <td class="table-primary">
+          {%else%}
         <td>
+          {%endif%}
           {{ refs[post["place"]]}}</td>
-        {%if post["category"]==1 or post["category"]==2%}
+        {%if post["category"]==1 %}
         <td class="table-primary">
           {%else%}
         <td>

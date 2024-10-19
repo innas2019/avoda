@@ -21,19 +21,14 @@
 </div>
 <div class="row">
    {%if post["category"]!="" %}
-   <div class="col-md-3 fw-semibold font-family-Inter " style="background-color:rgb(225, 237, 255);">
-      {%  if post["category"]>1%}
-      наиболее
-      {%endif%}
-      {% if post["category"]>0 %}
-      востребованный кандидат
-      {%endif%}
-   </div>
-{%endif%}
+   <div class="col-md-2 badge text-bg-primary">востребованный кандидат</div>
+   {%endif%}
    <div class="col-md-2 text fs-5 fw-semibold font-family-Inter">{{ post["name"] }}</div>
 
    <div class="col-md-2">
       {% if post.sex!=None %} <span class="badge text-bg-secondary">{{ post["sex"]}}</span> {% endif %}
+
+
    </div>
    <div class="row">
       <div class="col-md-2 text fw-semibold font-family-Inter">
