@@ -229,22 +229,14 @@ def update_post(n_post):
     db_post.text = n_post.text
     db_post.contacts=n_post.contacts
     db_post.len = json.dumps(n_post.transform_len_to_id())
-    if n_post.occupations != "":
-        db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
-    if n_post.docs != "":
-        db_post.docs = json.dumps(n_post.get_id_from_value(n_post.docs))
-    if n_post.o_kind != "":
-        db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
-    if n_post.sex != "":
-        db_post.sex = sex.index(n_post.sex)
-    if n_post.expirience != "":
-        db_post.expirience = n_post.expirience   
-    if n_post.category != "":
-        db_post.category = n_post.category  
-    if n_post.addinfo != "":
-        db_post.addinfo = n_post.addinfo    
-    if n_post.admininfo != "":
-        db_post.admininfo = n_post.admininfo   
+    db_post.occupations = json.dumps(n_post.get_id_from_value(n_post.occupations))
+    db_post.docs = json.dumps(n_post.get_id_from_value(n_post.docs))
+    db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
+    db_post.sex = sex.index(n_post.sex)
+    db_post.expirience = n_post.expirience   
+    db_post.category = n_post.category  
+    db_post.addinfo = n_post.addinfo    
+    db_post.admininfo = n_post.admininfo  
     db.session.commit()
     flash(n_post.name + " изменено")
     return "ok"
