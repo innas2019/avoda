@@ -234,7 +234,10 @@ def update_post(n_post):
     db_post.o_kind = json.dumps(n_post.get_id_from_value(n_post.o_kind))
     db_post.sex = sex.index(n_post.sex)
     db_post.expirience = n_post.expirience   
-    db_post.category = n_post.category  
+    if n_post.category !="": 
+        db_post.category = n_post.category  
+    else:
+        db_post.category = None  
     db_post.addinfo = n_post.addinfo    
     db_post.admininfo = n_post.admininfo  
     db.session.commit()
